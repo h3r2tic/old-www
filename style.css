@@ -1,0 +1,135 @@
+body {
+	background-color: black;
+	color: white;
+	padding: 0px;
+	margin: 0px;
+}
+
+#wrapper1 {
+	color: white;
+	padding: 0px;
+	margin: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	background: url(vert.png) repeat-x rgb(77, 77, 77);
+}
+
+#wrapper2 {
+	min-height: 100%;
+	margin: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 8%;
+	padding-right: 8%;
+	background: transparent;
+}
+
+div.c1 {
+	color: inherit;
+	padding: 16px;
+	background-color: rgba(0, 0, 0, 0.1);
+	text-align: justify;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.c2 {
+	color: inherit;
+	padding: 16px;
+	background-color: rgba(255, 255, 255, 0.02);
+}
+
+div.c3 {
+	color: inherit;
+	background-color: transparent;
+	line-height: 1.2em;
+	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.6);
+	font-family: "Palatino Linotype", "Book Antiqua", serif;
+	font-size: 15px;
+}
+
+p {
+	margin-top: 0;
+	margin-bottom: 1.6em;
+}
+
+#header {
+	color: white;
+	margin: 10px;
+	margin-top: 15px;
+	left: 0px;
+	top: 0px;
+	padding: 10px;
+	height: 80px;
+	background-color: rgba(0, 0, 0, 0.15);
+	text-align: justify;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#header h3 {
+	color: rgb(96%, 100%, 85%);
+	text-shadow: 1px 1px 10px rgba(100%, 100%, 100%, 0.3);
+	font-family: Tahoma, sans-serif;
+	font-size: 36px;
+	font-weight: 600;
+	padding: 0;
+	margin-top: 10px;
+	margin-left: 20px;
+	margin-bottom: 5px;
+}
+
+#header span {
+	font-family: Verdana, sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	padding: 0;
+}
+
+#menu {
+	float: right;
+	height: 100%;
+}
+
+#menu div {
+	position: relative;
+	bottom: -60%;
+	margin-right: 5px;
+}
+
+#menu div a {
+	font-size: 17px;
+	font-family: "Palatino Linotype", "Book Antiqua", serif;
+	text-decoration: none;
+	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.3);
+	color: rgba(100%, 100%, 80%, 0.8);
+	padding: 3px 8px 5px 8px;
+	margin-left: 8px;
+	background-color: rgba(100%, 100%, 100%, 0.04);
+	border: 1px solid rgba(0%, 0%, 0%, 0.1);
+}
+
+#menu div a:hover {
+	background-color: rgba(100%, 100%, 100%, 0.075);
+}
+
+#topStatus {
+	font-family: Verdana, sans-serif;
+	font-size: 11px;
+	margin: 3px;
+	display: none;
+	text-align: center;
+	color: #ffff80;
+	background-color: transparent;
+}
+
+a {
+	text-decoration: none;
+	color: #8f8;
+	background-color: inherit;
+}
+
+a:hover {
+	color: #bfb;
+	background-color: inherit;
+}

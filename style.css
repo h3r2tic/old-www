@@ -3,6 +3,7 @@ body {
 	color: white;
 	padding: 0px;
 	margin: 0px;
+	font-family: "Palatino Linotype", "Book Antiqua", _Palatino, "URW Palladio L", serif;
 }
 
 #wrapper1 {
@@ -44,7 +45,7 @@ div.c3 {
 	background-color: transparent;
 	line-height: 1.2em;
 	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.6);
-	font-family: "Palatino Linotype", "Book Antiqua", serif;
+	font-family: inherit;
 	font-size: 15px;
 }
 
@@ -55,20 +56,21 @@ p {
 
 #header {
 	color: white;
-	margin: 10px;
-	margin-top: 15px;
 	left: 0px;
 	top: 0px;
 	padding: 10px;
 	height: 80px;
 	background-color: rgba(0, 0, 0, 0.15);
 	text-align: justify;
+	margin-bottom: 10px;
+	margin-top: 15px;
 	margin-left: auto;
 	margin-right: auto;
 }
 
 #header h3 {
 	color: rgb(96%, 100%, 85%);
+	background-color: transparent;
 	text-shadow: 1px 1px 10px rgba(100%, 100%, 100%, 0.3);
 	font-family: Tahoma, sans-serif;
 	font-size: 36px;
@@ -99,7 +101,7 @@ p {
 
 #menu div a {
 	font-size: 17px;
-	font-family: "Palatino Linotype", "Book Antiqua", serif;
+	font-family: inherit;
 	text-decoration: none;
 	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.3);
 	color: rgba(100%, 100%, 80%, 0.8);
@@ -110,6 +112,7 @@ p {
 }
 
 #menu div a:hover {
+	color: inherit;
 	background-color: rgba(100%, 100%, 100%, 0.075);
 }
 

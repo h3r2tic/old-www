@@ -26,6 +26,7 @@ body {
 }
 
 div.c1 {
+	border-radius: 7px;
 	color: inherit;
 	padding: 16px;
 	background-color: rgba(0, 0, 0, 0.1);
@@ -35,6 +36,7 @@ div.c1 {
 }
 
 div.c2 {
+	border-radius: 6px;
 	color: inherit;
 	padding: 16px;
 	background-color: rgba(255, 255, 255, 0.02);
@@ -66,6 +68,7 @@ p {
 	margin-top: 15px;
 	margin-left: auto;
 	margin-right: auto;
+	border-radius: 7px;
 }
 
 #header h3 {
@@ -109,10 +112,12 @@ p {
 	margin-left: 8px;
 	background-color: rgba(100%, 100%, 100%, 0.04);
 	border: 1px solid rgba(0%, 0%, 0%, 0.1);
+	border-radius: 4px;
+	-webkit-transition: background-color 0.1s ease-out;
 }
 
 #menu div a:hover {
-	color: inherit;
+	color: rgba(100%, 100%, 80%, 0.8);
 	background-color: rgba(100%, 100%, 100%, 0.075);
 }
 

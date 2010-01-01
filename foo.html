@@ -1,0 +1,103 @@
+<html>
+	<head>
+		<style>
+			body {
+				color: white;
+				padding: 0px;
+				margin: 0px;
+				background: black;
+			}
+
+			div#wrapper1 {
+				color: white;
+				padding: 0px;
+				margin: 0px;
+				margin-left: auto;
+				margin-right: auto;
+				background: url(vert.png) repeat-x rgb(77, 77, 77);
+			}
+
+			div#wrapper2 {
+				min-height: 100%;
+				margin: 0px;
+				padding-top: 5px;
+				padding-bottom: 5px;
+				padding-left: 8%;
+				padding-right: 8%;
+			}
+
+			div.c1 {
+				margin: 10px;
+				left: 0px;
+				top: 0px;
+				padding: 10px;
+				background-color:
+				rgba(0, 0, 0, 0.1);
+				text-align: justify;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			div.c2 {
+				padding: 6px;
+				background-color: rgba(255, 255, 255, 0.02);
+			}
+
+			div.c3 {
+				line-height: 1.2em;
+
+				text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.6);
+				font-family: Palatino Linotype, Book Antiqua, serif;
+				font-size: 15px;
+			}
+
+			a {
+				text-decoration: none;
+				color: #8f8;
+				background-color: inherit;
+			}
+
+			a:hover {
+				color: #bfb;
+			}
+		</style>
+
+		<script src="supportedGradientResolutions.js"></script>
+		<script src="horizontalGradient.js"></script>
+	</head>
+	<body onLoad="loadHorizontalGradient()">
+		<div id="wrapper1">
+		<div id="wrapper2">
+
+			<div class="c1">
+				<div class="c2">
+					<div class="c3">
+
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.jfbillingsley.com/blog/?p=53');"  href="http://www.jfbillingsley.com/blog/?p=53">Jarrett can complain like no one else</a>. But he also makes many good points about the state of D. There are tons of inconsistencies and flaws in the language and its toolchain. But that has to be quite obvious. After all, if it wasn&#8217;t for these deficiencies, D would certainly be a major player in the programming industry.</p> 
+<p>It&#8217;s true &#8211; the future of D is uncertain, but it has always been such. Has it worsened considerably in the recent future? Nope. Has it improved? Yes, but not much.<br /> 
+Some time ago there wasn&#8217;t even a good system library for D1. As Jarrett successfully notes, Phobos is underwhelming. I&#8217;d go even further by being politically incorrect and saying that it&#8217;s a complete mess. My recipe for spaghetti: try drawing an import graph of Phobos. It&#8217;s full of cycles and as we know, the DMD frontend hates cycles. They produce some of the most incomprehensible error messages the compiler can spew.<br /> 
+Fortunately, we don&#8217;t have to use Phobos anymore with D1. Tango is a much better option, as most of the community have already figured.<br /> 
+Not that long ago, D could only be reasonably used on two platforms: Windows and Linux. Now it can also run on OSX, FreeBSD, Solaris and there are folks that use it on Nintendo DS.<br /> 
+The other areas of D are also improving &#8211; QtD is great, Descent never ceases to amaze with its IntelliSense and compile-time code views, and LDC can do awesome code optimization, sometimes beating C++ and usually matching it.</p> 
+<p>I don&#8217;t agree with Jarrett on the matter of Tango &#8211; in my opinion, it&#8217;s quite stable and not hard to keep up with at all. If you&#8217;re using the SVN revisions, you&#8217;ll at least have to follow the Trac timeline for it. An RSS feed read daily will suffice just fine. But if you don&#8217;t feel like riding the cutting edge, sticking to the larger releases is what most people do anyway. In this case, you&#8217;d just have to read the &#8216;Breaking changes&#8217; section when it&#8217;s out. And except the major I/O system overhaul, it never gets any lengthy. Writing a library to support both the cutting edge and the stable version might be quite tricky, but that&#8217;s what we have version blocks for.<br /> 
+As for the supposed difficulty configuring it, there are the effortless bundles as well as instructions for manual installation.</p> 
+<p>So D actually is improving, thus Jarrett is a madman and a drunkard. Well, no, he&#8217;s not, at least not always. You need to take his latest post with a grain of salt. The thing about frustration is that it stacks up. And folks are getting more and more frustrated with specific parts of D. As far as community goes, it&#8217;s doing fine: several folks working on a native D kernel, the first demoscene production, a few games in the making and many projects that I personally lack comprehension in order to discover fully. But unfortunately, the opinion that is becoming increasingly common is that the makers of D, most notably Walter can&#8217;t keep up. The specification is vague on many topics, to say the least. It&#8217;s not clear whether we&#8217;re really programming in D or perhaps in &#8220;DMD.languageof&#8221;. This issue is extremely efficient at depressing the makers of alternative compilers, like LDC and Dil. They would all like the corner cases to be cleaned up. Sure, they could submit patches and hopefully Walter would include them. But at one point, you can&#8217;t even know whether something is a bug or a feature. How do you fix something that is not well specified, but it&#8217;s known that the specification is frozen?</p> 
+<p>Another part that I think deserves special attention is my personal favorite: OPTLINK. The linker that you will most probably use if you program in D on Windows. That is, unless you&#8217;re adventurous and compile with a custom-patched version of GDC on top of MinGW or LDC without exceptions. The thing about OPTLINK is that it&#8217;s awesome AND it sucks. I mean, it&#8217;s very fast and we all love it for that. But at the same time, anyone doing non-trivial development with D probably knows the dreadful MessageBox Of Death. A recipe for obtaining it: build a medium-sized D project with debug info. You&#8217;ll get to know the x86 register values as OPTLINK comes crashing down at your face.<br /> 
+What Walter says: it&#8217;s hard for a module to reach the limit of &#8220;fixups&#8221;, it can be split up.<br /> 
+What happens in the real world: templates. And with them, ClassInfo, TypeInfo, debug info. Sum it all up and it&#8217;s not hard for a module to reach the fixup limit (which is an OPTLINK bug, not a problem inherent in OMF &#8211; the object file format it uses &#8211; DDL can process these &#8216;too large&#8217; files just fine). It does happen in practice, and when it happens, it&#8217;s really bad. It&#8217;s grown to the status of voodoo, and in fact magic is used to prevent it from happening as well. &#8220;Try putting the modules in a different order when passing them to the compiler&#8221; and &#8220;Compile everything at once instead of one module at a time&#8221; are two such incantations. Sometimes they work &#8211; the compiler will put template instances in different modules, depending on which ones are encountered first. But automatic build tools don&#8217;t really make this well controllable. And if you&#8217;ve tried all the combinations of module order and you&#8217;re still getting the error? Remove -g when compiling. No debug info for you. But when that doesn&#8217;t suffice? You&#8217;re screwed. Like me.</p> 
+<p>I was working on &#8216;xpose2&#8242;, a meta-data processing and generation lib that allowed me to effortlessly expose D classes to MiniD, serialization and whatever else I wanted. Using xpose2 with MiniD and my game was quite easy and pleasant initially. That is, until OPTLINK issues struck. So I put the modules that used xpose2 into a separate package, compiled them into a lib separately from the rest of the project and built them without -g. I could lose debug info for them with relatively little disadvantage. Fine for a while, I continued binding more classes to MiniD. The linker was more persistent than that &#8211; the issues came back&#8230; But I don&#8217;t give up so easily &#8211; I split the bindings into more modules and worked with it for a while. Then it turned out DMD didn&#8217;t like me for splitting it up and gave me some strange crashes at my program&#8217;s runtime. After a lengthy investigation, it turned out it was a codegen bug related to the supposedly fixed issue of template mixins not being instantiated enough times, so e.g. typeof(this) yielded the incorrect type. After a whole process of giving up on it, doing &#8216;hg rm minid&#8217;, then reverting it, I had to settle on a hack that would mean I would not be screwed that much. I&#8217;ve modified xpose2 to rely more on string mixins (which I despise but have to use them in order to do the more complex metaprogramming) and added a custom pragma to DMD which would cause it not to emit symbols or debug info for functions and types used only for CTFE.</p> 
+<p>If you&#8217;d like to support DMD-win for your medium-to-large D project, these are just the issues you might face. QtD, MiniD and my yet unannounced project are just a few of these that do. The #d IRC channel holds more instances of this story.</p> 
+<p>I&#8217;ve known quite a few people using D for about 5 or more years now. They have collectively written probably a few hundred thousand lines of multi-paradigm D code that often pushes the limits of the compilers. I believe they&#8217;re an important part of the community, but I might be alone in this belief. You&#8217;d think that they have a huge impact on D because after all, Walter says that D is community-driven. I began to suspect that the community is Walter, Andrei and Bartosz. Don&#8217;t get me wrong &#8211; I wouldn&#8217;t dare to diminish their great work and all the efforts and sweat they put into making D a reality. The thing is &#8211; they don&#8217;t know or use D that much as one would think. They sure are keen on specific parts of the spec or how the compiler *should* behave, but I doubt they know all the traps and workarounds one learns about when doing some real D. Who does? The frustrated guys. They aren&#8217;t frustrated in order to upset Walter and co., but because they deeply care about the language into which they put their hopes and spent their time instead of going mainstream. I think they all realize that D has a great potential and allows to program things in ways impossible in most other languages.<br /> 
+Issues with .tupleof? Try doing it in C++, C# or Java. Many bugs that pop up in DMDFE are just that. We&#8217;re all grateful to Walter for enabling us to use a language with such an amazing feature set and we hate him at the same time because when forced to use other languages, we feel like slitting our wrists. But after the hundredth time something breaks in the compiler that was reported two years earlier, you begin to question the point of sticking with D. Perhaps the same could be done with an elaborate C preprocessor hack or a snippet of Bash script that will generate code as a pre-build step? We stick to D because we believe that Walter will finally clean it all up. Yet, there seems to be a disjoint vision of D by the people who use it and the people who shape it.</p> 
+<p>D2 is currently on the horizon, as well as a book about it. If I remember correctly, it&#8217;s meant to be out by the end of 2009. The new features it will have could just be groundbreaking. Sharing, proper constness, purity, enhanced meta-programming &#8211; they will each attract their share of new programmers. But if these people find that next to these features, there are some long-standing warts in the toolchain, like improper protection for renamed imports or forward reference errors declared inexistent by the specification, they&#8217;ll run away screaming&#8230; And damn me if I&#8217;m wrong, but the OPTLINK issues we&#8217;ve had are going to be nothing compared to what will come up when when people start using Phobos 2 with its template-heavy code. D needs a new toolchain and it needs it badly.</p> 
+<p>Does D have a future? I don&#8217;t know. Many people have decided that it doesn&#8217;t and left for other (greener?) pastures. The DSource graveyard is just a proof of that. Fortunately, many of the dead projects are in a shape good enough for reuse. Some good code can be still found e.g. in Core32, MinWin, Kong or heck, DSP. It takes a bit of necromancy at times, but overall, working with D can be quite productive. I&#8217;ve recently uncovered Enki2, and it&#8217;s doing a great job at parser generation for a larger project.</p> 
+<p>And as long as I can be productive with D, I like to believe that it has a future. Whether that future is Bright, is mostly up to one man to determine.</p> 
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+		</div>
+	</body>
+</html>

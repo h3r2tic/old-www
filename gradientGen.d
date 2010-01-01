@@ -179,7 +179,13 @@ void main() {
 		1440,
 		1600,
 		1680,
-		1920
+		1920,
+		2048,
+		2560,
+		2800,
+		3200,
+		3840,
+		4096
 	];
 
 	char[] resolutionsJS = `var supportedGradientResolutions = [`\n\t;
@@ -195,7 +201,7 @@ void main() {
 	foreach (xres; xResolutions) {
 		auto lastH = generateGradient(
 			Format("horiz{}.png", xres), 0.49999f,
-			xres, 80, true,
+			xres, 40, true,
 			noise,
 			[
 				0.0f * mult, 0.0f,
@@ -213,12 +219,12 @@ void main() {
 
 	auto lastV = generateGradient(
 		"vert.png", 1.0f,
-		40, 500, false,
+		40, 400, false,
 		noise,
 		[
 			0.0f * mult, 0.0f,
-			0.1f * mult, 0.4f,
-			0.15f * mult, 0.66f,
+			0.1f * mult, 0.65f,
+			0.125f * mult, 0.825f,
 			0.15f * mult, 1.0f
 		]
 	);

@@ -20,8 +20,8 @@ body {
 	margin: 0px;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	padding-left: 8%;
-	padding-right: 8%;
+	padding-left: 13%;
+	padding-right: 13%;
 	background: transparent;
 }
 
@@ -61,7 +61,6 @@ p {
 	left: 0px;
 	top: 0px;
 	padding: 10px;
-	height: 80px;
 	background-color: rgba(0, 0, 0, 0.15);
 	text-align: justify;
 	margin-bottom: 10px;
@@ -97,18 +96,19 @@ p {
 }
 
 #menu div {
-	position: relative;
-	bottom: -60%;
+	margin-top: 50px;
 	margin-right: 5px;
 }
 
 #menu div a {
-	font-size: 17px;
-	font-family: inherit;
+	font-size: 11px;
+	font-family: verdana;
 	text-decoration: none;
+	font-weight: bold;
+	font-variant: normal;
 	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.3);
 	color: rgba(100%, 100%, 80%, 0.8);
-	padding: 3px 8px 5px 8px;
+	padding: 7px 10px 7px 10px;
 	margin-left: 8px;
 	background-color: rgba(100%, 100%, 100%, 0.04);
 	border: 1px solid rgba(0%, 0%, 0%, 0.1);
@@ -132,8 +132,10 @@ p {
 }
 
 a {
+	font-family: Tahoma;
+	font-variant: small-caps;
 	text-decoration: none;
-	color: #8f8;
+	color: #7e7;
 	background-color: inherit;
 }
 

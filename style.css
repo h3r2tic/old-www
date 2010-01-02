@@ -44,7 +44,7 @@ div.c2 {
 
 div.c3 {
 	color: inherit;
-	background-color: transparent;
+	background: url(teapot.png) no-repeat bottom right transparent;
 	line-height: 1.4em;
 	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.6);
 	font-family: inherit;

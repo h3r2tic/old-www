@@ -45,7 +45,7 @@ div.c2 {
 div.c3 {
 	color: inherit;
 	background-color: transparent;
-	line-height: 1.3em;
+	line-height: 1.4em;
 	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.6);
 	font-family: inherit;
 	font-size: 15px;
@@ -57,6 +57,7 @@ p {
 }
 
 #header {
+	background-image: url(headerBackground.png);
 	color: white;
 	left: 0px;
 	top: 0px;
@@ -132,7 +133,7 @@ p {
 }
 
 a {
-	font-family: Tahoma;
+	font-family: Tahoma, sans-serif;
 	font-variant: small-caps;
 	text-decoration: none;
 	color: #7e7;

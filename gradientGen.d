@@ -39,21 +39,68 @@ struct SplinePoint {
 }
 
 
-	T bezier(T)(T p0, T p1, T p2, T p3, float t) {
-		float t2 = t * t;
-		float t3 = t2 * t;
-		
-		T pt = T.zero;
-		pt += p3 * (t3 / 6.f);
-		pt += p2 * ((1.f + 3.f * t + 3.f * t2 - 3.f * t3) / 6.f);
-		pt += p1 * ((4.f - 6.f * t2 + 3.f * t3) / 6.f);
-		pt += p0 * (((1.f - t) * (1.f - t) * (1.f - t)) / 6.f);
-		
-		return pt;
+int binomial(int n, int k) {
+	if (k > n) {
+        return 0;
+	}
+	if (k > n / 2) {
+		k = n - k;
 	}
 
+	int num = 1;
+	for (int i = n - k + 1; i <= n; ++i) {
+		num *= i;
+	}
+	int den = 1;
+	for (int i = 2; i <= k; ++i) {
+		den *= i;
+	}
+	return num / den;
+}
 
-vec4 interp(SplinePoint[] points, float t) {
+static assert (binomial(7, 3) == 35);
+static assert (binomial(4, 0) == 1);
+static assert (binomial(4, 1) == 4);
+static assert (binomial(4, 2) == 6);
+static assert (binomial(4, 3) == 4);
+static assert (binomial(4, 4) == 1);
+
+
+/+T bezier(T)(T delegate(int) p, int n, float t) {
+	T pt = T.zero;
+
+	float ti = 1.f;
+	for (int i = 0; i < n; ++i) {
+		float mult = cast(double)binomial(i, n) * ti * pow(1.f - t, n-i);
+		pt += mult * p(i);
+		ti *= t;
+	}
+
+	float t2 = t * t;
+	float t3 = t2 * t;
+		
+	T pt = T.zero;
+	pt += p3 * (t3 / 6.f);
+	pt += p2 * ((1.f + 3.f * t + 3.f * t2 - 3.f * t3) / 6.f);
+	pt += p1 * ((4.f - 6.f * t2 + 3.f * t3) / 6.f);
+	pt += p0 * (((1.f - t) * (1.f - t) * (1.f - t)) / 6.f);
+		
+	return pt;
+}+/
+
+
+enum InterpType {
+	CatmullRom,
+	Bezier
+}
+
+enum NoiseWeighting {
+	Brightness	= 0b1,
+	Center		= 0b10
+}
+
+
+vec4 interp(InterpType type, SplinePoint[] points, float t) {
 	int i1 = 0;
 	while (i1+1 < points.length && points[i1+1].t < t) ++i1;
 	int i0 = max(0, min(points.length-1, i1-1));
@@ -64,26 +111,30 @@ vec4 interp(SplinePoint[] points, float t) {
 		t2 = (t - points[i1].t) / (points[i2].t - points[i1].t);
 	}
 	vec4 res = vec4.zero;
-	catmullRomInterp(
-		t2,
-		points[i0].pt,
-		points[i1].pt,
-		points[i2].pt,
-		points[i3].pt,
-		res
-	);
-	/+res = bezier(
-		points[i0].pt,
-		points[i1].pt,
-		points[i2].pt,
-		points[i3].pt,
-		t2
-	);+/
+	if (InterpType.CatmullRom == type) {
+		catmullRomInterp(
+			t2,
+			points[i0].pt,
+			points[i1].pt,
+			points[i2].pt,
+			points[i3].pt,
+			res
+		);
+	} else {
+		/+res = bezier(
+			points[i0].pt,
+			points[i1].pt,
+			points[i2].pt,
+			points[i3].pt,
+			t2
+		);+/
+		assert (false);
+	}
 	return res;
 }
 
 
-vec4ub generateGradient(char[] file, float alpha, int width, int height, bool vertical, float noiseStr, float[] intens, double postGammaMult = 1.0) {
+vec4ub generateGradient(char[] file, float alpha, int width, int height, bool vertical, float noiseStr, NoiseWeighting nwt, InterpType interpType, float[] intens, double postGammaMult = 1.0) {
 	SplinePoint[] splinePoints;
 	for (int i = 0; i < intens.length; i += 2) {
 		splinePoints ~= SplinePoint(
@@ -109,10 +160,17 @@ vec4ub generateGradient(char[] file, float alpha, int width, int height, bool ve
 
 	vec4 lastBase = vec4.zero;
 
-	vec4ub finalCol(vec4 colf) {
+	vec4ub finalCol(float t, vec4 colf) {
 		auto noise = genNoise();
-		float noiseWeight = vec3.from(colf).length() / 3.f;
-		noiseWeight = sqrt(noiseWeight);
+		float noiseWeight = 1.f;
+
+		if (NoiseWeighting.Center & nwt) {
+			noiseWeight *= sin(pi * t);
+		}
+		if (NoiseWeighting.Brightness & nwt) {
+			noiseWeight *= sqrt(vec3.from(colf).length() / 3.f);
+		}
+
 		colf += noise * noiseWeight;
 		return sRGB(colf, postGammaMult);
 	}
@@ -120,23 +178,23 @@ vec4ub generateGradient(char[] file, float alpha, int width, int height, bool ve
 	if (vertical) {
 		for (int x = 0; x < width; ++x) {
 			float xf = x / cast(double)(width-1);
-			vec4 baseCol = interp(splinePoints, xf);
+			vec4 baseCol = interp(interpType, splinePoints, xf);
 			lastBase = baseCol;
 			assert (baseCol.ok);
 
 			for (int y = 0; y < height; ++y) {
-				pixels[x][y] = finalCol(baseCol);
+				pixels[x][y] = finalCol(xf, baseCol);
 			}
 		}
 	} else {
 		for (int y = 0; y < height; ++y) {
 			float yf = y / cast(double)(height-1);
-			vec4 baseCol = interp(splinePoints, yf);
+			vec4 baseCol = interp(interpType, splinePoints, yf);
 			lastBase = baseCol;
 			assert (baseCol.ok);
 
 			for (int x = 0; x < width; ++x) {
-				pixels[x][y] = finalCol(baseCol);
+				pixels[x][y] = finalCol(yf, baseCol);
 			}
 		}
 	}
@@ -202,7 +260,7 @@ void main() {
 		auto lastH = generateGradient(
 			Format("horiz{}.png", xres), 0.49999f,
 			xres, 40, true,
-			noise,
+			noise * 1.2f, NoiseWeighting.Brightness, InterpType.CatmullRom,
 			[
 				0.0f * mult, 0.0f,
 				0.1f * mult, 0.2f,
@@ -220,7 +278,7 @@ void main() {
 	auto lastV = generateGradient(
 		"vert.png", 1.0f,
 		40, 400, false,
-		noise,
+		noise * 1.0f, NoiseWeighting.Center | NoiseWeighting.Brightness, InterpType.CatmullRom,
 		[
 			0.0f * mult, 0.0f,
 			0.1f * mult, 0.65f,

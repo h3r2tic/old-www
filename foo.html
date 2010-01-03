@@ -1,6 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+<!DOCTYPE html> 
+<html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<title>h3r3tic's grimoire</title> 
@@ -25,12 +24,15 @@
 
 			<script type="text/javascript" src="browserComplaints.js"></script>
 
-			<div id="header">
+			<div id="head">
 				<div id="menu">
 					<span id="settingsIcon" onclick="showHideSettingsPopup()">
 						<span>settings</span>
 						<img src="settingsIcon.png" alt="settings" />
 					</span>
+					<a href="#" id="readability" onclick="(function(){readStyle='style-newspaper';readSize='size-medium';readMargin='margin-wide';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='screen';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();">
+						Plain view
+					</a>
 					<div>
 						<a href="/">HOME</a>
 						<a href="#">PROJECTS</a>
@@ -40,7 +42,7 @@
 				</div>
 
 				<h3>h3r3tic's grimoire</h3>
-				<span style="margin-left: 50px; color: rgb(100%, 50%, 30%); text-shadow: 1px 1px 5px rgba(100%, 50%, 30%, 0.3);">
+				<span style="margin-left: 40px; color: rgb(100%, 50%, 30%); text-shadow: 1px 1px 5px rgba(100%, 50%, 30%, 0.3);">
 					ramblings of a madman
 				</span>
 				<span style="color: rgb(100%, 100%, 100%); text-shadow: 1px 1px 5px rgba(100%, 100%, 100%, 0.3);">
@@ -136,6 +138,6 @@ Issues with .tupleof? Try doing it in C++, C# or Java. Many bugs that pop up in 
 			
 		</div>
 		</div>
-		<script type="text/javascript">loadStoredSettings()</script>
+		<script type="text/javascript">loadHorizontalGradient(); loadStoredSettings();</script>
 	</body>
 </html>

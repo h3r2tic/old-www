@@ -20,8 +20,8 @@ body {
 	margin: 0px;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	padding-left: 13%;
-	padding-right: 13%;
+	padding-left: 17%;
+	padding-right: 17%;
 	background: transparent;
 	text-align: center;
 }
@@ -48,10 +48,10 @@ div.c2 {
 div.c3 {
 	color: #f0f0f0;
 	background: url(teapot.png) no-repeat bottom right transparent;
-	line-height: 1.4em;
 	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.6);
 	font-family: inherit;
-	font-size: 15px;
+	font-size: 100%;
+	line-height: 140%;
 }
 
 p {
@@ -59,7 +59,7 @@ p {
 	margin-bottom: 1.6em;
 }
 
-#header {
+#head {
 	background-image: url(headerBackground.png);
 	color: white;
 	left: 0px;
@@ -75,7 +75,7 @@ p {
 	-moz-border-radius: 7px;
 }
 
-#header h3 {
+#head h3 {
 	color: rgb(96%, 100%, 85%);
 	background-color: transparent;
 	text-shadow: 1px 1px 10px rgba(100%, 100%, 100%, 0.3);
@@ -88,7 +88,7 @@ p {
 	margin-bottom: 5px;
 }
 
-#header span {
+#head span {
 	font-family: Verdana, sans-serif;
 	font-size: 14px;
 	font-weight: 400;
@@ -123,7 +123,7 @@ p {
 }
 
 #menu div a {
-	font-size: 11px;
+	font-size: 10px;
 	font-family: Verdana, sans-serif;
 	text-decoration: none;
 	font-weight: bold;
@@ -131,7 +131,7 @@ p {
 	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.3);
 	color: rgba(100%, 100%, 80%, 0.8);
 	padding: 7px 10px 7px 10px;
-	margin-left: 8px;
+	margin-left: 6px;
 	background-color: rgba(100%, 100%, 100%, 0.04);
 	border: 1px solid rgba(0%, 0%, 0%, 0.1);
 	border-radius: 4px;
@@ -142,6 +142,49 @@ p {
 #menu div a:hover {
 	color: rgba(100%, 100%, 80%, 0.8);
 	background-color: rgba(100%, 100%, 100%, 0.075);
+}
+
+#readability {
+	float: left;
+	font-size: 14px;
+	font-family: Georgia, serif;
+	text-decoration: none;
+	font-weight: normal;
+	font-variant: small-caps;
+	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.3);
+	color: rgba(100%, 100%, 80%, 0.8);
+	padding: 4px 10px 5px 10px;
+	background-color: rgba(100%, 100%, 100%, 0.08);
+	border: 1px solid rgba(0%, 0%, 0%, 0.1);
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	margin-top: 3px;
+	margin-left: 6px;
+	opacity: 0.2;
+	-webkit-transition: opacity 0.1s ease-out;
+}
+
+#readability:hover {
+	opacity: 1;
+}
+
+#settingsIcon {
+	float: right;
+	opacity: 0.7;
+}
+
+#settingsIcon span {
+	font-size: 10px;
+	opacity: 0.25;
+}
+
+#settingsIcon img {
+	vertical-align: middle;
+}
+
+#settingsIcon:hover {
+	opacity: 1;
+	cursor: pointer;
 }
 
 #topStatus {
@@ -165,24 +208,5 @@ a {
 a:hover {
 	color: #bfb;
 	background-color: inherit;
-}
-
-#settingsIcon {
-	float: right;
-	opacity: 0.7;
-}
-
-#settingsIcon span {
-	font-size: 10px;
-	opacity: 0.25;
-}
-
-#settingsIcon img {
-	vertical-align: middle;
-}
-
-#settingsIcon:hover {
-	opacity: 1;
-	cursor: pointer;
 }
 

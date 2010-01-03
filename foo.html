@@ -27,7 +27,7 @@
 
 			<div id="header">
 				<div id="menu">
-					<img id="settingsIcon" src="settingsIcon.png" onclick="showHideSettingsPopup()" />
+					<img id="settingsIcon" src="settingsIcon.png" alt="settings" onclick="showHideSettingsPopup()" />
 					<div>
 						<a href="/">HOME</a>
 						<a href="#">PROJECTS</a>
@@ -77,14 +77,14 @@ Issues with .tupleof? Try doing it in C++, C# or Java. Many bugs that pop up in 
 			</div>
 
 		<div id="footer">
-			The contents of this site are available under the <a href="http://creativecommons.org/licenses/by/2.5/" alt="Creative Commons Attribution 2.5 Generic license">Creative Commons Attribution 2.5 Generic license</a>.
+			The contents of this site are available under the <a href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 Generic license</a>.
 		</div>
 
 		<div id="settingsPopupWrap"><div id="settingsPopup">
 			<div class="settingsGroup">
 				<span>Text settings:</span>
 
-				<table id="textColorSettings">
+				<table>
 					<tr>
 						<td><label for="textColorSliderR">R:</label></td>
 						<td><input name="slider1" id="textColorSliderR" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateTextColor fd_hide_input" value="255" maxlength="3" /></td>
@@ -104,10 +104,10 @@ Issues with .tupleof? Try doing it in C++, C# or Java. Many bugs that pop up in 
 
 			<div class="settingsGroup">
 				<span>Background settings:</span>
-				<p><input id="settingsUseHGradientCheckbox" type="checkbox" checked onclick="siteSettings.useHorizontalGradient = event.target.checked; siteSettings.update();" />Horizontal gradient</p>
-				<p><input id="settingsUseVGradientCheckbox" type="checkbox" checked onclick="siteSettings.useVerticalGradient = event.target.checked; siteSettings.update();"/>Vertical gradient (overrides color)</p>
+				<p><input id="settingsUseHGradientCheckbox" name="settingsUseHGradientCheckbox" type="checkbox" onclick="siteSettings.useHorizontalGradient = event.target.checked; siteSettings.update();" />Horizontal gradient</p>
+				<p><input id="settingsUseVGradientCheckbox" name="settingsUseVGradientCheckbox" type="checkbox" onclick="siteSettings.useVerticalGradient = event.target.checked; siteSettings.update();"/>Vertical gradient (overrides color)</p>
 
-				<table id="textColorSettings">
+				<table>
 					<tr>
 						<td><label for="bgColorSliderR">R:</label></td>
 						<td><input name="slider4" id="bgColorSliderR" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateBGColor fd_hide_input" value="77" maxlength="3" /></td>

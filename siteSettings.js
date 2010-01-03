@@ -73,7 +73,7 @@ function SiteSettings_update() {
 		vgradient.style.background = "url(vert.png) repeat-x rgb(77, 77, 77)";
 	}
 
-	set_cookie("settings", this.serialize());
+	set_cookie("siteSettings", this.serialize());
 }
 
 function SiteSettings_serialize() {
@@ -189,7 +189,7 @@ function settingsUseShadowsHandler(e) {
 }
 
 function loadStoredSettings() {
-	var s = get_cookie("settings");
+	var s = get_cookie("siteSettings");
 	var success = false;
 	if (s) {
 		success = siteSettings.unserialize(s);

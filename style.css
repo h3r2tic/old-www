@@ -12,7 +12,7 @@ body {
 	margin: 0px;
 	margin-left: auto;
 	margin-right: auto;
-	background: transparent;
+	background-color: transparent;
 }
 
 #wrapper2 {
@@ -28,6 +28,7 @@ body {
 
 div.c1 {
 	border-radius: 7px;
+	-moz-border-radius: 7px;
 	color: inherit;
 	padding: 16px;
 	background-color: rgba(0, 0, 0, 0.1);
@@ -38,6 +39,7 @@ div.c1 {
 
 div.c2 {
 	border-radius: 6px;
+	-moz-border-radius: 6px;
 	color: inherit;
 	padding: 16px;
 	background-color: rgba(255, 255, 255, 0.02);
@@ -70,6 +72,7 @@ p {
 	margin-left: auto;
 	margin-right: auto;
 	border-radius: 7px;
+	-moz-border-radius: 7px;
 }
 
 #header h3 {
@@ -104,6 +107,7 @@ p {
 }
 
 #footer a {
+	background-color: transparent;
 	font-variant: normal;
 	color: #6d6;
 }
@@ -120,7 +124,7 @@ p {
 
 #menu div a {
 	font-size: 11px;
-	font-family: verdana;
+	font-family: Verdana, sans-serif;
 	text-decoration: none;
 	font-weight: bold;
 	font-variant: normal;
@@ -131,6 +135,7 @@ p {
 	background-color: rgba(100%, 100%, 100%, 0.04);
 	border: 1px solid rgba(0%, 0%, 0%, 0.1);
 	border-radius: 4px;
+	-moz-border-radius: 4px;
 	-webkit-transition: background-color 0.1s ease-out;
 }
 

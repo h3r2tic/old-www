@@ -16,6 +16,7 @@
 	margin-right: auto;
 	background-color: rgba(12.5%, 12.5%, 12.5%, 0.97);
 	border-radius: 4px;
+	-moz-border-radius: 4px;
 	border: 1px solid black;
 	padding: 10px;
 	overflow: hidden;
@@ -35,6 +36,7 @@
 	border: 2px solid #333;
 	padding: 8px;
 	border-radius: 4px;
+	-moz-border-radius: 4px;
 	margin: 5px;
 }
 

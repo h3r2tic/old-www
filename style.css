@@ -172,6 +172,15 @@ a:hover {
 	opacity: 0.7;
 }
 
+#settingsIcon span {
+	font-size: 10px;
+	opacity: 0.25;
+}
+
+#settingsIcon img {
+	vertical-align: middle;
+}
+
 #settingsIcon:hover {
 	opacity: 1;
 	cursor: pointer;

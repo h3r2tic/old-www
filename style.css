@@ -1,5 +1,5 @@
 body {
-	background-color: black;
+	background-color: rgb(77, 77, 77);
 	color: white;
 	padding: 0px;
 	margin: 0px;
@@ -12,7 +12,7 @@ body {
 	margin: 0px;
 	margin-left: auto;
 	margin-right: auto;
-	background: url(vert.png) repeat-x rgb(77, 77, 77);
+	background: transparent;
 }
 
 #wrapper2 {
@@ -23,6 +23,7 @@ body {
 	padding-left: 13%;
 	padding-right: 13%;
 	background: transparent;
+	text-align: center;
 }
 
 div.c1 {
@@ -43,7 +44,7 @@ div.c2 {
 }
 
 div.c3 {
-	color: inherit;
+	color: #f0f0f0;
 	background: url(teapot.png) no-repeat bottom right transparent;
 	line-height: 1.4em;
 	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.6);
@@ -89,6 +90,22 @@ p {
 	font-size: 14px;
 	font-weight: 400;
 	padding: 0;
+}
+
+#footer {
+	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.6);
+	text-align: center;
+	font-size: 11px;
+	font-style: italic;
+	font-family: Verdana, sans-serif;
+	background-color: transparent;
+	color: #c0c0c0;
+	margin: 4px;
+}
+
+#footer a {
+	font-variant: normal;
+	color: #6d6;
 }
 
 #menu {
@@ -144,3 +161,14 @@ a:hover {
 	color: #bfb;
 	background-color: inherit;
 }
+
+#settingsIcon {
+	float: right;
+	opacity: 0.7;
+}
+
+#settingsIcon:hover {
+	opacity: 1;
+	cursor: pointer;
+}
+

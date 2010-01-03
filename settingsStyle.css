@@ -1,0 +1,92 @@
+#settingsPopupWrap {
+	visibility: hidden;
+	position: absolute;
+	top: 25%;
+	left: 0;
+	width: 100%;
+	text-align: center;
+}
+
+#settingsPopup {
+	z-index: 2;
+	text-align: left;
+	width: 55%;
+	max-width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: rgba(12.5%, 12.5%, 12.5%, 0.97);
+	border-radius: 4px;
+	border: 1px solid black;
+	padding: 10px;
+	overflow: hidden;
+
+	font-family: Verdana, sans-serif;
+	font-size: 11px;
+	color: #f0f0f0;
+}
+
+#settingsButtons {
+	float: right;
+	padding: 5px;
+}
+
+#settingsPopup div.settingsGroup {
+	float: left;
+	border: 2px solid #333;
+	padding: 8px;
+	border-radius: 4px;
+	margin: 5px;
+}
+
+#settingsPopup p {
+	margin-top: 4px;
+	margin-bottom: 4px;
+	display: block;
+}
+
+#settingsPopup div.settingsGroup span {
+	display: block;
+	margin-left: 4px;
+	margin-bottom: 10px;
+	font-variant: small-caps;
+	text-decoration: underline;
+	color: #ffffc0;
+	font-size: 13px;
+}
+
+#settingsPopup input[type="text"] {
+	width: 2.5em;
+	background-color: #202020;
+	color: white;
+	font-size: 11px;
+	font-family: Verdana, sans-serif;
+	border: 1px solid #1c1c1c;
+	display: inline;
+	float: right;
+	margin-left: 4px;
+	text-align: center;
+}
+
+#settingsPopup .fd-slider {
+	float: left;
+	width: 100px;
+}
+
+#settingsPopup .fd-slider .fd-slider-inner {
+	background:#202020;
+	border-color:#1c1c1c;
+}
+
+#settingsPopup .fd-slider .fd-slider-bar {
+	background:#111;
+	border-color:#111 #2c2c2c #2c2c2c #111;
+}
+
+#settingsPopup .fd-slider:focus .fd-slider-inner,
+#settingsPopup .fd-slider:focus .fd-slider-inner,
+#settingsPopup .focused .fd-slider-inner
+{
+	background:#202020 !important;
+	border-color:#000 !important;
+}
+

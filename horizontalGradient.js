@@ -1,4 +1,8 @@
 function setHorizontalGradient(width) {
+	if (!siteSettings.useHorizontalGradient) {
+		return;
+	}
+
 	var res = supportedGradientResolutions[
 		supportedGradientResolutions.length-1
 	];
@@ -16,11 +20,16 @@ function setHorizontalGradient(width) {
 }
 
 
-function loadHorizontalGradient() {
+function updateHorizontalGradient() {
 	setHorizontalGradient(window.innerWidth);
+}
+
+
+function loadHorizontalGradient() {
+	updateHorizontalGradient();
 
 	window.onresize = function() {
-		setHorizontalGradient(window.innerWidth);
+		updateHorizontalGradient();
 	};
 }
 

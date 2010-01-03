@@ -6,25 +6,28 @@
 		<title>h3r3tic's grimoire</title> 
 		<meta name="keywords" content="h3r3tic, tomasz, stachowiak, ctrace, bind, d, deadlock, stfu, dmedia, dshade, programming, coding" />
 
-		<link type="text/css" rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" type="text/css" media="screen, projection" href="style.css" />
+		<script type="text/javascript" src="cookie.js"></script>
 		<script type="text/javascript" src="supportedGradientResolutions.js"></script>
 		<script type="text/javascript" src="horizontalGradient.js"></script>
+		<script type="text/javascript" src="siteSettings.js"></script>
+
+        <link rel="stylesheet" type="text/css" media="screen, projection" href="slider/slider.css" />
+		<script type="text/javascript" src="slider/slider.js"></script>
+
+        <link rel="stylesheet" type="text/css" media="screen, projection" href="settingsStyle.css" />
 	</head>
 
-	<body onload="loadHorizontalGradient();">
+	<body>
 		<div id="wrapper1">
 		<div id="wrapper2">
-
-			<script type="text/javascript">
-				loadHorizontalGradient();
-			</script>
-
 			<div id="topStatus"></div>
 
 			<script type="text/javascript" src="browserComplaints.js"></script>
 
 			<div id="header">
 				<div id="menu">
+					<img id="settingsIcon" src="settingsIcon.png" onclick="showHideSettingsPopup()" />
 					<div>
 						<a href="/">HOME</a>
 						<a href="#">PROJECTS</a>
@@ -73,7 +76,63 @@ Issues with .tupleof? Try doing it in C++, C# or Java. Many bugs that pop up in 
 				</div>
 			</div>
 
+		<div id="footer">
+			The contents of this site are available under the <a href="http://creativecommons.org/licenses/by/2.5/" alt="Creative Commons Attribution 2.5 Generic license">Creative Commons Attribution 2.5 Generic license</a>.
+		</div>
+
+		<div id="settingsPopupWrap"><div id="settingsPopup">
+			<div class="settingsGroup">
+				<span>Text settings:</span>
+
+				<table id="textColorSettings">
+					<tr>
+						<td><label for="textColorSliderR">R:</label></td>
+						<td><input name="slider1" id="textColorSliderR" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateTextColor fd_hide_input" value="255" maxlength="3" /></td>
+					</tr>
+					<tr>
+						<td><label for="textColorSliderG">G:</label></td>
+						<td><input name="slider2" id="textColorSliderG" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateTextColor fd_hide_input" value="255" maxlength="3" /></td>
+					</tr>
+					<tr>
+						<td><label for="textColorSliderB">B:</label></td>
+						<td><input name="slider3" id="textColorSliderB" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateTextColor fd_hide_input" value="255" maxlength="3" /></td>
+					</tr>
+				</table>
+
+				<p><input id="settingsUseShadowsCheckbox" type="checkbox" onclick="settingsUseShadowsHandler(event)" />Shadows</p>
+			</div>
+
+			<div class="settingsGroup">
+				<span>Background settings:</span>
+				<p><input id="settingsUseHGradientCheckbox" type="checkbox" checked onclick="siteSettings.useHorizontalGradient = event.target.checked; siteSettings.update();" />Horizontal gradient</p>
+				<p><input id="settingsUseVGradientCheckbox" type="checkbox" checked onclick="siteSettings.useVerticalGradient = event.target.checked; siteSettings.update();"/>Vertical gradient (overrides color)</p>
+
+				<table id="textColorSettings">
+					<tr>
+						<td><label for="bgColorSliderR">R:</label></td>
+						<td><input name="slider4" id="bgColorSliderR" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateBGColor fd_hide_input" value="77" maxlength="3" /></td>
+					</tr>
+					<tr>
+						<td><label for="bgColorSliderG">G:</label></td>
+						<td><input name="slider5" id="bgColorSliderG" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateBGColor fd_hide_input" value="77" maxlength="3" /></td>
+					</tr>
+					<tr>
+						<td><label for="bgColorSliderB">B:</label></td>
+						<td><input name="slider6" id="bgColorSliderB" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateBGColor" value="77" maxlength="3" /></td>
+					</tr>
+				</table>
+			</div>
+
+			<div id="settingsButtons">
+				<a href="#" style="font-size: 18px" onclick="restoreDefaultSettings()">Default</a>
+				<br />
+				<br />
+				<a href="#" style="font-size: 18px" onclick="showHideSettingsPopup()">Done</a>
+			</div>
+		</div></div>
+			
 		</div>
 		</div>
+		<script type="text/javascript">loadStoredSettings()</script>
 	</body>
 </html>

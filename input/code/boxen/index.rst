@@ -1,0 +1,14 @@
+Info
+====
+
+Project 'Boxen' is aiming to be a multi-player first person shooter game involving human characters and vehicles, similar to games of the *Battlefield* series.
+
+The game's engine is written from scratch in the D programming language. Naturally not all of its wheels are re-invented. Boxen utilizes the **Havok** library for physics, **FMOD** for sound, **OpenGL 3.2** and **CgFX** for graphics and **enet** for a reliable UDP layer. The networking component is based on an `authority scheme <http://gafferongames.com/conferences/migs09/>`__ enabling rich vehicle and kinetic controller dynamics.
+
+The artistic side is covered by my brother, Marcin Stachowiak, who makes awesome low-poly meshes. A gallery of preliminary models can be `viewed here <http://www.dropbox.com/gallery/1267818/1/boxen?h=8e36f1>`__.
+
+
+Progress
+========
+
+A simple prototype of networked physics and basic gameplay has been successfully constructed and tested with 7 players scattered around the world. The prototype was based on the *PhysX* engine and a very experimental rendering system. I'm currently working on a `new renderer <../nucleus/index.html>`__, which is also the main topic of my MSc thesis. In parallel, I'm replacing the PhysX-based simulation with Havok which has proven to be much more user friendly so far.

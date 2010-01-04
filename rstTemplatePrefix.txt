@@ -38,7 +38,7 @@
 					</a>
 					<div>
 						<a href="http://h3.gd/devlog/">BLOG</a>
-						<a href="%(siteRoot)sproj/index.html">PROJECTS</a>
+						<a href="%(siteRoot)scode/index.html">CODE</a>
 						<a href="%(siteRoot)slinks.html">LINKS</a>
 						<a href="%(siteRoot)sabout.html">ABOUT</a>
 					</div>

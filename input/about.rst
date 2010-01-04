@@ -9,8 +9,6 @@ I have a `sister <http://missselfdestruct.deviantart.com/>`_ and a `brother <htt
 
 I luuuuv `mudkipz <http://www.encyclopediadramatica.com/index.php/So_i_herd_u_liek_mudkip>`_.
 
-I'm currently working on a networked FPS game with humanoid players and vehicles, code-named Boxen. Not much info is public about it yet, but you can see some `concept art <http://www.dropbox.com/gallery/1267818/1/boxen?h=8e36f1>`_ created by my brother.
-
 You can contact me by sending an e-mail to the 'h3' account at this domain.
 
 
@@ -19,7 +17,7 @@ About this site
 
 There's a chance this site doesn't work perfectly in your browser. This is because it uses HTML5, CSS level 3 and some EcmaScript, which older browsers might not be able to handle. You should be fine with a relatively recent version of Firefox or anything based on WebKit. No Internet Explorer support here, sorry.
 
-The background is composed of two gradients, a horizontal and a vertical one. The horizontal one is translucent, thus mixing with the background vertical one thus forming the curved pattern. Both of the gradients are generated using a D program which utilizes Catmull-Rom and Cosine splines to interpolate the colors. The calculations are done using floating point RGB colors, which subsequently have specially weighted noise added to them. Finally, the linear color is converted to the sRGB space and quantized. The noise is not purely aesthetical - without it, there would be apparent banding resulting from the ability of the human visual system to perceive more than 256 shades of gray. The use of noise is a hack exploting an intrinsic feature of this visual system, which is filtering. In the presence of noise, the human brain will smooth out the image similarly to a bilateral filter, thus adding the missing gray levels.
+The background is composed of two gradients, a horizontal and a vertical one. The horizontal one is translucent, thus mixing with the background vertical one forming the curved pattern. Both of the gradients are generated using a D program which utilizes Catmull-Rom and Cosine splines to interpolate the values. The calculations are done using floating point RGB colors, which subsequently have specially weighted noise added to them. Finally, the linear color is converted to the sRGB space and quantized. The noise is not purely aesthetical - without it, there would be apparent banding resulting from the ability of the human visual system to perceive more than 256 shades of gray. The use of noise is a hack exploting an intrinsic feature of this visual system, which is filtering. In the presence of noise, the human brain will smooth out the image similarly to a bilateral filter, thus adding the missing gray levels.
 
 The horizontal gradient is generated for most popular horizontal resolutions, starting with 320 and ending with 4096 pixels. The proper one is chosen by EcmaScript at init time and upon window resizing.
 

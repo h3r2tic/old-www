@@ -1,7 +1,7 @@
 Boxen_
 ======
 
-durrr (broken link)
+durrr
 
 
 Deadlock_
@@ -66,11 +66,11 @@ __ ann_
 durrr
 
 
-.. _Boxen: Boxen.html
+.. _Boxen: boxen/index.html
 .. _Deadlock: http://deadlock.team0xf.com/
 .. _ctrace: ../ctrace/index.html
 .. _Hybrid: http://hybrid.team0xf.com/
-.. _Nucleus: Nucleus.html
+.. _Nucleus: nucleus/index.html
 .. _xfProf: xfProf.html
 .. _xfBuild: http://bitbucket.org/h3r3tic/xfbuild/wiki/Home
 .. _OMFG: omfg.html

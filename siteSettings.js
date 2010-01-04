@@ -133,10 +133,10 @@ function restoreDefaultSettings() {
 function showHideSettingsPopup() {
 	var popup = document.getElementById("settingsPopupWrap");
 	if (settingsPopupDisplayed) {
-		popup.style.display = "none";
+		popup.style.visibility = "hidden";
 		settingsPopupDisplayed = false;
 	} else {
-		popup.style.display = "block";
+		popup.style.visibility = "visible";
 		settingsPopupDisplayed = true;
 
 		document.getElementById("settingsUseShadowsCheckbox")

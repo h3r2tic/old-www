@@ -5,7 +5,7 @@ import shutil
 
 def formatTemplate(s, level):
 	return s % {
-		'level' : '../' * level
+		'siteRoot' : '../' * level
 	}
 
 def rst2html(dir, rst, level):
@@ -40,7 +40,7 @@ def dir_rst2html(dir, level = 0):
 				try:	os.makedirs('output/'+p)
 				except:	pass
 				dir_rst2html(p, level+1)
-		else:
+		elif file[-4:] != '.swp':
 			shutil.copyfile('input/' + dir + file, 'output/' + dir + file)
 
 

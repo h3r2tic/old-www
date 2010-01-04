@@ -91,7 +91,8 @@ static assert (binomial(4, 4) == 1);
 
 enum InterpType {
 	CatmullRom,
-	Bezier
+	Bezier,
+	Cosine
 }
 
 enum NoiseWeighting {
@@ -120,7 +121,10 @@ vec4 interp(InterpType type, SplinePoint[] points, float t) {
 			points[i3].pt,
 			res
 		);
-	} else {
+	} else if (InterpType.Cosine == type) {
+		float x = (1.f - cos(t2 * pi)) * 0.5f;
+		res = points[i1].pt * (1.f - x) + points[i2].pt * x;
+	} else if (InterpType.Bezier == type) {
 		/+res = bezier(
 			points[i0].pt,
 			points[i1].pt,
@@ -129,7 +133,7 @@ vec4 interp(InterpType type, SplinePoint[] points, float t) {
 			t2
 		);+/
 		assert (false);
-	}
+	} else assert (false);
 	return res;
 }
 
@@ -229,6 +233,8 @@ void main() {
 	const float noise = 0.06f;
 
 	int[] xResolutions = [
+		320,
+		640,
 		800,
 		1024,
 		1152,
@@ -278,11 +284,9 @@ void main() {
 	auto lastV = generateGradient(
 		"output/vert.png", 1.0f,
 		40, 400, false,
-		noise * 1.0f, NoiseWeighting.Center | NoiseWeighting.Brightness, InterpType.CatmullRom,
+		noise * 1.0f, NoiseWeighting.Center | NoiseWeighting.Brightness, InterpType.Cosine,
 		[
 			0.0f * mult, 0.0f,
-			0.1f * mult, 0.65f,
-			0.125f * mult, 0.825f,
 			0.15f * mult, 1.0f
 		]
 	);

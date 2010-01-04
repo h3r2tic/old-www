@@ -66,12 +66,16 @@ div.c3 img {
 	border: none;
 }
 
+a {
+	text-decoration: none;
+}
+
 p {
 	margin-top: 0;
 	margin-bottom: 1.6em;
 }
 
-#verticalPad {
+.verticalPad {
 	height: 15px;
 }
 
@@ -89,16 +93,22 @@ p {
 }
 
 #head h3 {
-	color: rgb(96%, 100%, 85%);
-	background-color: transparent;
-	text-shadow: 1px 1px 10px rgba(100%, 100%, 100%, 0.3);
-	font-family: Tahoma, sans-serif;
-	font-size: 36px;
-	font-weight: 600;
-	padding: 0;
-	margin-top: 10px;
-	margin-left: 20px;
-	margin-bottom: 5px;
+	color: rgb(96%, 100%, 85%) !important;
+	background-color: transparent !important;
+	text-shadow: 1px 1px 10px rgba(96%, 100%, 85%, 0.3) !important;
+	font-family: Tahoma, sans-serif !important;
+	font-size: 36px !important;
+	font-weight: 600 !important;
+	padding: 0 !important;
+	margin-top: 10px !important;
+	margin-left: 20px !important;
+	margin-bottom: 5px !important;
+	font-variant: normal !important;
+}
+
+#head h3:hover {
+	text-shadow: 1px 1px 10px rgba(96%, 100%, 85%, 0.6) !important;
+	cursor: pointer;
 }
 
 #head span {

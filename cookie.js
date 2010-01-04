@@ -10,7 +10,7 @@ function get_cookie ( cookie_name )
     return null;
 }
 
-function set_cookie ( name, value, exp_y, exp_m, exp_d, path, domain, secure )
+function set_cookie ( name, value, exp_y, exp_m, exp_d, /*path, */domain, secure )
 {
   var cookie_string = name + "=" + escape ( value );
 
@@ -20,8 +20,9 @@ function set_cookie ( name, value, exp_y, exp_m, exp_d, path, domain, secure )
     cookie_string += "; expires=" + expires.toGMTString();
   }
 
-  if ( path )
-        cookie_string += "; path=" + escape ( path );
+  /*if ( path )
+        cookie_string += "; path=" + escape ( path );*/
+  cookie_string += "; path=" + escape("/u/1267818/styleProto");
 
   if ( domain )
         cookie_string += "; domain=" + escape ( domain );

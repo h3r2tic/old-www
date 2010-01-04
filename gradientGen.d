@@ -292,5 +292,16 @@ void main() {
 	);
 
 	Stdout.formatln("last v pt: {}", lastV);
+
+
+	generateGradient(
+		"output/vertB.png", 1.0f,
+		40, 200, false,
+		noise * 1.0f, NoiseWeighting.Center | NoiseWeighting.Brightness, InterpType.Cosine,
+		[
+			0.15f * mult, 0.0f,
+			0.0f * mult, 1.0f
+		]
+	);
 }
 

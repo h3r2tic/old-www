@@ -70,7 +70,12 @@ function SiteSettings_update() {
 	if (!this.useVerticalGradient) {
 		vgradient.style.background = "transparent";
 	} else {
+		/* old browsers without multiple background support */
 		vgradient.style.background = "url("+siteRoot+"vert.png) repeat-x rgb(77, 77, 77)";
+
+		/* new browsers. the old ones should ignore this */
+		vgradient.style.background = "url("+siteRoot+"vert.png) top repeat-x, url("+siteRoot+"vertB.png) bottom repeat-x, rgb(77, 77, 77)";
+		vgradient.style.height = document.height+"px";
 	}
 
 	set_cookie("siteSettings", this.serialize());

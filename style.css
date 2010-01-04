@@ -235,3 +235,9 @@ h2 {
 	font-size: 24px;
 }
 
+.literal-block {
+	font-family: Consolas, "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", monospace;
+	font-size: 75%;
+	line-height: 120%;
+}
+

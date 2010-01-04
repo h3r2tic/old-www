@@ -31,6 +31,10 @@
 	padding: 5px;
 }
 
+#settingsButtons a {
+	font-size: 18px;
+}
+
 #settingsPopup div.settingsGroup {
 	float: left;
 	border: 2px solid #333;

@@ -71,7 +71,7 @@ durrr
 .. _ctrace: ../ctrace/index.html
 .. _Hybrid: http://hybrid.team0xf.com/
 .. _Nucleus: nucleus/index.html
-.. _xfProf: xfProf.html
+.. _xfProf: xfProf/index.html
 .. _xfBuild: http://bitbucket.org/h3r3tic/xfbuild/wiki/Home
 .. _OMFG: omfg.html
 .. _photons: photons.html

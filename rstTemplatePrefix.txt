@@ -8,55 +8,45 @@
 		<script type="text/javascript">var siteRoot = "%(siteRoot)s";</script>
 
 		<link rel="stylesheet" type="text/css" media="screen, projection" href="%(siteRoot)sstyle.css" />
+		<link rel="stylesheet" type="text/css" media="screen, projection" href="%(siteRoot)ssettingsStyle.css" />
+
 		<script type="text/javascript" src="%(siteRoot)scookie.js"></script>
 		<script type="text/javascript" src="%(siteRoot)ssupportedGradientResolutions.js"></script>
-		<script type="text/javascript" src="%(siteRoot)shorizontalGradient.js"></script>
 		<script type="text/javascript" src="%(siteRoot)ssiteSettings.js"></script>
 
-        <link rel="stylesheet" type="text/css" media="screen, projection" href="%(siteRoot)sslider/slider.css" />
+		<link rel="stylesheet" type="text/css" media="screen, projection" href="%(siteRoot)sslider/slider.css" />
 		<script type="text/javascript" src="%(siteRoot)sslider/slider.js"></script>
-
-        <link rel="stylesheet" type="text/css" media="screen, projection" href="%(siteRoot)ssettingsStyle.css" />
 	</head>
 
 	<body>
-		<div id="wrapper1">
-		<div id="wrapper2">
-			<div id="topStatus"></div>
+		<div id="topStatus"></div>
+		<div id="wrapper1"><div id="wrapper2">
 
-			<script type="text/javascript" src="%(siteRoot)sbrowserComplaints.js"></script>
+		<script type="text/javascript" src="%(siteRoot)sbrowserComplaints.js"></script>
 
-			<div class="verticalPad"><!--HACK--></div>
-			<div id="head">
-				<div id="menu">
-					<span id="settingsIcon" onclick="showHideSettingsPopup()">
-						<span>settings</span>
-						<img src="%(siteRoot)ssettingsIcon.png" alt="settings" />
-					</span>
-					<a href="#" id="readability" onclick="(function(){readStyle='style-newspaper';readSize='size-medium';readMargin='margin-wide';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='screen';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();">
-						Plain view
-					</a>
-					<div>
-						<a href="http://h3.gd/devlog/">BLOG</a>
-						<a href="%(siteRoot)scode/index.html">CODE</a>
-						<a href="%(siteRoot)slinks.html">LINKS</a>
-						<a href="%(siteRoot)sabout.html">ABOUT</a>
-					</div>
+		<div class="verticalPad"></div>
+
+		<div id="head">
+			<div id="menu">
+				<span id="settingsIcon" onclick="showHideSettingsPopup()">
+					<span>settings</span>
+					<img src="%(siteRoot)ssettingsIcon.png" alt="settings" />
+				</span>
+				<div>
+					<a href="http://h3.gd/devlog/">BLOG</a>
+					<a href="%(siteRoot)scode/index.html">CODE</a>
+					<a href="%(siteRoot)slinks.html">LINKS</a>
+					<a href="%(siteRoot)sabout.html">ABOUT</a>
 				</div>
-
-				<a href="%(siteRoot)sindex.html"><h3>h3r3tic's grimoire</h3></a>
-				<span style="margin-left: 40px; color: rgb(100%%, 50%%, 30%%); text-shadow: 1px 1px 5px rgba(100%%, 50%%, 30%%, 0.3);">
-					ramblings of a madman
-				</span>
-				<span style="color: rgb(100%%, 100%%, 100%%); text-shadow: 1px 1px 5px rgba(100%%, 100%%, 100%%, 0.3);">
-					::
-				</span>
-				<span style="color: rgb(30%%, 50%%, 100%%); text-shadow: 1px 1px 5px rgba(30%%, 50%%, 100%%, 0.3);">
-					gamedev edition
-				</span>
 			</div>
 
-			<div class="c1">
-				<div class="c2">
-					<div class="c3">
+			<a href="%(siteRoot)sindex.html"><h3>h3r3tic's grimoire</h3></a>
+			<span class="title1">ramblings of a madman</span>
+			<span class="title2">::</span>
+			<span class="title3">gamedev edition</span>
+		</div>
+
+		<div id="contentWrapper1">
+			<div id="contentWrapper2">
+				<div id="content">
 

@@ -25,6 +25,58 @@ function disableGlobalTextShadows() {
 }
 
 
+function setBackgroundGradient(width) {
+	var bg1 = siteSettings.bgColor;
+	var bg2 = "transparent";
+	var bg3 = "transparent";
+
+	if (siteSettings.useVerticalGradient) {
+		bg1 = "url("+siteRoot+"vertB.png) bottom repeat-x " + siteSettings.defaultBgColor;
+		bg2 = "url("+siteRoot+"vert.png) top repeat-x";
+	}
+
+	if (siteSettings.useHorizontalGradient) {
+		var res = supportedGradientResolutions[
+			supportedGradientResolutions.length-1
+		];
+
+		for (i in supportedGradientResolutions) {
+			r = supportedGradientResolutions[i];
+			if (r >= width) {
+				res = r;
+				break;
+			}
+		}
+
+		bg3 = "url("+siteRoot+"horiz"+res+".png) repeat-y";
+	}
+
+	var div1 = document.body;
+	div1.style.background = bg1;
+
+	var div2 = document.getElementById("wrapper1");
+	div2.style.background = bg2;
+
+	var div3 = document.getElementById("wrapper2");
+	div3.style.background = bg3;
+	div3.style.minHeight = window.innerHeight + "px";
+}
+
+
+function updateBackgroundGradient() {
+	setBackgroundGradient(window.innerWidth);
+}
+
+
+function loadBackgroundGradient() {
+	updateBackgroundGradient();
+
+	window.onresize = function() {
+		updateBackgroundGradient();
+	};
+}
+
+
 function SiteSettings() {
 	this.version = "4";
 
@@ -39,7 +91,8 @@ function SiteSettings() {
 		this.textColor = "rgb(240,240,240)";
 	}
 
-	this.bgColor = "rgb(77,77,77)";
+	this.defaultBgColor = "rgb(77,77,77)";
+	this.bgColor = this.defaultBgColor;
 
 	this.useTextShadows = true;
 	this.update = SiteSettings_update;
@@ -51,7 +104,6 @@ function SiteSettings() {
 
 function SiteSettings_update() {
 	setGlobalTextColor(this.textColor);
-	document.body.style.backgroundColor = this.bgColor;
 
 	if (this.useTextShadows) {
 		enableGlobalTextShadows();
@@ -59,24 +111,7 @@ function SiteSettings_update() {
 		disableGlobalTextShadows();
 	}
 
-	var hgradient = document.getElementById("wrapper2");
-	if (!this.useHorizontalGradient) {
-		hgradient.style.background = "transparent";
-	} else {
-		updateHorizontalGradient();
-	}
-
-	var vgradient = document.getElementById("wrapper1");
-	if (!this.useVerticalGradient) {
-		vgradient.style.background = "transparent";
-	} else {
-		/* old browsers without multiple background support */
-		vgradient.style.background = "url("+siteRoot+"vert.png) repeat-x rgb(77, 77, 77)";
-
-		/* new browsers. the old ones should ignore this */
-		vgradient.style.background = "url("+siteRoot+"vert.png) top repeat-x, url("+siteRoot+"vertB.png) bottom repeat-x, rgb(77, 77, 77)";
-		vgradient.style.height = document.height+"px";
-	}
+	updateBackgroundGradient();
 
 	set_cookie("siteSettings", this.serialize());
 }

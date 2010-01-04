@@ -1,12 +1,12 @@
-					</div>
 				</div>
 			</div>
+		</div>
 
 		<div id="footer">
 			<a rel="license" href="http://creativecommons.org/licenses/by/2.0/uk/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/2.0/uk/80x15.png" /></a><br />This work by Tomasz Stachowiak is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/2.0/uk/">Creative Commons Attribution 2.0 UK: England &amp; Wales License</a>.
 		</div>
 
-		<div class="verticalPad"><!--HACK--></div>
+		<div class="verticalPad"></div>
 
 		<div id="settingsPopupWrap"><div id="settingsPopup">
 			<div class="settingsGroup">
@@ -52,15 +52,15 @@
 			</div>
 
 			<div id="settingsButtons">
-				<a href="#" style="font-size: 18px" onclick="restoreDefaultSettings()">Default</a>
+				<a href="#" onclick="restoreDefaultSettings()">Default</a>
 				<br />
 				<br />
-				<a href="#" style="font-size: 18px" onclick="showHideSettingsPopup()">Done</a>
+				<a href="#" onclick="showHideSettingsPopup()">Done</a>
 			</div>
 		</div></div>
+
+		</div></div><!--wrapper1 and wrapper2-->		
 			
-		</div>
-		</div>
-		<script type="text/javascript">loadHorizontalGradient(); loadStoredSettings();</script>
+		<script type="text/javascript">loadBackgroundGradient(); loadStoredSettings();</script>
 	</body>
 </html>

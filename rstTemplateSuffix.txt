@@ -1,0 +1,66 @@
+					</div>
+				</div>
+			</div>
+
+		<div id="footer">
+			<a rel="license" href="http://creativecommons.org/licenses/by/2.0/uk/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/2.0/uk/80x15.png" /></a><br />This work by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Tomasz Stachowiak</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/2.0/uk/">Creative Commons Attribution 2.0 UK: England &amp; Wales License</a>.
+		</div>
+
+		<div id="verticalPad"><!--HACK--></div>
+
+		<div id="settingsPopupWrap"><div id="settingsPopup">
+			<div class="settingsGroup">
+				<span>Text settings:</span>
+
+				<table>
+					<tr>
+						<td><label for="textColorSliderR">R:</label></td>
+						<td><input name="slider1" id="textColorSliderR" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateTextColor fd_hide_input" value="255" maxlength="3" /></td>
+					</tr>
+					<tr>
+						<td><label for="textColorSliderG">G:</label></td>
+						<td><input name="slider2" id="textColorSliderG" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateTextColor fd_hide_input" value="255" maxlength="3" /></td>
+					</tr>
+					<tr>
+						<td><label for="textColorSliderB">B:</label></td>
+						<td><input name="slider3" id="textColorSliderB" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateTextColor fd_hide_input" value="255" maxlength="3" /></td>
+					</tr>
+				</table>
+
+				<p><input id="settingsUseShadowsCheckbox" type="checkbox" onclick="settingsUseShadowsHandler(event)" />Shadows</p>
+			</div>
+
+			<div class="settingsGroup">
+				<span>Background settings:</span>
+				<p><input id="settingsUseHGradientCheckbox" name="settingsUseHGradientCheckbox" type="checkbox" onclick="siteSettings.useHorizontalGradient = event.target.checked; siteSettings.update();" />Horizontal gradient</p>
+				<p><input id="settingsUseVGradientCheckbox" name="settingsUseVGradientCheckbox" type="checkbox" onclick="siteSettings.useVerticalGradient = event.target.checked; siteSettings.update();"/>Vertical gradient (overrides color)</p>
+
+				<table>
+					<tr>
+						<td><label for="bgColorSliderR">R:</label></td>
+						<td><input name="slider4" id="bgColorSliderR" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateBGColor fd_hide_input" value="77" maxlength="3" /></td>
+					</tr>
+					<tr>
+						<td><label for="bgColorSliderG">G:</label></td>
+						<td><input name="slider5" id="bgColorSliderG" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateBGColor fd_hide_input" value="77" maxlength="3" /></td>
+					</tr>
+					<tr>
+						<td><label for="bgColorSliderB">B:</label></td>
+						<td><input name="slider6" id="bgColorSliderB" type="text" title="Range: 0 - 255" class="fd_range_0_255 fd_slider_cn_extraclass fd_jump fd_slider_cb_update_updateBGColor" value="77" maxlength="3" /></td>
+					</tr>
+				</table>
+			</div>
+
+			<div id="settingsButtons">
+				<a href="#" style="font-size: 18px" onclick="restoreDefaultSettings()">Default</a>
+				<br />
+				<br />
+				<a href="#" style="font-size: 18px" onclick="showHideSettingsPopup()">Done</a>
+			</div>
+		</div></div>
+			
+		</div>
+		</div>
+		<script type="text/javascript">loadHorizontalGradient(); loadStoredSettings();</script>
+	</body>
+</html>

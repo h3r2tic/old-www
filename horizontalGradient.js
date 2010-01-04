@@ -16,7 +16,7 @@ function setHorizontalGradient(width) {
 	}
 
 	var foo = document.getElementById("wrapper2");
-	foo.style.background = "url(horiz"+res+".png) repeat-y";
+	foo.style.background = "url("+siteRoot+"horiz"+res+".png) repeat-y";
 }
 
 

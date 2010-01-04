@@ -1,0 +1,8 @@
+syntax: glob
+output
+.objs
+.deps
+*.swp
+*.obj
+*.map
+*.exe

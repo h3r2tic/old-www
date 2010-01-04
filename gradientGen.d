@@ -252,13 +252,13 @@ void main() {
 		resolutionsJS ~= Format("{}", r);
 	}
 	resolutionsJS ~= "\n];";
-	File.set("supportedGradientResolutions.js", resolutionsJS);
+	File.set("output/supportedGradientResolutions.js", resolutionsJS);
 
 	const float mult = 0.5f;
 
 	foreach (xres; xResolutions) {
 		auto lastH = generateGradient(
-			Format("horiz{}.png", xres), 0.49999f,
+			Format("output/horiz{}.png", xres), 0.49999f,
 			xres, 40, true,
 			noise * 1.2f, NoiseWeighting.Brightness, InterpType.CatmullRom,
 			[
@@ -276,7 +276,7 @@ void main() {
 
 
 	auto lastV = generateGradient(
-		"vert.png", 1.0f,
+		"output/vert.png", 1.0f,
 		40, 400, false,
 		noise * 1.0f, NoiseWeighting.Center | NoiseWeighting.Brightness, InterpType.CatmullRom,
 		[

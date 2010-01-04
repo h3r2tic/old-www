@@ -70,7 +70,7 @@ function SiteSettings_update() {
 	if (!this.useVerticalGradient) {
 		vgradient.style.background = "transparent";
 	} else {
-		vgradient.style.background = "url(vert.png) repeat-x rgb(77, 77, 77)";
+		vgradient.style.background = "url("+siteRoot+"vert.png) repeat-x rgb(77, 77, 77)";
 	}
 
 	set_cookie("siteSettings", this.serialize());
@@ -133,10 +133,10 @@ function restoreDefaultSettings() {
 function showHideSettingsPopup() {
 	var popup = document.getElementById("settingsPopupWrap");
 	if (settingsPopupDisplayed) {
-		popup.style.visibility = "hidden";
+		popup.style.display = "none";
 		settingsPopupDisplayed = false;
 	} else {
-		popup.style.visibility = "visible";
+		popup.style.display = "block";
 		settingsPopupDisplayed = true;
 
 		document.getElementById("settingsUseShadowsCheckbox")

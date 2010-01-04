@@ -38,7 +38,7 @@
 					</a>
 					<div>
 						<a href="%(level)sindex.html">HOME</a>
-						<a href="#">PROJECTS</a>
+						<a href="%(level)sproj/index.html">PROJECTS</a>
 						<a href="#">LINKS</a>
 						<a href="%(level)sabout.html">ABOUT</a>
 					</div>

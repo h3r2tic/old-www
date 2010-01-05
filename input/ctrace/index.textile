@@ -55,15 +55,15 @@ Total rendering/compilation time: 26148 seconds (on my 1.7GHz laptop)
 
 {{{d
 alias Tuple!(
-	Sphere!(Vec3!(-4.f, 1.5f, -8.f),    3.2f,  Vec3!(1.f, .3f, .1f)),
-	Sphere!(Vec3!(2.5f,  1.5f, -5.0f),  1.2f,  Vec3!(.2f, 1.f, .4f)),
-	Sphere!(Vec3!( .7f, -1.5f, -4.2f),  1.5f,  Vec3!(.2f, .4f, 1.f)),
-	Plane! (Vec3!( 0.f,  1.f,   0.f),   4.f,   Vec3!(.5f, .5f, .5f))
+	Sphere!(Vec3!(-4.f, 1.5f, -8.f),	3.2f,  Vec3!(1.f, .3f, .1f)),
+	Sphere!(Vec3!(2.5f,  1.5f, -5.0f),	1.2f,  Vec3!(.2f, 1.f, .4f)),
+	Sphere!(Vec3!( .7f, -1.5f, -4.2f),	1.5f,  Vec3!(.2f, .4f, 1.f)),
+	Plane! (Vec3!( 0.f,  1.f,   0.f),	4.f,   Vec3!(.5f, .5f, .5f))
 ) scene;
 
 
 alias Tuple!(
-	PointLight!(Vec3!(8.f, 8.f, 10.f), scale!(Vec3!(0.7f, 0.7f, 0.6f), 30.f)),
+	PointLight!(Vec3!(8.f, 8.f, 10.f),   scale!(Vec3!(0.7f, 0.7f, 0.6f), 30.f)),
 	PointLight!(Vec3!(-2.f,  2.5f, 0.f), scale!(Vec3!(.6f, .4f, .1f), 8.f))
 ) lights;
 }}}

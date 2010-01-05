@@ -13,6 +13,16 @@ def formatTemplate(s, level):
 		'siteRoot' : '../' * level
 	}
 
+def untabify(line, ts = 4):
+	n = ''
+	for c in line:
+		if '\t' == c:
+			l = len(n)
+			n += ' ' * (ts - l % ts)
+		else:
+			n += c
+	return n
+
 def formatText(text):
 	text2 = ''
 	lines = text.splitlines()
@@ -27,7 +37,7 @@ def formatText(text):
 				line = lines[0]
 				if '}}}' == line:
 					break
-				code += line + '\n'
+				code += untabify(line) + '\n'
 				lines = lines[1:]
 				numLines += 1
 			lexer = get_lexer_by_name(lang, stripall=True)

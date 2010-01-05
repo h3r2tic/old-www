@@ -2,26 +2,20 @@ var settingsPopupDisplayed = false;
 
 
 function setGlobalTextColor(color) {
-	var doc = document.getElementsByClassName('c3');
-	for (var i = 0; i < doc.length; ++i) {
-	   doc[i].style.color = color;
-	}
+	var doc = document.getElementById('content');
+	doc.style.color = color;
 }
 
 
 function enableGlobalTextShadows() {
-	var doc = document.getElementsByClassName('c3');
-	for (var i = 0; i < doc.length; ++i) {
-	   doc[i].style.textShadow = "2px 1px 4px rgba(0, 0, 0, 0.6)";
-	}
+	var doc = document.getElementById('content');
+	doc.style.color = "2px 1px 4px rgba(0, 0, 0, 0.6)";
 }
 
 
 function disableGlobalTextShadows() {
-	var doc = document.getElementsByClassName('c3');
-	for (var i = 0; i < doc.length; ++i) {
-	   doc[i].style.textShadow = "none";
-	}
+	var doc = document.getElementById('content');
+	doc.style.color = "none";
 }
 
 

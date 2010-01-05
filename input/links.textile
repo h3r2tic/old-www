@@ -2,8 +2,13 @@ h1. Friends and/or smart folks
 
 * "Cryzed":http://cryzed.de/
 * "dbot":http://wiki.dprogramming.com/DBot/HomePage
+* "GiM":http://gim.org.pl/
+* "gruby":http://gruby.team0xf.com/
+* "KeYeR":http://keyer.team0xf.com/
 * "Keyframe2":http://vga.hr/
+* "repi":http://repi.se/
 * "Rudy":http://rudyandrut.blogspot.com/ _(Polish)_
+* "welna":http://welna.team0xf.com/
 
 
 h1. Various sites

@@ -1,0 +1,14 @@
+h1. Friends and/or smart folks
+
+* "Cryzed":http://cryzed.de/
+* "dbot":http://wiki.dprogramming.com/DBot/HomePage
+* "Keyframe2":http://vga.hr/
+* "Rudy":http://rudyandrut.blogspot.com/ _(Polish)_
+
+
+h1. Various sites
+
+* "The D Programming Language":http://digitalmars.com/d/1.0/ - Home of D 1.0
+* "DSource":http://dsource.org/ - D projects hosting
+* "DMedia":http://dmedia.dprogramming.com/ - My old site dedicated to multimedia programming in D. Never got too popular.
+

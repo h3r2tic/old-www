@@ -91,7 +91,7 @@ function SiteSettings() {
 		this.textColor = "rgb(240,240,240)";
 	}
 
-	this.defaultBgColor = "rgb(77,77,77)";
+	this.defaultBgColor = "rgb(69,69,69)";
 	this.bgColor = this.defaultBgColor;
 
 	this.useTextShadows = true;

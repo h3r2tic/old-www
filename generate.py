@@ -1,6 +1,11 @@
 import os
 import os.path
 import shutil
+import textile
+
+from pygments import highlight
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters import HtmlFormatter
 
 
 def formatTemplate(s, level):
@@ -8,43 +13,71 @@ def formatTemplate(s, level):
 		'siteRoot' : '../' * level
 	}
 
-def rst2html(dir, rst, level):
-	outfile = 'output/' + dir + rst[:-4] + '.html'
+def formatText(text):
+	text2 = ''
+	lines = text.splitlines()
+	while len(lines):
+		line = lines[0]
+		if '{{{' == line[0:3]:
+			lang = line[3:]
+			lines = lines[1:]
+			code = ''
+			numLines = 0
+			while True:
+				line = lines[0]
+				if '}}}' == line:
+					break
+				code += line + '\n'
+				lines = lines[1:]
+				numLines += 1
+			lexer = get_lexer_by_name(lang, stripall=True)
+			code = highlight(code, lexer, HtmlFormatter())
+			text2 += '\n'
+			for l in code.splitlines():
+				text2 += '==' + l + '==\n'
+			text2 += '\n'
+			print 'Formatted %s lines of code' % numLines
+			#print code
+		else:
+			text2 += line + '\n'
+		lines = lines[1:]
+
+	return textile.textile(text2)
+
+def textile2html(dir, path, level):
+	outfile = 'output/' + dir + path[:-8] + '.html'
 	contents = formatTemplate(
-		open('rstTemplatePrefix.txt').read(),
+		open('textileTemplatePrefix.txt').read(),
 		level
 	)
 
-	assert rst[-4:] == '.rst'
-	cmd = r'C:\dload\docutils-snapshot\docutils\tools\rst2html.py '
-	cmd += '--template=rstTemplate.txt '
-	cmd += 'input/' + dir + rst + ' '
-	contents += os.popen(cmd).read()
+	assert path[-8:] == '.textile'
+	contents += formatText(open('input/'+dir+path).read())
 
 	contents += formatTemplate(
-		open('rstTemplateSuffix.txt').read(),
+		open('textileTemplateSuffix.txt').read(),
 		level
 	)
 
 	open(outfile, 'w').write(contents)
 
 
-def dir_rst2html(dir, level = 0):
+def dir_textile2html(dir, level = 0):
 	for file in os.listdir('input/' + dir):
-		if file[-4:] == '.rst':
+		if file[-8:] == '.textile':
 			print dir+file
-			rst2html(dir, file, level)
+			textile2html(dir, file, level)
 		elif os.path.isdir('input/' + dir + file):
 			if dir != '.' and dir != '..':
 				p = dir + file + '/'
 				try:	os.makedirs('output/'+p)
 				except:	pass
-				dir_rst2html(p, level+1)
+				dir_textile2html(p, level+1)
 		elif file[-4:] != '.swp':
 			shutil.copyfile('input/' + dir + file, 'output/' + dir + file)
 
 
-dir_rst2html('')
+dir_textile2html('')
 
 cmds = [
 	r'cp -R slider output/slider',

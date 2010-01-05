@@ -6,7 +6,7 @@ html {
 body {
 	padding: 0px;
 	margin: 0px;
-	background: rgb(77, 77, 77);
+	background: rgb(69, 69, 69);
 }
 
 #wrapper1 {
@@ -51,7 +51,12 @@ body {
 
 #content img {
 	max-width: 100%;
-	border: none;
+	box-shadow: 6px 4px 8px rgba(0%, 0%, 0%, 0.5);
+	-webkit-box-shadow: 6px 4px 8px rgba(0%, 0%, 0%, 0.5);
+	-moz-box-shadow: 6px 4px 8px rgba(0%, 0%, 0%, 0.5);
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	margin: 10px;
 }
 
 a {
@@ -247,11 +252,5 @@ h2 {
 	font-family: Verdana, sans-serif;
 	line-height: 120%;
 	font-size: 24px;
-}
-
-.literal-block {
-	font-family: Consolas, "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", monospace;
-	font-size: 75%;
-	line-height: 120%;
 }
 

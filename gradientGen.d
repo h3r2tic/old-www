@@ -269,10 +269,10 @@ void main() {
 			noise * 1.2f, NoiseWeighting.Brightness, InterpType.CatmullRom,
 			[
 				0.0f * mult, 0.0f,
-				0.1f * mult, 0.2f,
-				0.2f * mult, 0.33f,
-				0.2f * mult, 0.66f,
-				0.1f * mult, 0.8f,
+				0.08f * mult, 0.2f,
+				0.12f * mult, 0.33f,
+				0.12f * mult, 0.66f,
+				0.08f * mult, 0.8f,
 				0.0f * mult, 1.0f
 			]
 		);
@@ -287,7 +287,7 @@ void main() {
 		noise * 1.0f, NoiseWeighting.Center | NoiseWeighting.Brightness, InterpType.Cosine,
 		[
 			0.0f * mult, 0.0f,
-			0.15f * mult, 1.0f
+			0.12f * mult, 1.0f
 		]
 	);
 
@@ -299,7 +299,7 @@ void main() {
 		40, 200, false,
 		noise * 1.0f, NoiseWeighting.Center | NoiseWeighting.Brightness, InterpType.Cosine,
 		[
-			0.15f * mult, 0.0f,
+			0.12f * mult, 0.0f,
 			0.05f * mult, 1.0f
 		]
 	);

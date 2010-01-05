@@ -22,7 +22,8 @@ function set_cookie ( name, value, exp_y, exp_m, exp_d, /*path, */domain, secure
 
   /*if ( path )
         cookie_string += "; path=" + escape ( path );*/
-  cookie_string += "; path=" + escape("/u/1267818/styleProto");
+  //cookie_string += "; path=" + escape("/u/1267818/styleProto");
+  cookie_string += "; path=" + escape("/");
 
   if ( domain )
         cookie_string += "; domain=" + escape ( domain );

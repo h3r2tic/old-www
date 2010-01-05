@@ -1,0 +1,12 @@
+* "Boxen":boxen/index.html
+* "Deadlock":http://deadlock.team0xf.com/
+* "ctrace":../ctrace/index.html
+* "Hybrid":http://hybrid.team0xf.com/
+* "Nucleus":nucleus/index.html (broken)
+* "xfProf":xfProf/index.html
+* "xfBuild":http://bitbucket.org/h3r3tic/xfbuild/wiki/Home
+* "OMFG":omfg/index.html (broken)
+* "Photon Mapping":photons/index.html (broken)
+* "xpose2":xpose2/index.html (broken)
+* "Artificial Neural Networks":http://h3.gd/ann/
+

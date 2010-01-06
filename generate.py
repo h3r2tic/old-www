@@ -88,7 +88,7 @@ def dir_textile2html(dir, level = 0):
 				try:	os.makedirs('output/'+p)
 				except:	pass
 				dir_textile2html(p, level+1)
-		elif file[-4:] != '.swp':
+		elif file[-4:] != '.swp' and file != 'Thumbs.db':
 			shutil.copyfile('input/' + dir + file, 'output/' + dir + file)
 
 

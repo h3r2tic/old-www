@@ -42,10 +42,15 @@ def formatText(text):
 				numLines += 1
 			lexer = get_lexer_by_name(lang, stripall=True)
 			code = highlight(code, lexer, HtmlFormatter())
-			text2 += '\n'
+			text2 += 'notextile. '
+			ntx = 0
 			for l in code.splitlines():
-				text2 += '==' + l + '==\n'
-			text2 += '\n'
+				if len(l.strip()) > 0:
+					text2 += l + '\n'
+					ntx = 0
+				else:
+					text2 += '&nbsp;\n'
+			text2 += '\n\n'
 			print 'Formatted %s lines of code' % numLines
 			#print code
 		else:

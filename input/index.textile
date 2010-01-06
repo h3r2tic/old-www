@@ -1,4 +1,4 @@
-Hello, world! I'm a programmer obsessed with gamedev. I'm one of these twisted souls who enjoy engine programming more than working on the actual games.
+Hello, world! I'm a programmer obsessed with gamedev, though one of these twisted souls who enjoy engine programming more than working on the actual games.
 
 I'm currently working on a team-based multi-player first person shooter game akin to the _Battlefield_ series. More info "here":code/boxen/index.html.
 

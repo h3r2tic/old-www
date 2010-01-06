@@ -1,11 +1,23 @@
+div.highlight {
+	padding: 0;
+	margin: 16px 0 16px 0px;
+}
+
+
 div.highlight pre {
-	font-family: Consolas, "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", monospace;
-	font-size: 75%;
-	line-height: 120%;
-	color: #fffff0;
 	background-color: rgba(0%, 0%, 0%, 0.1);
 	border: 1px solid rgba(0%, 0%, 0%, 0.2);
+	color: #fffff0;
+	white-space: pre-wrap;
 	padding: 1em;
+	margin: 0;
+
+	font-family: Consolas, "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", monospace;
+	font-size: 12px;
+	line-height: 14px;
+
+	/* fit the width */
+	display: table-cell;
 }
 
 div.highlight .c { color: #716855; font-style: italic } /* Comment */

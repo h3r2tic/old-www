@@ -17,7 +17,7 @@ body {
 #wrapper2 {
 	color: white;
 	font-family: "Palatino Linotype", "Book Antiqua", _Palatino, "URW Palladio L", serif;
-	padding: 0% 17% 0% 17%;
+	padding: 0% 15.5% 0% 15.5%;
 }
 
 #contentWrapper1 {
@@ -35,7 +35,7 @@ body {
 	border-radius: 6px;
 	-moz-border-radius: 6px;
 	color: inherit;
-	padding: 16px;
+	padding: 1px 28px 1px 28px;
 	background: url(teapot.png) no-repeat bottom right rgba(255, 255, 255, 0.02);
 }
 
@@ -43,6 +43,7 @@ body {
 	min-height: 150px; /* teapot */
 	color: #f0f0f0;
 	background-color: transparent;
+	text-rendering: optimize-legibility;
 	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.6);
 	font-family: inherit;
 	font-size: 100%;
@@ -51,21 +52,12 @@ body {
 
 #content img {
 	max-width: 100%;
-	box-shadow: 6px 4px 8px rgba(0%, 0%, 0%, 0.5);
-	-webkit-box-shadow: 6px 4px 8px rgba(0%, 0%, 0%, 0.5);
-	-moz-box-shadow: 6px 4px 8px rgba(0%, 0%, 0%, 0.5);
+	box-shadow: 6px 4px 8px rgba(0%, 0%, 0%, 0.3);
+	-webkit-box-shadow: 6px 4px 8px rgba(0%, 0%, 0%, 0.3);
+	-moz-box-shadow: 6px 4px 8px rgba(0%, 0%, 0%, 0.3);
 	border-radius: 3px;
 	-moz-border-radius: 3px;
-	margin: 10px;
-}
-
-a {
-	text-decoration: none;
-}
-
-p {
-	margin-top: 0;
-	margin-bottom: 1.6em;
+	margin: 10px 0 10px 0;
 }
 
 .verticalPad {
@@ -246,11 +238,25 @@ h1 {
 	font-family: Verdana, sans-serif;
 	line-height: 120%;
 	font-size: 28px;
+	margin: 24px 0px 16px 0px;
 }
 
 h2 {
 	font-family: Verdana, sans-serif;
 	line-height: 120%;
 	font-size: 24px;
+}
+
+p {
+	margin: 16px 0 16px 0px;
+}
+
+hr {
+	border: none;
+	width: 98%;
+	border: none;
+	border-top: 1px dashed rgba(100%, 100%, 100%, 0.7);
+	height: 0px;
+	margin: 20px 1% 20px 1%;
 }
 

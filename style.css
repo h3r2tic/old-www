@@ -17,18 +17,20 @@ body {
 #wrapper2 {
 	color: white;
 	font-family: "Palatino Linotype", "Book Antiqua", _Palatino, "URW Palladio L", serif;
-	padding: 0% 15.5% 0% 15.5%;
+	padding: none;
+	margin: none;
 }
 
 #contentWrapper1 {
 	border-radius: 7px;
 	-moz-border-radius: 7px;
 	color: inherit;
-	padding: 16px;
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: rgba(0, 0, 0, 0.125);
 	text-align: justify;
-	margin-left: auto;
-	margin-right: auto;
+
+	padding: 16px;
+	margin: 0 auto 0 auto;
+	max-width: 50em;
 }
 
 #contentWrapper2 {
@@ -44,9 +46,8 @@ body {
 	color: #f0f0f0;
 	background-color: transparent;
 	text-rendering: optimize-legibility;
-	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.6);
 	font-family: inherit;
-	font-size: 100%;
+	font-size: 14pt;
 	line-height: 140%;
 }
 
@@ -69,12 +70,14 @@ body {
 	color: white;
 	left: 0px;
 	top: 0px;
-	padding: 10px;
 	background-color: rgba(0, 0, 0, 0.15);
 	text-align: justify;
-	margin: 0px auto 10px auto;
 	border-radius: 7px;
 	-moz-border-radius: 7px;
+
+	padding: 10px 16px 10px 16px;
+	margin: 0 auto 10px auto;
+	max-width: 50em;
 }
 
 #head h3 {
@@ -166,30 +169,6 @@ body {
 #menu div a:hover {
 	color: rgba(100%, 100%, 80%, 0.8);
 	background-color: rgba(100%, 100%, 100%, 0.075);
-}
-
-#readability {
-	float: left;
-	font-size: 14px;
-	font-family: Georgia, serif;
-	text-decoration: none;
-	font-weight: normal;
-	font-variant: small-caps;
-	text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.3);
-	color: rgba(100%, 100%, 80%, 0.8);
-	padding: 4px 10px 5px 10px;
-	background-color: rgba(100%, 100%, 100%, 0.08);
-	border: 1px solid rgba(0%, 0%, 0%, 0.1);
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	margin-top: 3px;
-	margin-left: 6px;
-	opacity: 0.2;
-	-webkit-transition: opacity 0.1s ease-out;
-}
-
-#readability:hover {
-	opacity: 1;
 }
 
 #settingsIcon {

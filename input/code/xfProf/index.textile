@@ -1,3 +1,4 @@
+disqus
 h1. Overview
 
 *xfProf* is a non-intrusive multi-thread statistical profiler for the D programming language, currently supporting _DMD-Win_. It's largely inspired by the "Sleepy profiler":http://sleepy.sourceforge.net/ which unfortunately doesn't understand the debug info produced by DMD, nor the D name mangling. Quoting Nick Chapman, the author of Sleepy, ??Every 1ms or so, the profiler thread suspends the target thread, and pulls out the current instruction pointer register value from the thread context. These mem addresses are resolved into procedure names and line numbers using debug information. This allows line-level resolution, without making any changes to the target program.??

@@ -13,9 +13,9 @@ import tango.math.random.Kiss;
 import tango.text.convert.Format;
 
 
-ubyte ftoub(float f) {
-	if (f <= 0.f) return 0;
-	if (f >= 1.f) return 255;
+ubyte ftoub(double f) {
+	if (f <= 0.0) return 0;
+	if (f >= 1.0) return 255;
 	return rndint(f * 255);
 }
 
@@ -35,7 +35,7 @@ vec4ub sRGB(vec4 c, double postGammaMult = 1.0) {
 
 struct SplinePoint {
 	vec4	pt;
-	float	t;
+	double	t;
 }
 
 
@@ -66,18 +66,18 @@ static assert (binomial(4, 3) == 4);
 static assert (binomial(4, 4) == 1);
 
 
-/+T bezier(T)(T delegate(int) p, int n, float t) {
+/+T bezier(T)(T delegate(int) p, int n, double t) {
 	T pt = T.zero;
 
-	float ti = 1.f;
+	double ti = 1.f;
 	for (int i = 0; i < n; ++i) {
-		float mult = cast(double)binomial(i, n) * ti * pow(1.f - t, n-i);
+		double mult = cast(double)binomial(i, n) * ti * pow(1.f - t, n-i);
 		pt += mult * p(i);
 		ti *= t;
 	}
 
-	float t2 = t * t;
-	float t3 = t2 * t;
+	double t2 = t * t;
+	double t3 = t2 * t;
 		
 	T pt = T.zero;
 	pt += p3 * (t3 / 6.f);
@@ -101,13 +101,13 @@ enum NoiseWeighting {
 }
 
 
-vec4 interp(InterpType type, SplinePoint[] points, float t) {
+vec4 interp(InterpType type, SplinePoint[] points, double t) {
 	int i1 = 0;
 	while (i1+1 < points.length && points[i1+1].t < t) ++i1;
 	int i0 = max(0, min(points.length-1, i1-1));
 	int i2 = max(0, min(points.length-1, i1+1));
 	int i3 = max(0, min(points.length-1, i1+2));
-	float t2 = 1.0f;
+	double t2 = 1.0;
 	if (i1 != i2) {
 		t2 = (t - points[i1].t) / (points[i2].t - points[i1].t);
 	}
@@ -122,8 +122,8 @@ vec4 interp(InterpType type, SplinePoint[] points, float t) {
 			res
 		);
 	} else if (InterpType.Cosine == type) {
-		float x = (1.f - cos(t2 * pi)) * 0.5f;
-		res = points[i1].pt * (1.f - x) + points[i2].pt * x;
+		double x = (1.0 - cos(t2 * pi)) * 0.5;
+		res = points[i1].pt * (1.0 - x) + points[i2].pt * x;
 	} else if (InterpType.Bezier == type) {
 		/+res = bezier(
 			points[i0].pt,
@@ -138,7 +138,7 @@ vec4 interp(InterpType type, SplinePoint[] points, float t) {
 }
 
 
-vec4ub generateGradient(char[] file, float alpha, int width, int height, bool vertical, float noiseStr, NoiseWeighting nwt, InterpType interpType, float[] intens, double postGammaMult = 1.0) {
+vec4ub generateGradient(char[] file, double alpha, int width, int height, bool vertical, double noiseStr, NoiseWeighting nwt, InterpType interpType, double[] intens, double postGammaMult = 1.0) {
 	SplinePoint[] splinePoints;
 	for (int i = 0; i < intens.length; i += 2) {
 		splinePoints ~= SplinePoint(
@@ -150,7 +150,7 @@ vec4ub generateGradient(char[] file, float alpha, int width, int height, bool ve
 	vec4ub[][] pixels = new vec4ub[][](width, height);
 
 	vec4 genNoise() {
-		static float n1() {
+		static double n1() {
 			return Kiss.instance.fraction() - 0.5f;
 		}
 
@@ -164,15 +164,16 @@ vec4ub generateGradient(char[] file, float alpha, int width, int height, bool ve
 
 	vec4 lastBase = vec4.zero;
 
-	vec4ub finalCol(float t, vec4 colf) {
+	vec4ub finalCol(double t, vec4 colf) {
 		auto noise = genNoise();
-		float noiseWeight = 1.f;
+		double noiseWeight = 1.0;
 
 		if (NoiseWeighting.Center & nwt) {
 			noiseWeight *= sin(pi * t);
 		}
 		if (NoiseWeighting.Brightness & nwt) {
-			noiseWeight *= sqrt(vec3.from(colf).length() / 3.f);
+			double lumin = 0.3 * colf.r + 0.59 * colf.g + 0.11 * colf.b;
+			noiseWeight *= sqrt(lumin);
 		}
 
 		colf += noise * noiseWeight;
@@ -181,7 +182,7 @@ vec4ub generateGradient(char[] file, float alpha, int width, int height, bool ve
 
 	if (vertical) {
 		for (int x = 0; x < width; ++x) {
-			float xf = x / cast(double)(width-1);
+			double xf = x / cast(double)(width-1);
 			vec4 baseCol = interp(interpType, splinePoints, xf);
 			lastBase = baseCol;
 			assert (baseCol.ok);
@@ -192,7 +193,7 @@ vec4ub generateGradient(char[] file, float alpha, int width, int height, bool ve
 		}
 	} else {
 		for (int y = 0; y < height; ++y) {
-			float yf = y / cast(double)(height-1);
+			double yf = y / cast(double)(height-1);
 			vec4 baseCol = interp(interpType, splinePoints, yf);
 			lastBase = baseCol;
 			assert (baseCol.ok);
@@ -230,7 +231,7 @@ vec4ub generateGradient(char[] file, float alpha, int width, int height, bool ve
 
 
 void main() {
-	const float noise = 0.06f;
+	const double noise = 0.055f;
 
 	int[] xResolutions = [
 		320,
@@ -260,7 +261,7 @@ void main() {
 	resolutionsJS ~= "\n];";
 	File.set("output/supportedGradientResolutions.js", resolutionsJS);
 
-	const float mult = 0.5f;
+	const double mult = 0.5f;
 
 	foreach (xres; xResolutions) {
 		auto lastH = generateGradient(
@@ -268,12 +269,12 @@ void main() {
 			xres, 40, true,
 			noise * 1.2f, NoiseWeighting.Brightness, InterpType.CatmullRom,
 			[
-				0.0f * mult, 0.0f,
-				0.08f * mult, 0.2f,
-				0.12f * mult, 0.33f,
-				0.12f * mult, 0.66f,
-				0.08f * mult, 0.8f,
-				0.0f * mult, 1.0f
+				0.0 * mult, 0.0,
+				0.08 * mult, 0.2,
+				0.12 * mult, 0.33,
+				0.12 * mult, 0.66,
+				0.08 * mult, 0.8,
+				0.0 * mult, 1.0
 			]
 		);
 
@@ -282,12 +283,12 @@ void main() {
 
 
 	auto lastV = generateGradient(
-		"output/vert.png", 1.0f,
-		40, 400, false,
-		noise * 1.0f, NoiseWeighting.Center | NoiseWeighting.Brightness, InterpType.Cosine,
+		"output/vert.png", 1.0,
+		60, 400, false,
+		noise * 1.0, NoiseWeighting.Center | NoiseWeighting.Brightness, InterpType.Cosine,
 		[
-			0.0f * mult, 0.0f,
-			0.12f * mult, 1.0f
+			0.0 * mult, 0.0,
+			0.12 * mult, 1.0
 		]
 	);
 
@@ -295,12 +296,12 @@ void main() {
 
 
 	generateGradient(
-		"output/vertB.png", 1.0f,
-		40, 200, false,
-		noise * 1.0f, NoiseWeighting.Center | NoiseWeighting.Brightness, InterpType.Cosine,
+		"output/vertB.png", 1.0,
+		60, 200, false,
+		noise * 1.0, NoiseWeighting.Center | NoiseWeighting.Brightness, InterpType.Cosine,
 		[
-			0.12f * mult, 0.0f,
-			0.05f * mult, 1.0f
+			0.12 * mult, 0.0,
+			0.05 * mult, 1.0
 		]
 	);
 }

@@ -1,12 +1,12 @@
 Hello, world! I'm a programmer obsessed with gamedev, though one of these twisted souls who enjoy engine programming more than working on the actual games.
 
-I'm currently working on a team-based multi-player first person shooter game akin to the _Battlefield_ series. More info "here":code/boxen/index.html.
+I'm currently working on a team-based multi-player first person shooter game akin to the _Battlefield_ series. More info "here":code/boxen/.
 
 So far, my largest finished project is "Deadlock":http://deadlock.team0xf.com/, an arena-based multi-player first person shooter done with four friends from "team0xf":http://team0xf.com/.
 
 The progress of my work can be tracked via "my blog":http://h3.gd/devlog/, "twitter":http://twitter.com/h3r2tic/ and a "random stream of images":http://h3.gd/img/ which I sometimes update with cool visuals.
 
-"Here":code/index.html is a list of stuff I've been involved in.
+"Here":code/ is a list of stuff I've been involved in.
 
 There are references to some interesting projects, portals and smart folks' home pages in the "links section":links.html.
 

@@ -1,0 +1,56 @@
+#disqus_thread {
+        border-radius: 6px;
+        -moz-border-radius: 6px;
+        color: inherit;
+	margin-top: 35px;
+        padding: 1px 28px 15px 28px;
+        background: rgba(255, 255, 255, 0.02);
+}
+
+#dsq-content {
+	font-size: 100% !important;
+}
+
+.dsq-dc-logo { display: none !important; }
+.dsq-options { display: none !important; }
+.dsq-comment {
+	background: rgba(0, 0, 0, 0.1) !important;
+	padding: 5px !important;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+	margin-bottom: 6px !important;
+}
+
+.dsq-comment-message {
+	font-size: 14pt !important;
+}
+
+
+#dsq-content .dst-remove-message, #dsq-content .dsq-realtime-alert, #dsq-content .dsq-missing-permissions {
+	background-color: #305030 !important;
+	border: #306030 !important;
+	font-size: 14pt !important;
+}
+
+#dsq-content .dsq-thread-settings {
+	border: 1px solid #222 !important;
+	background: rgba(0, 0, 0, 0.1) !important;
+}
+
+#dsq-content .dsq-textarea textarea, #dsq-content .dsq-post-fields input {
+	color: #f0f0f0 !important;
+}
+
+#dsq-content .dsq-textarea .dsq-textarea-wrapper, #dsq-content .dsq-post-fields .dsq-input-wrapper {
+	border: 1px solid #222 !important;
+	background: rgb(69, 69, 69) !important;
+}
+
+button.dsq-button, button.dsq-button-small {
+	border: 1px solid #222 !important;
+}
+
+#form-message {
+	background: rgb(69, 69, 69);
+	color: #f0f0f0;
+}

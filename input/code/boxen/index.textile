@@ -1,3 +1,4 @@
+disqus
 h1. Info
 
 Project 'Boxen' is aiming to be a multi-player first person shooter game involving human characters and vehicles, similar to games of the _Battlefield_ series.
@@ -9,4 +10,4 @@ The artistic side is covered by my brother, Marcin Stachowiak, who makes awesome
 
 h1. Progress
 
-A simple prototype of networked physics and basic gameplay has been successfully constructed and tested with 7 players scattered around the world. The prototype was based on the *PhysX* engine and a very experimental rendering system. I'm currently working on a "new renderer":../nucleus/index.html, which is also the main topic of my MSc thesis. In parallel, I'm replacing the PhysX-based simulation with Havok which has proven to be much more user friendly so far.
+A simple prototype of networked physics and basic gameplay has been successfully constructed and tested with 7 players scattered around the world. The prototype was based on the *PhysX* engine and a very experimental rendering system. I'm currently working on a "new renderer":../nucleus/, which is also the main topic of my MSc thesis. In parallel, I'm replacing the PhysX-based simulation with Havok which has proven to be much more user friendly so far.

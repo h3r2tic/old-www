@@ -9,13 +9,13 @@ function setGlobalTextColor(color) {
 
 function enableGlobalTextShadows() {
 	var doc = document.getElementById('content');
-	doc.style.color = "2px 1px 4px rgba(0, 0, 0, 0.6)";
+	doc.style.textShadow = "2px 1px 4px rgba(0, 0, 0, 0.6)";
 }
 
 
 function disableGlobalTextShadows() {
 	var doc = document.getElementById('content');
-	doc.style.color = "none";
+	doc.style.textShadow = "none";
 }
 
 
@@ -58,7 +58,7 @@ function setBackgroundGradient(width) {
 
 
 function updateBackgroundGradient() {
-	setBackgroundGradient(window.innerWidth);
+	setBackgroundGradient(document.documentElement.clientWidth);
 }
 
 
@@ -74,21 +74,19 @@ function loadBackgroundGradient() {
 function SiteSettings() {
 	this.version = "4";
 
-	/*	WebKit switches text rendering libraries/algorithms when using shadows,
-		resulting in slightly thinner acute lines in the glyphs. As a result, the text
-		look darker. Thus this script adjusts for that by bumping up the brightness
-		from the default #f0f0f0 to full white.
-	*/
+	/* Current versions of Chrome seem to have a fallback for shadowed font rendering
+	and the fallback renders font that is too thick, ruining the look. */
 	if (navigator.userAgent.indexOf("WebKit") != -1) {
-		this.textColor = "rgb(255,255,255)";
+		this.useTextShadows = false;
 	} else {
-		this.textColor = "rgb(240,240,240)";
+		// Firefox looks great with shadows
+		this.useTextShadows = true;
 	}
 
+	this.textColor = "rgb(240,240,240)";	
 	this.defaultBgColor = "rgb(69,69,69)";
 	this.bgColor = this.defaultBgColor;
 
-	this.useTextShadows = true;
 	this.update = SiteSettings_update;
 	this.serialize = SiteSettings_serialize;
 	this.unserialize = SiteSettings_unserialize;

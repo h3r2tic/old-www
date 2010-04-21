@@ -10,4 +10,10 @@ The artistic side is covered by my brother, Marcin Stachowiak, who makes awesome
 
 h1. Progress
 
-A simple prototype of networked physics and basic gameplay has been successfully constructed and tested with 7 players scattered around the world. The prototype was based on the *PhysX* engine and a very experimental rendering system. I'm currently working on a "new renderer":../nucleus/, which is also the main topic of my MSc thesis. In parallel, I'm replacing the PhysX-based simulation with Havok which has proven to be much more user friendly so far.
+h3. March 29, 2010:
+
+p((. Networked physics on top of *Havok Physics* and new core modules is running fairly well. A simple demo can be "downloaded here":http://bit.ly/c0IlXJ ( { wsad, e, mouse } for controls, only guaranteed to work on Windows with recent GPUs ).
+
+h3. February 26, 2010
+
+p((. A simple prototype of networked physics and basic gameplay has been successfully constructed and tested with 7 players scattered around the world. The prototype was based on the *PhysX* engine and a very experimental rendering system. I'm currently working on a "new renderer":../nucleus/, which is also the main topic of my MSc thesis. In parallel, I'm replacing the PhysX-based simulation with Havok which has proven to be much more user friendly so far.

@@ -3,7 +3,7 @@ h1. Nucleus
 
 *Nucleus* is a real-time rendering system I'm creating for "Boxen":/code/boxen/. It's also the subject of my MSc thesis and an evolution of my two older rendering engines that turned out to be exercises in over-engineering, over-generalization and "cache thrashing":http://research.scee.net/files/presentations/gcapaustralia09/Pitfalls_of_Object_Oriented_Programming_GCAP_09.pdf. This iteration attempts to be more pragmatic.
 
-At the top level, Nucleus is split into two layers: the _graphics base_ which lies on a level similar to XNA and a _high level rendering interface_.
+At the top level, Nucleus is split in two layers: the _graphics base_ which lies on a level similar to XNA and a _high level rendering interface_.
 
 
 h1. Graphics base

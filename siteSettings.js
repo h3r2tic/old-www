@@ -78,7 +78,7 @@ function SiteSettings() {
 	this.version = "5";
 	this.useTextShadows = true;
 
-	/* WebKit currently falls back to non-native font rendering (via GraphicsCore)
+	/* WebKit currently falls back to non-native font rendering (via CoreGraphics / Skia)
 	 * in case blurred or translucent shadows are enabled. The fallback doesn't have
 	 * sub-pixel anti-aliasing and its strokes are too thick, ruining the intended look. */
 	if (navigator.userAgent.indexOf("WebKit") != -1) {

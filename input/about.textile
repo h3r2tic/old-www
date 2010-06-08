@@ -2,7 +2,7 @@ h1. About me
 
 My name is Tomasz Stachowiak. I'm a university student (currently at my final year) and a programmer. I'm mostly interested in the topics of graphics (both real-time and off-line) and game networking (networked physics), though I've been fiddling with other areas as well, such as doing core game engine programming, tools (custom statistical profiler, build tool, graph-based shader editor), GUIs (IM, RM) and various perversions, such as compile-time ray tracing.
 
-I love "customization":myDesktop.png, "my companion":t42.jpg and "good music":http://nin.com/.
+I love "customization":newBlackbox.png, "my companion":t42.jpg and "good music":http://nin.com/.
 
 I have a "sister":http://missselfdestruct.deviantart.com/ and a "brother":http://misterm.deviantart.com/.
 

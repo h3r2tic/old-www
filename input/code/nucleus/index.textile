@@ -8,9 +8,9 @@ At the top level, Nucleus is split in two layers: the _graphics base_ which lies
 
 h1. Graphics base
 
-This layer completely isolates the underlying rendering API (currently _OpenGL 3.2_ + _CgFX_) and gives an easy to use interface on top of it. The main building blocks are:
+This layer completely isolates the underlying rendering API (currently _OpenGL 3.3_ + _CgFX_) and gives an easy to use interface on top of it. The main building blocks are:
 * *Effect* - wraps vertex, geometry and fragment shaders together, allows shader specialization (e.g. setting the implementations of Cg interfaces, providing sizes for unsized Cg arrays). Once compiled, allows the programmer to provide values for uniform parameters shared by all instances of the effect. Finally, it allows instantiation into EffectInstances.
-* *EffectInstance* - provides a name space and storage for uniform and varying parameters associated with a single instance of an Effect. Additionally, uses a VertexArray to cache current varying parameter bindings. Automatically performs reference counting of resources assigned as uniform (Textures) and varying parameters (VertexBuffers). The memory for EffectInstances is allocated from pools in contiguous slabs for both the structure data and the effect-dependent payload.
+* *EffectInstance* - provides a name space and storage for uniform and varying parameters associated with a single instance of an Effect. Additionally, uses a VertexArray to cache current varying parameter bindings. Automatically performs reference counting of resources assigned as uniform (Textures) and varying parameters (VertexBuffers). The memory for EffectInstances is allocated from pools in contiguous slabs for both the structure data and the effect-dependent payload. By adding an indirection to parameter storage, multiple Effects and EffectInstances may source their parameters from the same variable in memory, possibly managed entirely by the client.
 * *Buffer* - allows the specification and modification of graphics API-allocated memory (VRAM, AGP, system).
 ** *VertexBuffer* - used for generic untyped vertex attributes. The actual types are specified when binding varying parameters to EffectInstances and specifying the offset, stride and type of the underlying data.
 ** *IndexBuffer* - specialized for u16 and u32 mesh indices.
@@ -33,126 +33,352 @@ An important factor to note is that the *RenderList* does not plainly contain Ef
 
 As mentioned before, the *Renderer* also gives access to the *RenderState*, a set of common rendering settings, such as the mode of Z-testing, blending, back-face culling, etc.
 
-The _Graphics base_ layer has so far been testing by implementing "chunked terrain":http://tulrich.com/geekstuff/chunklod.html and regular mesh rendering on top of it. The latter are loaded from a custom format exported from 3DS Max by a plugin created specifically for Nucleus.
+The _Graphics base_ layer can therefore be used instead of the underlying graphics API, completely hiding its complexity and error-prone setup. It has been tested (in isolation from the high level of Nucleus) by implementing "chunked terrain":http://tulrich.com/geekstuff/chunklod.html and standard mesh rendering. Meshes are loaded from a custom format exported from 3DS Max by a plugin created specifically for Nucleus.
 
 !chunkedLoD.jpg!
 
-h1. High level rendering interface
+h1. High level rendering model
 
-This part of Nucleus is still being designed and thus subject to change. The most fundamental idea is to completely abstract away the hardware shader types. While they tightly correspond to the way GPUs work, they are not a very good mental model for designing rendering algorithms, nor a comfortable basis for artists to work with. Instead, Nucleus will lean more towards the *Renderman* / *RSL* model. Hence, there are 3 basic shader types:
+The most fundamental idea behind Nucleus is that of providing a more intuitive programming level than hardware shaders deliver. While they tightly correspond to the way GPUs work, they are not a very good mental model for designing rendering algorithms, nor a comfortable basis for artists to work with. Instead, Nucleus leans more towards the model employed by *Renderman*.
+
+The basic building block of Nucleus is called a _kernel_. From a conceptual point of view, it's just a function which may be implemented in NVidia's Cg language. Alternatively however, a kernel may be composed of other kernels connected into a directed acyclic graph.
+
+Each object to be rendered must have 3 basic kernels provided for it. They must be implementations of the following _abstract_ kernels:
+* *Structure* - Defines the macro-structure and mostly contains what a vertex or geometry shader might. It's responsible for providing the primitives to be rendered, including data such as positions, normals, partial derivatives of position with respect to texture coordinates, etc.
+* *Reflectance* - Enables the object to interact with lights by implementing a BRDF function. Examples include the Lambertian model, Phong, Cook-Torrance and Ashikhmin-Shirley.
+* *Material* - This is the level on which most artists will work, specifying the albedo of the rendered object, its bumpiness, specular tint, emissive lighting, roughness, etc. Kernels extending _Material_ will be created for types of objects in a scene, as well as for particular instances thereof.
+
+A scene will usually also contain lights. Each must have a kernel specified for it, in this case an implementation of the abstract *Light*. This mechanism allows specification of custom attenuation, sampling and shadowing algorithms, which automatically are applicable to any _Reflectance_ kernel.
+
+The big picture therefore looks like this:
 
 {{{dot digraph std
-	"Structure" -> "Surface";
-	"Light" -> "Surface";
-}}}
-
-The *structure* shader is responsible for providing the primitives to be rendered, including data such as: positions, normals and partial derivatives of positions with respect to U and V texture coordinates (often incorrectly called the 'tangent and bitangent' or 'tangent and binormal'). The GPU part of a structure shader can be as simple as just passing-through the data from vertex buffers, but it can do more fancy operations, such as skinning the mesh with matrices or sampling a heightmap. Structure shaders also have a CPU counterpart, which creates vertex buffers, unpacks data and provides it to the GPU. This part is necessarily strongly coupled with the type of an asset that's being rendered. This coupling is unfortunate, but provides a consistent mechanism for bringing any sort of an asset into the GPU for rendering without sacrificing speed like a more general system might. Additionally, the CPU part of the structure shader will be able to answer queries about the geometry of the object, such as ray-surface intersections and bounding volume computations.
-
-Data from the structure shader is passed into the *surface* shader, whose job is to define the final looks of the object being rendered now that its geometry is known. It will compute results such as the albedo of the surface, Fresnel reflection intensity, reflection and refraction colors, opacity, surface roughness, etc. Most surface shaders will use a common building block to compute the radiance at a point being shaded - usually the results of a reflectance model such as Strauss, Ashikhmin-Shirley or Ward summed over all visible lights (the precise formulation here depends on whether the rendering algorithm is forward or deferred). For instance, a simple *surface* shader might yield the value of an albedo texture sample multiplied with the standard radiance plus a cube-mapped reflection.
-
-{{{dot digraph std
-	"Standard reflectance" [
-		fillcolor = "#ffffe0"
-	];
-
-	"*" [
+	"combine" [
 		fillcolor = "#d0e0ff"
 	];
 
-	"+" [
-		fillcolor = "#d0e0ff"
-	];
-
-	"Albedo" -> "*";
-	"Standard reflectance" -> "*";
-	"*" -> "+";
-	"Reflection" -> "+";
-	"+" -> "Output";
-
-	label = "A simple surface shader";
+	"Structure" -> "Material";
+	"Material" -> "Reflectance";
+	"Light" -> "Reflectance";
+	"Material" -> "combine";
+	"Reflectance" -> "combine";
+	"combine" -> "output";
 }}}
 
-A building block implementing radiance calculation will necessarily interface with *light* shaders. Their role is to calculate the irradiance at a particular reference frame (usually a point and a normal). For instance, the light shader for a point light not casting any shadows would return the usual _N dot L_ divided by the square of the distance between the point and the light. A more fancy light shader might perform cascaded shadow mapping.
+h2. Data
 
-The _surface shader_ and its data together form a *Material*. For instance, two rocks in the scene may use the same surface shader and only differ in the albedo texture. Yet there may be many different rocks with these materials, thus the generalization comes in handy from a workflow perspective.
+Naturally, kernels, which live entirely on the GPU, need a way to have data provided for them. Each kernel type sources its inputs from a separate location, as to enable arbitrary composition.
+
+*Structure* kernels have a CPU counterpart, which creates vertex buffers, unpacks data and provides it to the GPU. This part is necessarily strongly coupled with the type of an *Asset* that's being rendered. This coupling is unfortunate, but provides a consistent mechanism for bringing any sort of an asset into the GPU for rendering without sacrificing speed. Additionally, the CPU part of the structure kernel will be able to answer queries about the geometry of the object, such as ray-surface intersections and bounding volume computations.
+
+_Structure_ kernels and _Assets_ together define a way for the renderer to rasterize the primitives from various sources of data, the most basic of which is a triangle mesh. Another combination of the above might allow the rendering of height-mapped terrains, subdivision surfaces or geometry shader-based generation of primitives.
+
+A *Reflectance* kernel plus its inputs is called a *surface* within Nucleus. Unlike _Structure_ kernels, _surfaces_ don't come with any CPU logic attached, only a collection of parameter bindings into the associated _Reflectance_ kernel. Whereas a _Reflectance_ kernel might implement the _Phong_ lighting model, a _surface_ using this kernel may be specialized for various types of plastic or other dielectrics.
+
+Finally *Material* kernel instances are known as just *materials* and similarly to _surfaces_, only carry specialized sets of data provided for the specific kernel and no logic to be evaluated on the CPU-side.
+
+Lights are currently pretty heavy-weight entities in Nucleus, each being represented by an instance of the *Light* class and treated specially by renderers. All lights affecting the rendered viewport are given a chance to prepare the data for the kernels associated with them. This includes rendering of shadow maps, computing projection matrices from look-at constraints and determining the bounding volumes based on the attenuation model and luminous intensity.
+
+The result of this separation is that it's possible to render any _Asset_ with any _material_ applied to it, under any _reflectance_ model, with any number of affecting lights. The next sub-section discusses just how this rendering may happen.
+
+h2. Rendering algorithms
+
+The most straight-forward way of rendering a collection of objects under the influence of lights is via the _Forward_ rendering algorithm. The current implementation is based around a cache of kernel combinations compiled into *Effects* (as described in the first section of this article).
+
+The way kernels are composed into GPU shaders in the _Forward_ algorithm is relatively simple. Just take all the lights affecting an object, connect them to the _Reflectance_ kernel, sum the outputs and multiply that with the output of the albedo and specular tint outputs of the _Material_ kernel:
 
 {{{dot digraph std
-	label = "Renderable"
+	"Reflectance1" [
+		label = "Reflectance"
+	];
 
-	subgraph "cluster" {
-		label = ""
-		"Asset";
-		"Structure";
-	}
+	"Reflectance2" [
+		label = "Reflectance"
+	];
 
-	subgraph "cluster_Material" {
-		label = "Material"
-
-		"Surface";
-		"Material parameters";
-	}
-
-	"Asset" -> "Structure";
-	"Structure" -> "Surface";
-	"Material parameters" -> "Surface";
+	"Structure" -> "Material";
+	"Material" -> "Reflectance1";
+	"Material" -> "Reflectance2";
+	"Light1" -> "Reflectance1";
+	"Light2" -> "Reflectance2";
+	"Reflectance1" -> "+";
+	"Reflectance2" -> "+";
+	"+" -> "*";
+	"Material" -> "*";
+	"*" -> "output";
 }}}
 
-A _structure shader_ along with the *Asset* providing data for it and a _Material_ form a *Renderable*. Renderables reside in a _render graph_, which is a structure specialized for culling and traversal with the purpose of rendering the scene. The exact algorithms to be used here are still to be determined, but for now they will basically be flat cache-friendly arrays of renderables. I'm planning to investigate structures like loose AABB trees or loose k-D trees for hierarchical culling in the future.
+_Note: it's not shown in the picture, however specular and diffuse light contributions are processed separately._
 
-Additionally, Renderman's _displacement_ shaders might be later added between the structure and surface stages, however their role for real-time applications such as games may often be done in the surface shader via normal or parallax mapping.
+Such a graph is then split into vertex, geometry and fragment shaders using a specially designated node within the _Structure_ kernel to serve as the bridge between the geometry and fragment pipelines.
 
-h2. Shader building blocks
+h3. Deferred rendering
 
-In order to facilitate code reuse, shaders are composed of code snippets thereon called "*quarks*". Quarks are basically functions implemented in Cg (or HLSL), however their parameters are not just basic Cg types. Nucleus implements a rich _semantic type system_ (inspired by "Abstract Shade Trees":http://graphics.cs.brown.edu/games/AbstractShadeTrees/ by McGuire et al.), which carries more concepts than just the data type. For example:
-* The basis to which a vector belongs
-* The color space
-* Linearity of a value
+Due to the particular split of the basic kernels which Nucleus enforces, it's possible to use the same kernel implementations for various rendering algorithms, not just the traditional forward approach. One downside of the forward renderer is that it requires large numbers of shaders to be compiled: basically _*O*(materials * surfaces * light combinations)_. It's not uncommon to have hundreds or thousands of shaders generated like this in a large game project. This issue can be partially mitigated by using multi-pass rendering instead of specializing the shader for all possible light combinations. This approach has the downside of requiring geometry re-rendering for each pass, hence can quickly become a bottleneck, particularly with large meshes affected by many lights, where the computational complexity becomes _*O*(objects * lights)_.
+
+Recently, a class of algorithms designed these very problems have been gaining popularity. Collectively known as _deferred rendering_, they manage to turn shift the costs around the rendering problem and break it down into separate stages, thus turning the aforementioned multiplicative computational complexity into a sum: _*O(objects + lights)*_, albeit with additional memory overhead.
+
+Nucleus contains an implementation of one such flavor of deferred rendering, known as _light pre-pass_, whose operation is composed of 3 stages:
+* Render geometric attributes of objects in the scene into a set of textures _(collectively called the G-buffer)_, containing:
+** surface depth
+** normal
+** surface ID _(Nucleus - specific)_
+* Render the bounding volumes of lights, computing lighting per-pixel with geometric attributes reconstructed from the attribute textures. Use additive blending to sum the contribution of multiple lights.
+* Render the scene objects again, this time fully evaluating their materials and combining them with the illumination computed in the previous step.
+
+<hr />
+
+The first stage is simple to do. Most of the attributes required for the G-buffer are computed by the _Structure_ kernel. However, a _Material_ kernel may e.g. alter the per-vertex normals in order to perform _normal mapping_. Hence, the first stage is basically:
+
+{{{dot digraph std
+	"Structure" -> "Material";
+	"Material" -> "G-buffer";
+}}}
+
+<hr />
+
+The second stage is the tricky one. Deferred renderers are notorious for being quite rigid with respect to the illumination models achievable with them. This is because once the G-buffer is rendered, the light stage doesn't have access to per-object shaders, which might perform custom shading. Light volumes must then be rendered with the same shader for each pixel, regardless of which scene object a fragment in the G-buffer comes from.
+
+A common approach is to use just one reflectance model ( usually the half-angle version of Phong's ) for all pixels and only vary the specular contribution amount and roughness. This may work just fine for games which don't require drastically varying surface styles.
+
+Another solution to the problem is to render the majority of the scene using deferred rendering, but fall-back to forward rendering for surfaces requiring a different reflection model. Such an approach however means that objects using the second-class reflectance models have to be used sparingly, and thus form a constraint for artists.
+
+The approach which the deferred renderer in Nucleus takes instead is not a novel one, however it's one which has been "fairly questionable":http://http.developer.nvidia.com/GPUGems2/gpugems2_chapter09.html on graphics hardware for a long time. Basically, the G-buffer stores the _surface ID_ to be used at a given pixel and the fragment shader of the light stage branches on it and chooses the appropriate _Reflectance_ kernel implementation. The index of the kernel and the parameters for it are stored in a texture, into which the G-buffer contains a coordinate. The current approach allows up to 256 different surfaces, each of which might potentially use a different _Reflectance_ kernel. Obviously, this is not free either, however with the advent of real branching in recent GPU generations means that in practice the cost does not seem very high.
+
+As a result, the second stage of _light pre-pass_ in Nucleus presents itself like this:
+
+{{{dot digraph std
+	"G-buffer" -> "Reflectance1";
+	"G-buffer" -> "Reflectance2";
+	"G-buffer" -> "Reflectance3";
+	"G-buffer" -> "Light";
+	"Reflectance1" -> "switch";
+	"Reflectance2" -> "switch";
+	"Reflectance3" -> "switch";
+	"switch" -> "Reflectance";
+	"Light" -> "Reflectance";
+	"Reflectance" -> "Illumination buffer";
+}}}
+
+What the above graph doesn't show is how the light volume geometry is constructed. This part is still in flux, whereas the current implementation uses a geometry shader to instantiate a cube for each light, taking just a point for the input. It also performs approximate culling of light volumes with the help of the *EXT_depth_bounds_test* OpenGL extension where it's available.
+
+<hr />
+
+Once the _Illumination buffer_ has been calculated, the final stage of _light pre-pass_ is simple:
+
+{{{dot digraph std
+	"Structure" -> "Material";
+	"Illumination buffer" -> "*";
+	"Material" -> "*";
+	"*" -> "output";
+}}}
+
+h2. Semantic type system
+
+One of the issues plaguing graph-based shader generation approaches is that they don't remove much of the tedious work one has to go through in order to author a new effect. Data still needs to be converted between coordinate and representation spaces and each field must be manually connected between two consecutive nodes.
+
+Nucleus tries to improve on the state of the art by implementing a rich  _semantic type system_, which carries more concepts than just the data type. This semantic information may then be used to automate certain operations. The approach is hugely inspired by "Abstract Shade Trees":http://graphics.cs.brown.edu/games/AbstractShadeTrees/ by McGuire et al.
+
+This rich type system allows special _traits_ to be associated with input and output parameters of kernels, for example:
+* The basis to which a vector belongs - world, view, clip, ...
+* The color space - RGB, sRGB, logLUV, ...
+* Linearity of a value - linear, logarithmic, exponential, ...
 * Whether a vector is normalized or not
-* The very meaning of the parameter, e.g. whether it's a color or a normal vector
+* The very purpose of the parameter, e.g. whether it's a color or a normal vector
 
-For instance, when a reflectance model requires that its inputs be in world coordinates, it will simply declare its parameters with the 'basis' semantic trait set to 'world'. If it requires the normal vector to be normalized, it will set the 'unit' trait to 'true', etc. The shader compiler will infer all appropriate conversions statically.
+Consider a reflectance model which requires that its inputs be in world coordinates. It will simply declare its parameters with the 'basis' _trait_ set to _world_. If it requires the normal vector to be normalized, it will set the _unit_ trait to _true_, etc. The kernel compiler will infer all appropriate conversions statically.
+
+Just like in the work by McGuire et al., Nucleus is able to automatically find connections between particular parameters of kernels. It's not necessary to wire each output to each input manually - just as the semantic type system allows conversions to be performed, it may also perform an implicit search in the graph of all possible conversions from a set of inputs, hence choosing the optimal source for each parameter. In case of an ambiguity, parameters may be connected manually.
+
+Given a simple kernel graph such as:
+
+{{{dot digraph std
+	node [ fontsize = 11 ];
+
+	"Input" [
+		shape = "plaintext"
+		style = "rounded, filled"
+		label = <<table>
+			<tr><td colspan="2"><font face="Verdana Bold">Input</font></td></tr>
+			<tr><td></td><td port="position">pos &lt;use position + basis model&gt;</td></tr>
+			<tr><td></td><td port="normal">norm &lt;use normal + basis model&gt;</td></tr>
+		</table>>
+	];
+
+	"Rasterize" [
+		shape = "plaintext"
+		style = "rounded, filled"
+		label = <<table>
+			<tr><td colspan="2"><font face="Verdana Bold">Rasterize</font></td></tr>
+			<tr><td port="position">pos &lt;use position + basis clip&gt;</td><td></td></tr>
+		</table>>
+	];
+	
+	"Output" [
+		shape = "plaintext"
+		style = "rounded, filled"
+		label = <<table>
+			<tr><td colspan="2"><font face="Verdana Bold">Output</font></td></tr>
+			<tr><td port="color">col &lt;use color&gt;</td><td></td></tr>
+		</table>>
+	];
+
+	"Input" -> "Rasterize";
+	"Input" -> "Output";
+}}}
+
+Nucleus might resolve the connections it in the following way:
+
+{{{dot digraph std
+	node [ fontsize = 11 ];
+
+	"Input" [
+		shape = "plaintext"
+		style = "rounded, filled"
+		label = <<table>
+			<tr><td colspan="2"><font face="Verdana Bold">Input</font></td></tr>
+			<tr><td></td><td port="position">pos</td></tr>
+			<tr><td></td><td port="normal">norm</td></tr>
+		</table>>
+	];
+
+	"Rasterize" [
+		shape = "plaintext"
+		style = "rounded, filled"
+		label = <<table>
+			<tr><td colspan="2"><font face="Verdana Bold">Rasterize</font></td></tr>
+			<tr><td port="position">pos</td><td></td></tr>
+		</table>>
+	];
+	
+	"Output" [
+		shape = "plaintext"
+		style = "rounded, filled"
+		label = <<table>
+			<tr><td colspan="2"><font face="Verdana Bold">Output</font></td></tr>
+			<tr><td port="color">col</td><td></td></tr>
+		</table>>
+	];
+	
+	"modelToClip" [ fillcolor = "#d0d0ff" ];
+	"normalToColor" [ fillcolor = "#d0d0ff" ];
+	"normalize" [ fillcolor = "#d0d0ff" ];
+
+	"Input":position -> "modelToClip";
+	"modelToClip" -> "Rasterize":position;
+
+	"Input":normal -> "normalize";
+	"normalize" -> "normalToColor";
+	"normalToColor" -> "Output":color;
+}}}
+
+h3. Semantic expressions
+
+Nucleus also extends the technique proposed in _Abstract Shade Trees_ by allowing the use of simple expressions which operate on _semantic traits_ in the specification of output semantics.
+
+When working with a prototype of Nucleus which utilized a simpler version of the type system, it became apparent it's useful not only to compute values using kernels, but also let the output semantics of kernel functions depend on the _input_ semantics of these functions and the kernels they're _connected to_. For instance, One could have a kernel which samples a texture. Textures may be tagged with traits, specifying what sort of data they contain. If such a texture is connected to the sampling kernel, it's crucial to be able to express that the type of the sample should retain the traits of the texture. This is enabled by *semantic expressions*.
+
+The signature of the sampling kernel could be:
+	
+{{{d
+Tex2D = kernel (
+	in texture <type sampler2D>,
+	in uv <type float2 + use uv>,
+	out sample <in.texture.actual + type float4>
+);
+}}}
+
+In this case, the traits of the output parameter _sample_ depend on the *actual parameter* which is connected to the input _texture_ parameter in a kernel graph. Hence, the result of connecting an input with a semantic _&lt;type sampler2D + use color&gt;_ will be a sample with the semantic _&lt;type float4 + use color&gt;_.
+
+Semantic expressions are most commonly used in *semantic converters*, which may then perform arbitrarily complex additive and subtractive manipulation of traits. Converters are used automatically by Nucleus when resolving connections between parameters whose types don't match exactly. Each converter has an integral _cost_ value associated with it. This value is an approximation of the computational complexity of performing the given conversion. This lets Nucleus optimize automatic conversion paths.
+
+Additionally converters, just as regular kernels, may be tagged as *linear* as to allow Nucleus to move an operation from the fragment to the vertex stage, even when it's used in a _Reflectance_ or _Material_ kernel and not just _Structure_.
+
+h1. Post-processing
+
+In addition to regular scene rendering, Nucleus contains special support for post-processing. This again is performed by specifying a kernel and feeding it data. In this case, the data is just a texture (multiple inputs into the post-processing pipeline are planned for a later stage).
+
+A sample post-processing pipeline might look like this:
+	
+{{{dot digraph std
+	"Blit" [
+		fillcolor = "#d0e0ff"
+	];
+
+	"Input" -> "Blur1";
+	"Blur1" -> "Blit";
+	"Blit" -> "Blur2";
+	"Blur2" -> "Combine";
+	"Input" -> "Combine";
+}}}
+
+Nodes using the special *Blit* kernel are used to break the graph to be rendered in multiple passes. This enables the implementation of algorithms such as the _separable Gaussian blur_. *Blit* nodes may also rescale the input, as well as change the image format.
+
+In this case, the graph would be broken down into two passes:
+	
+{{{dot digraph std
+	subgraph "cluster_Pass1" {
+		label = "Pass 1"
+		"Blur1";
+	}
+
+	subgraph "cluster_Pass2" {
+		label = "Pass 2"
+		"Blur2";
+		"Combine";
+	}
+
+	"Input" -> "Blur1";
+	"Blur1" -> "Blur2";
+	"Blur2" -> "Combine";
+	"Input" -> "Combine";
+}}}
+
+In more complex cases, Nucleus will also find which passes may be performed at the same time and automatically use _Multiple Render Targets_.
+
+h2. Functional composition
+
+Implementing post-processing using the framework of a regular graph-based editor is a tricky business. Consider a graph like this:
+
+{{{dot digraph std
+	"Image" -> "pow2 (in float4, out float4)";
+	"pow2 (in float4, out float4)" -> "Blur (in Image)";
+}}}
+
+The *Blur* kernel expects to get an image which it may sample multiple times, with various offsets. Connecting the _Input_ directly to _Blur_ would have done the trick, but here the user has decided to filter the input through a power function first. The function operates not on _Images_, but on individual samples. Normally, the system would give up completely, however Nucleus has one more trick up its sleeve.
+
+In this case, the _Image_ type is nothing but a kernel. Particularly, one with the following signature:
+
+{{{d
+Image = kernel(
+	in uv <type float2 + use uv>,
+	out sample <type float4>
+);
+}}}
+
+Hence, the *Blur* kernel above expects _another kernel_ as its input, however the parameter which is connected to it is not a kernel, but *its return value*. This special case causes the type system to consider the whole incoming graph for _functional composition_. As a result, the graph might be turned into:
+
+{{{dot digraph std
+	subgraph "cluster" {
+		label = "function (in uv <type float2>, out sample <type float4>)"
+		"uv";
+		"Image";
+		"pow2";
+	}
+
+	"uv" -> "Image";
+	"Image" -> "pow2";
+	"pow2" -> "Blur";
+}}}
+
+At code generation time, this graph-based function gets turned into a *Cg* interface, which the implementation of _Blur_ may use just like any other _Image_.
+
+Naturally this very mechanism is not restricted to just the post-processing component of Nucleus and may be used e.g. in order to implement procedural texturing.
+
+h1. Editor
 
 !http://h3.gd/img/pictures/nucled33.png!
 
-A graph-based authoring tool, Nucled (more screenshots from the previous prototype can be found "here":http://h3.gd/img/), is provided in order to aid the shader artist. Except the connections between quarks, their implementations can be edited and the results are visible immediately. Despite some "criticism":http://realtimecollisiondetection.net/blog/?p=73 that graph-based tools sometimes receive, they can still be invaluable for fast shader prototyping and authoring given some discipline and expertise. In the case of _Nucled_, the implementations of more complex shaders can be specified entirely by programmers, whereas artists would then only provide inputs to them, thus the poor performance argument may hopefully be dodged.
+*This part is currently under development.*
 
-Quarks can be grouped to form higher level building blocks known as "*kernels*". These can be wired into shader graphs seamlessly as well, allowing custom construction of very complex effects.
-
-h2. Shader graph processors
-
-Once a shader graph has been specified, it can be used in a rendering algorithm to produce an image. Nucleus doesn't assume any particular method will be used and instead allows the renderer to transform the graph of quarks and kernels and finally produce GPU shaders for them. This generalization is not only useful for primary rendering - usually a scene will be rendered in other modes as well - e.g. using optimized shaders to create depth maps, variance depth maps or simplified reflection cube maps.
-
-This is also the place where the material-light combinatorial explosion problem is tackled. A forward renderer will generate multiple shaders from the graphs, each specialized for a different number or type of influencing lights. A classical deferred renderer will split the shader graph into parts that generate G-buffers and shade their results. A _light pre-pass_ renderer will create yet another pass that combines the irradiance buffer with surface parameters. ( _Note that for the deferred renderers to be able to do this, the shader graphs *must* utilize the standard irradiance calculation building block. Otherwise expensive multi-technique rendering will be required_ ).
-
-A nice implication of this approach is that the very same set of (structure, surface, light) shaders can be utilized to drive multiple rendering algorithms without the need for maintaining multiple copies of shaders, e.g. for solid and translucent objects (translucency doesn't work with most deferred renderers unless depth peeling is used) as a more traditional system might require.
-
-h2. CPU building blocks
-
-Additionally to wrapping GPU rendering operations in a more intuitive interface, Nucleus will provide two approaches for extending the renderer on the CPU side. The two extension mechanisms are:
-
-* CPU quarks
-* Data-query renderer plugins ( _name subject to change_ )
-
-*CPU quarks* will usually wrap series of GPU rendering operations - that is, they compose the rendering pipeline. A very typical CPU quark will be one that takes a texture and performs a Gaussian blur on it using the GPU in a separate framebuffer. It doesn't have to be as simple as that, though. A quark may utilize the whole machinery of the renderer and rasterize a scene into an HDR buffer, then interfacing with another which does tone mapping into the main sRGB framebuffer.
-
-{{{dot digraph std
-	"+" [
-		fillcolor = "#d0e0ff"
-	];
-
-	"HDR Render" -> "Glare";
-	"HDR Render" -> "Tone mapping";
-	"Tone mapping" -> "+";
-	"Glare" -> "+";
-	"+" -> "Output";
-
-	label = "\nAn example pipeline composed of CPU quarks";
-}}}
-
-CPU quarks do not have to be particularly efficient interface-wise, as there just won't be many of them. They will however provide profiling, debugging and introspection features. For instance, they will utilize interfaces for visualizing intermediate steps of rendering operations - a quark that does deferred rendering can use them to expose the values of its G-buffers, one that does tone mapping can expose histograms, etc. Additionally, all inputs and outputs of CPU quarks will be available via reflection mechanisms and thus automatically available for introspection as well.
-
-Aside from the bulky CPU quarks, there's a need for extending the renderer in another way: The objects being rendered may require some very special data, like reflection cube maps or irradiance grid samples for PRT. In contrast to the single set of inputs - single set of outputs data flow of CPU quarks, this particular functionality will be required for a large number of samples and thus not only has to be fast interface-wise, but should yield itself to approximation and quotas. For example, provided with the task of rendering 1000 objects each requiring a dynamic reflection cube map, a naive renderer would produce performance far from real-time. For this reason, a plugin that provides reflection cube maps may be told to only render just a few of these and allocate them amongst objects using an algorithm such as _k-means_. Since this behavior might need to be finely tuned, the functionality to calculate the special data is implemented as *data-query renderer plugins*.
-
-The difference between the aforementioned two CPU building block types manifests itself also in resource management. While CPU quarks will do tight reference counting on the data they receive and produce, the data-query plugins will assume ownership over the calculated resources and apply complex caching strategies. On the other hand, an optimization pass will be executed over CPU quark graphs in order to minimize resource usage - e.g. depth-first execution may mean that less resources need to be allocated than for breadth-first execution.
-
-Just as Nucled allows the modification of GPU quark code at runtime, it also enables the modification of CPU - level building blocks. A dynamic re-compilation and re-linking system built on top of "DDL":http://h3.gd/devlog/?p=12 is utilized for this purpose. Code modification can be done entirely within the shader editor thanks to the "Scintilla":http://www.scintilla.org/ component being integrated in the "Hybrid GUI":http://hybrid.team0xf.com/ lib on top of which Nucled is built.
+A graph-based authoring tool, Nucled (more screenshots from the previous prototype can be found "here":http://h3.gd/img/), will be provided in order to aid the shader artist. Except the connections between kernels, their implementations may be edited and the results visible immediately. Despite some "criticism":http://realtimecollisiondetection.net/blog/?p=73 that graph-based tools sometimes receive, they can still be invaluable for fast shader prototyping and authoring given some discipline and expertise. In the case of _Nucled_, the implementations of more complex kernels can be specified entirely by programmers, whereas artists would then only provide inputs to them, thus the poor performance argument may hopefully be dodged.

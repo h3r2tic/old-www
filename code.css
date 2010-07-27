@@ -13,8 +13,8 @@ div.highlight pre {
 	margin: 0;
 
 	font-family: Consolas, "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", monospace;
-	font-size: 12px;
-	line-height: 14px;
+	font-size: 15px;
+	line-height: 17px;
 
 	/* fit the width */
 	display: table-cell;

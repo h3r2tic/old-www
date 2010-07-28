@@ -1,4 +1,7 @@
 disqus
+
+_This document is just a draft. Expect errors of all sorts._
+
 h1. Nucleus
 
 *Nucleus* is a real-time rendering system I'm creating for "Boxen":/code/boxen/. It's also the subject of my MSc thesis and an evolution of my two older rendering engines that turned out to be exercises in over-engineering, over-generalization and "cache thrashing":http://research.scee.net/files/presentations/gcapaustralia09/Pitfalls_of_Object_Oriented_Programming_GCAP_09.pdf. This iteration attempts to be more pragmatic.
@@ -39,16 +42,16 @@ The _Graphics base_ layer can therefore be used instead of the underlying graphi
 
 h1. High level rendering model
 
-The most fundamental idea behind Nucleus is that of providing a more intuitive programming level than hardware shaders deliver. While they tightly correspond to the way GPUs work, they are not a very good mental model for designing rendering algorithms, nor a comfortable basis for artists to work with. Instead, Nucleus leans more towards the model employed by *Renderman*.
+The most fundamental idea behind Nucleus is that of providing a more intuitive programming level than hardware shaders deliver. While they tightly correspond to the way GPUs work, they are not a very good mental model for designing rendering algorithms, nor a comfortable basis for artists to work with. Nucleus leans more towards the model employed by *Renderman*.
 
-The basic building block of Nucleus is called a _kernel_. From a conceptual point of view, it's just a function which may be implemented in NVidia's Cg language. Alternatively however, a kernel may be composed of other kernels connected into a directed acyclic graph.
+The basic building block in Nucleus is called a _kernel_. From a conceptual point of view, it's just a function which may be implemented in NVidia's Cg language. Alternatively however, a kernel may be composed of other kernels connected into a directed acyclic graph.
 
 Each object to be rendered must have 3 basic kernels provided for it. They must be implementations of the following _abstract_ kernels:
 * *Structure* - Defines the macro-structure and mostly contains what a vertex or geometry shader might. It's responsible for providing the primitives to be rendered, including data such as positions, normals, partial derivatives of position with respect to texture coordinates, etc.
-* *Reflectance* - Enables the object to interact with lights by implementing a BRDF function. Examples include the Lambertian model, Phong, Cook-Torrance and Ashikhmin-Shirley.
+* *Reflectance* - Enables the object to interact with lights by implementing a "BRDF":http://en.wikipedia.org/wiki/Bidirectional_reflectance_distribution_function. Examples include the Lambertian model, Phong, Cook-Torrance and Ashikhmin-Shirley.
 * *Material* - This is the level on which most artists will work, specifying the albedo of the rendered object, its bumpiness, specular tint, emissive lighting, roughness, etc. Kernels extending _Material_ will be created for types of objects in a scene, as well as for particular instances thereof.
 
-A scene will usually also contain lights. Each must have a kernel specified for it, in this case an implementation of the abstract *Light*. This mechanism allows specification of custom attenuation, sampling and shadowing algorithms, which automatically are applicable to any _Reflectance_ kernel.
+A scene will usually also contain lights. Each must have a kernel specified for it. In this case, an implementation of the abstract *Light*. At program runtime, _Light_ kernels are connected to the per-object kernel types. This mechanism allows specification of custom attenuation, sampling and shadowing algorithms, which automatically are applicable to any _Reflectance_ kernel.
 
 The big picture therefore looks like this:
 
@@ -65,25 +68,38 @@ The big picture therefore looks like this:
 	"combine" -> "output";
 }}}
 
+Nucleus uses a _Domain Specific Language_ for the definition of graphs and plain kernels. The _DSL_ may embed Cg code, so that a sample kernel might look like:
+
+{{{d
+HalfLambert = kernel Reflectance {
+	float NdotL = dot(normal, toLight).x;
+	diffuse = NdotL * 0.5f + 0.5f;
+	diffuse *= diffuse * intensity;
+	specular = 0;
+};
+}}}
+
+The effect of such a declaration is a kernel conforming to the interface of _Reflectance_, hence it can be used as a _Reflectance_ kernel for an object.
+
 h2. Data
 
 Naturally, kernels, which live entirely on the GPU, need a way to have data provided for them. Each kernel type sources its inputs from a separate location, as to enable arbitrary composition.
 
-*Structure* kernels have a CPU counterpart, which creates vertex buffers, unpacks data and provides it to the GPU. This part is necessarily strongly coupled with the type of an *Asset* that's being rendered. This coupling is unfortunate, but provides a consistent mechanism for bringing any sort of an asset into the GPU for rendering without sacrificing speed. Additionally, the CPU part of the structure kernel will be able to answer queries about the geometry of the object, such as ray-surface intersections and bounding volume computations.
+*Structure* kernels have a CPU counterpart which unpacks data, creates vertex buffers,  and finally provides it to the GPU. Additionally, the CPU side  will be able to answer queries about the geometry of the object, such as ray-surface intersections and bounding volume computations. This part is necessarily strongly coupled with the type of an *Asset* being rendered. 
 
-_Structure_ kernels and _Assets_ together define a way for the renderer to rasterize the primitives from various sources of data, the most basic of which is a triangle mesh. Another combination of the above might allow the rendering of height-mapped terrains, subdivision surfaces or geometry shader-based generation of primitives.
+_Structure_ kernels and _Assets_ together define a way for the renderer to rasterize primitives from various sources of data, the most basic of which is a triangle mesh. Another combination of the above might allow the rendering of height-mapped terrains, subdivision surfaces or geometry shader-based generation of primitives.
 
-A *Reflectance* kernel plus its inputs is called a *surface* within Nucleus. Unlike _Structure_ kernels, _surfaces_ don't come with any CPU logic attached, only a collection of parameter bindings into the associated _Reflectance_ kernel. Whereas a _Reflectance_ kernel might implement the _Phong_ lighting model, a _surface_ using this kernel may be specialized for various types of plastic or other dielectrics.
+A *Reflectance* kernel plus its inputs is called a *surface* within Nucleus. Unlike _Structure_ kernels, _surfaces_ don't come with any CPU logic attached. They are just collections of parameter values. A _Reflectance_ kernel might implement the _Phong_ lighting model, then a _surface_ using this kernel can be specialized for various types of plastic or other dielectrics.
 
-Finally *Material* kernel instances are known as just *materials* and similarly to _surfaces_, only carry specialized sets of data provided for the specific kernel and no logic to be evaluated on the CPU-side.
+Finally *Material* kernel instances are known as just *materials* and similarly to _surfaces_, only carry specialized sets of data provided for the  kernel and no logic to be evaluated on the CPU-side.
 
-Lights are currently pretty heavy-weight entities in Nucleus, each being represented by an instance of the *Light* class and treated specially by renderers. All lights affecting the rendered viewport are given a chance to prepare the data for the kernels associated with them. This includes rendering of shadow maps, computing projection matrices from look-at constraints and determining the bounding volumes based on the attenuation model and luminous intensity.
+Lights are currently pretty heavy-weight entities in Nucleus, each being represented by an instance of the *Light* class and treated specially by renderers. All lights affecting the rendered scene are given a chance to prepare data for the kernels associated with them. This includes rendering of shadow maps, computing projection matrices from look-at constraints and determining  bounding volumes based on an attenuation model and luminous intensity.
 
-The result of this separation is that it's possible to render any _Asset_ with any _material_ applied to it, under any _reflectance_ model, with any number of affecting lights. The next sub-section discusses just how this rendering may happen.
+The result of this separation is the ability to render any _Asset_ with any _material_ applied to it, under any _reflectance_ model, with any number of affecting lights. The next sub-section discusses just how this rendering may happen.
 
 h2. Rendering algorithms
 
-The most straight-forward way of rendering a collection of objects under the influence of lights is via the _Forward_ rendering algorithm. The current implementation is based around a cache of kernel combinations compiled into *Effects* (as described in the first section of this article).
+The most straightforward way of rendering a collection of objects under the influence of lights is via the classical _Forward_ rendering algorithm.
 
 The way kernels are composed into GPU shaders in the _Forward_ algorithm is relatively simple. Just take all the lights affecting an object, connect them to the _Reflectance_ kernel, sum the outputs and multiply that with the output of the albedo and specular tint outputs of the _Material_ kernel:
 
@@ -108,42 +124,63 @@ The way kernels are composed into GPU shaders in the _Forward_ algorithm is rela
 	"*" -> "output";
 }}}
 
-_Note: it's not shown in the picture, however specular and diffuse light contributions are processed separately._
-
 Such a graph is then split into vertex, geometry and fragment shaders using a specially designated node within the _Structure_ kernel to serve as the bridge between the geometry and fragment pipelines.
 
 h3. Deferred rendering
 
-Due to the particular split of the basic kernels which Nucleus enforces, it's possible to use the same kernel implementations for various rendering algorithms, not just the traditional forward approach. One downside of the forward renderer is that it requires large numbers of shaders to be compiled: basically _*O*(materials * surfaces * light combinations)_. It's not uncommon to have hundreds or thousands of shaders generated like this in a large game project. This issue can be partially mitigated by using multi-pass rendering instead of specializing the shader for all possible light combinations. This approach has the downside of requiring geometry re-rendering for each pass, hence can quickly become a bottleneck, particularly with large meshes affected by many lights, where the computational complexity becomes _*O*(objects * lights)_.
+Due to the particular split of the basic kernels which Nucleus enforces, it's possible to use the same kernel implementations for various rendering algorithms, not just the traditional forward approach. 
 
-Recently, a class of algorithms designed these very problems have been gaining popularity. Collectively known as _deferred rendering_, they manage to turn shift the costs around the rendering problem and break it down into separate stages, thus turning the aforementioned multiplicative computational complexity into a sum: _*O(objects + lights)*_, albeit with additional memory overhead.
+One downside of the forward renderer is that it requires large numbers of shaders to be compiled: basically _*O*(materials * surfaces * light combinations)_. It's not uncommon to have hundreds or thousands of shaders generated like this in a large game project. This issue can be partially mitigated by using multi-pass rendering instead of specializing the shader for all possible light combinations. Such an approach has the downside of requiring geometry re-rendering for each pass, hence can quickly become a bottleneck, particularly with large meshes affected by many lights. The computational complexity then becomes _*O*(objects * lights)_.
 
-Nucleus contains an implementation of one such flavor of deferred rendering, known as _light pre-pass_, whose operation is composed of 3 stages:
+Recently, a class of algorithms designed to resolve these very problems have been gaining popularity. Collectively known as _deferred rendering_, they manage to shift the costs around the rendering problem and break it down into separate stages, turning the aforementioned multiplicative computational complexity into a sum: _*O(objects + lights)*_, albeit with additional memory overhead.
+
+Nucleus contains an implementation of one such flavor of deferred rendering, known as _light pre-pass_. The computation is divided into 3 stages:
 * Render geometric attributes of objects in the scene into a set of textures _(collectively called the G-buffer)_, containing:
 ** surface depth
 ** normal
 ** surface ID _(Nucleus - specific)_
-* Render the bounding volumes of lights, computing lighting per-pixel with geometric attributes reconstructed from the attribute textures. Use additive blending to sum the contribution of multiple lights.
-* Render the scene objects again, this time fully evaluating their materials and combining them with the illumination computed in the previous step.
+* Draw bounding volumes around lights, computing lighting per-pixel with geometric attributes of the scene reconstructed from the G-buffer. Use additive blending to sum contributions.
+* Render scene objects again, this time fully evaluating their materials and combining them with the illumination computed in the previous step.
 
-<hr />
+h3. Light pre-pass - Stage 1
 
-The first stage is simple to do. Most of the attributes required for the G-buffer are computed by the _Structure_ kernel. However, a _Material_ kernel may e.g. alter the per-vertex normals in order to perform _normal mapping_. Hence, the first stage is basically:
+The first stage is simple. Most of the attributes required for the G-buffer are computed by the _Structure_ kernel. Still, a _Material_ kernel may want to alter e.g. normals in order to perform _normal mapping_. Hence, the first stage is:
 
 {{{dot digraph std
 	"Structure" -> "Material";
 	"Material" -> "G-buffer";
 }}}
 
-<hr />
+h3. Light pre-pass - Stage 2
 
-The second stage is the tricky one. Deferred renderers are notorious for being quite rigid with respect to the illumination models achievable with them. This is because once the G-buffer is rendered, the light stage doesn't have access to per-object shaders, which might perform custom shading. Light volumes must then be rendered with the same shader for each pixel, regardless of which scene object a fragment in the G-buffer comes from.
+The second stage is the tricky one. Deferred renderers are notorious for being quite rigid with respect to illumination models achievable with them. This is because once the G-buffer is rendered, the light stage doesn't have access to per-object shaders, which might perform custom shading. Light volumes must then be rendered with the same shader for each pixel, regardless of which scene object a fragment in the G-buffer comes from.
 
-A common approach is to use just one reflectance model ( usually the half-angle version of Phong's ) for all pixels and only vary the specular contribution amount and roughness. This may work just fine for games which don't require drastically varying surface styles.
+A common approach is to use just one reflectance model ( usually the half-angle version of Phong's ) for all pixels and only control roughness. This may work just fine for games which don't require drastically varying surface styles.
 
-Another solution to the problem is to render the majority of the scene using deferred rendering, but fall-back to forward rendering for surfaces requiring a different reflection model. Such an approach however means that objects using the second-class reflectance models have to be used sparingly, and thus form a constraint for artists.
+Another solution is to render the majority of the scene using deferred rendering, but fall-back to forward rendering for surfaces requiring a different reflection model. Such an approach means that objects using the second-class reflectance models have to be used sparingly, and thus form a constraint imposed on artists.
 
-The approach which the deferred renderer in Nucleus takes instead is not a novel one, however it's one which has been "fairly questionable":http://http.developer.nvidia.com/GPUGems2/gpugems2_chapter09.html on graphics hardware for a long time. Basically, the G-buffer stores the _surface ID_ to be used at a given pixel and the fragment shader of the light stage branches on it and chooses the appropriate _Reflectance_ kernel implementation. The index of the kernel and the parameters for it are stored in a texture, into which the G-buffer contains a coordinate. The current approach allows up to 256 different surfaces, each of which might potentially use a different _Reflectance_ kernel. Obviously, this is not free either, however with the advent of real branching in recent GPU generations means that in practice the cost does not seem very high.
+The approach which Nucleus takes instead is not a novel one, but hasn't been widely adopted due to being "fairly questionable":http://http.developer.nvidia.com/GPUGems2/gpugems2_chapter09.html on past generations of graphics hardware.
+
+The G-buffer stores the _surface ID_ to be used at a given pixel and a fragment shader of the light stage branches on it, choosing the appropriate _Reflectance_ kernel implementation. The kernel index and parameters for it are stored in a texture, into which the G-buffer contains a coordinate. The current approach allows up to 256 different surfaces, each of which might potentially use a different _Reflectance_ kernel. Obviously, this is not free either, however with the advent of real branching in recent GPU generations means that in practice the cost does not seem very high.
+
+{{{d
+float surfaceId = tex2D(attribTex, uv);
+float reflectanceId = tex2D(surfaceId, float2(surfaceId, 0));
+
+if (reflectanceId < A) {
+	result = BRDF1(
+		tex2D(surfaceId, float2(surfaceId, ...)),
+		tex2D(surfaceId, float2(surfaceId, ...)),
+		tex2D(surfaceId, float2(surfaceId, ...))
+	)
+} else if (reflectanceId < B) {
+	result = BRDF2(...);
+} else if (reflectanceId < C) {
+	...
+} else {
+	...
+}
+}}}
 
 As a result, the second stage of _light pre-pass_ in Nucleus presents itself like this:
 
@@ -160,11 +197,11 @@ As a result, the second stage of _light pre-pass_ in Nucleus presents itself lik
 	"Reflectance" -> "Illumination buffer";
 }}}
 
-What the above graph doesn't show is how the light volume geometry is constructed. This part is still in flux, whereas the current implementation uses a geometry shader to instantiate a cube for each light, taking just a point for the input. It also performs approximate culling of light volumes with the help of the *EXT_depth_bounds_test* OpenGL extension where it's available.
+What the above graph doesn't show is how the light volume geometry is constructed. The current implementation uses a geometry shader to instantiate a cube for each light, taking a single point for the input. It also performs approximate culling of light volumes with the help of the *EXT_depth_bounds_test* OpenGL extension where it's available.
 
-<hr />
+h3. Light pre-pass - Stage 3
 
-Once the _Illumination buffer_ has been calculated, the final stage of _light pre-pass_ is simple:
+Once the _Illumination buffer_ has been computed, the final stage of _light pre-pass_ is simple:
 
 {{{dot digraph std
 	"Structure" -> "Material";
@@ -172,6 +209,12 @@ Once the _Illumination buffer_ has been calculated, the final stage of _light pr
 	"Material" -> "*";
 	"*" -> "output";
 }}}
+
+h3. Light pre-pass - Results
+
+Here's _Marko Dabrovic's_ *Sponza* model being lit by 100 point lights using the *ABg* BRDF:
+
+!sponza.jpg!
 
 h2. Semantic type system
 
@@ -184,11 +227,11 @@ This rich type system allows special _traits_ to be associated with input and ou
 * The color space - RGB, sRGB, logLUV, ...
 * Linearity of a value - linear, logarithmic, exponential, ...
 * Whether a vector is normalized or not
-* The very purpose of the parameter, e.g. whether it's a color or a normal vector
+* The very meaning of the parameter, e.g. whether it's a color or a normal vector
 
-Consider a reflectance model which requires that its inputs be in world coordinates. It will simply declare its parameters with the 'basis' _trait_ set to _world_. If it requires the normal vector to be normalized, it will set the _unit_ trait to _true_, etc. The kernel compiler will infer all appropriate conversions statically.
+Consider a reflectance model which requires that its inputs be in world coordinates. It will simply declare its parameters with the *basis* _trait_ set to *world*. If it requires the _normal_ vector to be normalized, it will set the *unit* trait to *true*, etc. The kernel compiler will infer all appropriate conversions statically.
 
-Just like in the work by McGuire et al., Nucleus is able to automatically find connections between particular parameters of kernels. It's not necessary to wire each output to each input manually - just as the semantic type system allows conversions to be performed, it may also perform an implicit search in the graph of all possible conversions from a set of inputs, hence choosing the optimal source for each parameter. In case of an ambiguity, parameters may be connected manually.
+Just like in the work by McGuire et al., Nucleus is able to automatically find connections between particular parameters of kernels. It's not necessary to wire each output to each input manually - just as the semantic type system allows conversions to be performed, it may also perform an implicit search in the graph of all possible conversions from a set of inputs, hence choosing the optimal source for each parameter. In the case of an ambiguity, parameters may still be connected manually.
 
 Given a simple kernel graph such as:
 
@@ -274,12 +317,12 @@ Nucleus might resolve the connections it in the following way:
 
 h3. Semantic expressions
 
-Nucleus also extends the technique proposed in _Abstract Shade Trees_ by allowing the use of simple expressions which operate on _semantic traits_ in the specification of output semantics.
+Nucleus also extends the technique proposed in _Abstract Shade Trees_ by allowing the use of simple expressions which operate on _semantic traits_ in the specification of output parameter semantics.
 
 When working with a prototype of Nucleus which utilized a simpler version of the type system, it became apparent it's useful not only to compute values using kernels, but also let the output semantics of kernel functions depend on the _input_ semantics of these functions and the kernels they're _connected to_. For instance, One could have a kernel which samples a texture. Textures may be tagged with traits, specifying what sort of data they contain. If such a texture is connected to the sampling kernel, it's crucial to be able to express that the type of the sample should retain the traits of the texture. This is enabled by *semantic expressions*.
 
 The signature of the sampling kernel could be:
-	
+
 {{{d
 Tex2D = kernel (
 	in texture <type sampler2D>,
@@ -288,17 +331,17 @@ Tex2D = kernel (
 );
 }}}
 
-In this case, the traits of the output parameter _sample_ depend on the *actual parameter* which is connected to the input _texture_ parameter in a kernel graph. Hence, the result of connecting an input with a semantic _&lt;type sampler2D + use color&gt;_ will be a sample with the semantic _&lt;type float4 + use color&gt;_.
+In this case, the traits of the output parameter "_sample_" depend on the *actual parameter* which is connected to the input "_texture_" parameter in a kernel graph. Hence, the result of connecting an input with a semantic _&lt;type sampler2D + use color&gt;_ will be a sample with the semantic _&lt;type float4 + use color&gt;_.
 
 Semantic expressions are most commonly used in *semantic converters*, which may then perform arbitrarily complex additive and subtractive manipulation of traits. Converters are used automatically by Nucleus when resolving connections between parameters whose types don't match exactly. Each converter has an integral _cost_ value associated with it. This value is an approximation of the computational complexity of performing the given conversion. This lets Nucleus optimize automatic conversion paths.
 
-Additionally converters, just as regular kernels, may be tagged as *linear* as to allow Nucleus to move an operation from the fragment to the vertex stage, even when it's used in a _Reflectance_ or _Material_ kernel and not just _Structure_.
+Converters, just as regular kernels, may be tagged as *linear* as to allow Nucleus to move an operation from the fragment to the vertex stage, even when it's used in a _Reflectance_ or _Material_ kernel and not just _Structure_.
 
 h1. Post-processing
 
-In addition to regular scene rendering, Nucleus contains special support for post-processing. This again is performed by specifying a kernel and feeding it data. In this case, the data is just a texture (multiple inputs into the post-processing pipeline are planned for a later stage).
+In addition to regular scene rendering, Nucleus contains special support for post-processing. It is performed by specifying a kernel and feeding it data. In this case, the data is just a texture _(multiple inputs into the post-processing pipeline are planned for a later stage)_.
 
-A sample post-processing pipeline might look like this:
+A simple post-processing pipeline might look like this:
 	
 {{{dot digraph std
 	"Blit" [
@@ -312,7 +355,7 @@ A sample post-processing pipeline might look like this:
 	"Input" -> "Combine";
 }}}
 
-Nodes using the special *Blit* kernel are used to break the graph to be rendered in multiple passes. This enables the implementation of algorithms such as the _separable Gaussian blur_. *Blit* nodes may also rescale the input, as well as change the image format.
+Nodes using the special *Blit* kernel are used to break the graph to be rendered in multiple passes. This enables the implementation of algorithms such as the _separable Gaussian blur_. *Blit* nodes may also rescale the input as well as change its internal format.
 
 In this case, the graph would be broken down into two passes:
 	
@@ -336,18 +379,20 @@ In this case, the graph would be broken down into two passes:
 
 In more complex cases, Nucleus will also find which passes may be performed at the same time and automatically use _Multiple Render Targets_.
 
+!glare.jpg!
+
 h2. Functional composition
 
-Implementing post-processing using the framework of a regular graph-based editor is a tricky business. Consider a graph like this:
+Implementing post-processing using the framework of a regular graph-based editor is a tricky business. Consider the following graph:
 
 {{{dot digraph std
 	"Image" -> "pow2 (in float4, out float4)";
 	"pow2 (in float4, out float4)" -> "Blur (in Image)";
 }}}
 
-The *Blur* kernel expects to get an image which it may sample multiple times, with various offsets. Connecting the _Input_ directly to _Blur_ would have done the trick, but here the user has decided to filter the input through a power function first. The function operates not on _Images_, but on individual samples. Normally, the system would give up completely, however Nucleus has one more trick up its sleeve.
+The *Blur* kernel expects to get an image which it may sample multiple times, with various offsets. Connecting the _Input_ directly to _Blur_ would have done the trick, however the user has decided to filter the input through a power function first. The function operates not on *Images*, but on individual samples. Normally, the system would give up completely, however Nucleus has one more trick up its sleeve.
 
-In this case, the _Image_ type is nothing but a kernel. Particularly, one with the following signature:
+In this case, the *Image* type is nothing but a kernel. Particularly, one with the following signature:
 
 {{{d
 Image = kernel(
@@ -356,7 +401,7 @@ Image = kernel(
 );
 }}}
 
-Hence, the *Blur* kernel above expects _another kernel_ as its input, however the parameter which is connected to it is not a kernel, but *its return value*. This special case causes the type system to consider the whole incoming graph for _functional composition_. As a result, the graph might be turned into:
+Hence, the *Blur* kernel above expects _another kernel_ as its input, but the parameter connected to this input is not a kernel. Its type, however, is the type of the kernel's *output parameter*. This special case causes the type system to consider the whole incoming graph for _functional composition_. As a result, the graph might be turned into:
 
 {{{dot digraph std
 	subgraph "cluster" {

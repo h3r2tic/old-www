@@ -51,7 +51,7 @@ body {
 	line-height: 140%;
 }
 
-#content img {
+#content img, #content iframe {
 	max-width: 100%;
 	box-shadow: 6px 4px 8px rgba(0%, 0%, 0%, 0.3);
 	-webkit-box-shadow: 6px 4px 8px rgba(0%, 0%, 0%, 0.3);

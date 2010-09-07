@@ -1,10 +1,9 @@
 disqus
-
-_This document is just a draft. Expect errors of all sorts._
-
 h1. Nucleus
 
 *Nucleus* is a real-time rendering system I'm creating for "Boxen":/code/boxen/. It's also the subject of my MSc thesis and an evolution of my two older rendering engines that turned out to be exercises in over-engineering, over-generalization and "cache thrashing":http://research.scee.net/files/presentations/gcapaustralia09/Pitfalls_of_Object_Oriented_Programming_GCAP_09.pdf. This iteration attempts to be more pragmatic.
+
+<div style="width:50%;display: inline-block"><iframe src="http://player.vimeo.com/video/14721594?title=0&amp;byline=0&amp;portrait=0" width="350" height="219" frameborder="0" style="display: inline-block"></iframe></div><div style="width:50%;display: inline-block; text-align:right"><iframe src="http://player.vimeo.com/video/14721474?title=0&amp;byline=0&amp;portrait=0" width="350" height="219" frameborder="0" style="display: inline-block"></iframe></div>
 
 At the top level, Nucleus is split in two layers: the _graphics base_ which lies on a level similar to XNA and a _high level rendering interface_.
 
@@ -182,6 +181,8 @@ if (reflectanceId < A) {
 }
 }}}
 
+_Please note that the BRDF kernel is composed with a light kernel, whose independent execution may hide some of the latency of the nasty dependent fetches above._
+
 As a result, the second stage of _light pre-pass_ in Nucleus presents itself like this:
 
 {{{dot digraph std
@@ -199,6 +200,11 @@ As a result, the second stage of _light pre-pass_ in Nucleus presents itself lik
 
 What the above graph doesn't show is how the light volume geometry is constructed. The current implementation uses a geometry shader to instantiate a cube for each light, taking a single point for the input. It also performs approximate culling of light volumes with the help of the *EXT_depth_bounds_test* OpenGL extension where it's available.
 
+The output of the light stage will typically look like this (100 lights on _Marko Dabrovic's_ *Sponza* model):
+
+!sponza.jpg!
+
+
 h3. Light pre-pass - Stage 3
 
 Once the _Illumination buffer_ has been computed, the final stage of _light pre-pass_ is simple:
@@ -212,9 +218,9 @@ Once the _Illumination buffer_ has been computed, the final stage of _light pre-
 
 h3. Light pre-pass - Results
 
-Here's _Marko Dabrovic's_ *Sponza* model being lit by 100 point lights using the *ABg* BRDF:
+Here's _Marko Dabrovic's / Crytek's_ *Sponza* model being lit by 50 point lights using the *ABg* BRDF:
 
-!sponza.jpg!
+!crytekSponza2.jpg!
 
 h2. Semantic type system
 

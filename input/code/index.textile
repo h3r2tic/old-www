@@ -1,12 +1,11 @@
-* "Boxen":boxen/
-* "Deadlock":http://deadlock.team0xf.com/
-* "ctrace":../ctrace/
-* "Hybrid":http://hybrid.team0xf.com/
-* "Nucleus":nucleus/
-* "xfProf":xfProf/
-* "xfBuild":http://bitbucket.org/h3r3tic/xfbuild/wiki/Home
-* "OMFG":omfg/ (broken)
-* "Photon Mapping":photons/ (broken)
-* "xpose2":xpose2/ (broken)
-* "Artificial Neural Networks":http://h3.gd/ann/
+* "Boxen":boxen/ - Battlefield-style multiplayer shooter in development
+* "Deadlock":http://deadlock.team0xf.com/ - Arena-based multiplayer FPS whose develoment I led for a university team programming course
+* "ctrace":../ctrace/ - Compile-time ray-tracer
+* "Hybrid":http://hybrid.team0xf.com/ - IMGUI with extensive caching
+* "Nucleus":nucleus/ - My current work-in progress rendering engine
+* "xfProf":xfProf/ - Statistical profiler for D
+* "xfBuild":http://bitbucket.org/h3r3tic/xfbuild/wiki/Home - Incremental build tool for D
+* "OMFG":omfg/ (broken) - Silly game; More info later
+* "Photon Mapping":photons/ (broken) - I experimented briefly with spectral photon mapping; Images "here":/img/
+* "Artificial Neural Networks":http://h3.gd/ann/ - Pretty simple stuff, but features the Utah Teapot
 

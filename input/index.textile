@@ -8,6 +8,4 @@ The progress of my work can be tracked via "my blog":http://h3.gd/devlog/, "twit
 
 "Here":code/ is a list of stuff I've been involved in.
 
-There are references to some interesting projects, portals and smart folks' home pages in the "links section":links.html.
-
 Finally, the "about section":about.html contains more info about me and this very website.

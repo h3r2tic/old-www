@@ -1,7 +1,7 @@
 disqus
 h1. Nucleus
 
-*Nucleus* is a real-time rendering system I'm creating for "Boxen":/code/boxen/. It's also the subject of my MSc thesis and an evolution of my two older rendering engines that turned out to be exercises in over-engineering, over-generalization and "cache thrashing":http://research.scee.net/files/presentations/gcapaustralia09/Pitfalls_of_Object_Oriented_Programming_GCAP_09.pdf. This iteration attempts to be more pragmatic.
+*Nucleus* is a real-time rendering system I'm creating for "Boxen":/code/boxen/. It's also the subject of my MSc "thesis":/Stachowiak2010_MSc_Thesis.pdf and an evolution of my two older rendering engines that turned out to be exercises in over-engineering, over-generalization and "cache thrashing":http://research.scee.net/files/presentations/gcapaustralia09/Pitfalls_of_Object_Oriented_Programming_GCAP_09.pdf. This iteration attempts to be more pragmatic.
 
 <div style="width:50%;display: inline-block"><iframe src="http://player.vimeo.com/video/14721594?title=0&amp;byline=0&amp;portrait=0" width="350" height="219" frameborder="0" style="display: inline-block"></iframe></div><div style="width:50%;display: inline-block; text-align:right"><iframe src="http://player.vimeo.com/video/14721474?title=0&amp;byline=0&amp;portrait=0" width="350" height="219" frameborder="0" style="display: inline-block"></iframe></div>
 

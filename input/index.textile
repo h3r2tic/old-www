@@ -6,6 +6,6 @@ So far, my largest finished project is "Deadlock":http://deadlock.team0xf.com/, 
 
 The progress of my work can be tracked via "my blog":http://h3.gd/devlog/, "twitter":http://twitter.com/h3r2tic/ and a "random stream of images":http://h3.gd/img/ which I sometimes update with cool visuals.
 
-"Here":code/ is a list of stuff I've been involved in.
+"Here":code/ is a list of stuff I've been involved in, and "this":Stachowiak2010_MSc_Thesis.pdf is my yet to be defended MSc thesis.
 
 Finally, the "about section":about.html contains more info about me and this very website.

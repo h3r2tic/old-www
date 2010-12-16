@@ -1,11 +1,15 @@
-Hello, world! I'm a programmer obsessed with gamedev, though one of these twisted souls who enjoy engine programming more than working on the actual games.
+Hello, world! I'm a programmer obsessed with gamedev, particularly one of these twisted souls who enjoy engine programming more than working on the actual games.
 
-I'm currently working on a team-based multi-player first person shooter game akin to the _Battlefield_ series. More info "here":code/boxen/.
+In my spare time I'm working on a team-based multi-player first person shooter game akin to the _Battlefield_ series. More info "here":code/boxen/.
 
 So far, my largest finished project is "Deadlock":http://deadlock.team0xf.com/, an arena-based multi-player first person shooter done with four friends from "team0xf":http://team0xf.com/.
 
 The progress of my work can be tracked via "my blog":http://h3.gd/devlog/, "twitter":http://twitter.com/h3r2tic/ and a "random stream of images":http://h3.gd/img/ which I sometimes update with cool visuals.
 
-"Here":code/ is a list of stuff I've been involved in, and "this":Stachowiak2010_MSc_Thesis.pdf is my yet to be defended MSc thesis.
+I'm looking for a job in gamedev! Here's "my Résumé":http://bit.ly/hTymRs and a game development reel video:
+
+<div style="text-align:center"><iframe src="http://player.vimeo.com/video/17813985" width="400" height="225" frameborder="0"></iframe></div>
+
+"Here":code/ is a list containing some of the stuff I've been involved in, and "this page":pub/msc.html contains my MSc thesis about pretty real-time pixels.
 
 Finally, the "about section":about.html contains more info about me and this very website.

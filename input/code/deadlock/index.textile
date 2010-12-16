@@ -1,0 +1,20 @@
+disqus
+h1. Info
+
+Deadlock is a multi-player first person shooter game developed by a team of 5 programmers, over the course of 6 months, for the "Team Programming" course at Nicolaus Copernicus University in Toruń, Poland. I was the lead programmer of this team and worked mostly on the core engine components, the rendering and networking systems. I also served the role of a mentor and a manger in the Scrum-based development process.
+
+!niceScr.jpg!
+
+The engine for Deadlock was developed mostly from scratch in the sense that the codebase is novel, but uses various middleware, including:
+* NVIDIA PhysX;
+* FMOD;
+* The low level components of RakNet;
+* CgFX.
+
+The game features a classic Deathmatch play mode, 3 weapons, power-ups (med-kids and stimulants which increase speed and/or damage resistance, but may be overdosed) and player class perks.
+
+The engine implements custom 3D rendering of Quake 3 BSP levels, skinned characters (own format) and particle systems. State is synchronized using the standard "rewind and fast-forward on mismatch" networking algorithm. It also features 3D sound, a custom GUI, a built-in console and error reporting tools.
+
+Deadlock has not been publicly released due to a conflict of interests within the team, however there's still a chance of a release in the future. For now, may this gameplay video be a testament to the game:
+
+<iframe title="YouTube video player" class="youtube-player" type="text/html" width="640" height="510" src="http://www.youtube.com/embed/d5MZqpFkGSI?rel=0" frameborder="0"></iframe>

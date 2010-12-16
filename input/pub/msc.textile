@@ -1,0 +1,31 @@
+disqus
+h1. MSc dissertation
+
+h2. Abstract
+
+The code needed to create realistic real-time computer graphics is becoming steadily more complex due to the exponentially increasing computational power of dedicated hardware and the raising expectations this progress generates. At the same time, the programming model has changed very little since the introduction of programmable shading on consumer graphics cards. It remains tied to the flow of data within graphics hardware, resulting in cumbersome and expensive development.
+
+This thesis presents a rendering system which allows the shader author to conceptualize in terms of individual rendering primitives, much closer to the models used in pre-rendering and light transport theory. The implemented architecture is verified to work in the context of forward and deferred rendering algorithms, as well as post-processing. It allows for code reuse and graph-based shader authoring simplified due to a semantically-rich type system, while at the same time retaining high run-time efficiency.
+
+h2. Download
+
+Download a "PDF version":/Stachowiak2010_MSc_Thesis.pdf of the thesis.
+
+h2. TL;DR;
+
+A somewhat "blue skies" research into graph-based rendering pipelines for the GPU, allowing programming at domains resembling _RenderMan_. Uses shaders at the level of:
+
+* *Structure* - Geometry deformation and generation (pretty limited so far).
+* *Reflectance* - BRDFs: _Blinn-Phong_, _Cook-Torrance_, etc.
+* *Light* - Light emission and shadowing: unshadowed omni, _Variance Shadow Mapped_ spot, etc.
+* *Material* - Pigment, specular tint, normals, roughness.
+* *Post processing* - With automatic lifting / functional composition for reuse of math.
+
+The graphs are translated to _Cg_. Same computational units work within _Forward_ and _Deferred_ rendering, as well as post-processing. A semantic type system inspired by McGuire et al.'s _Abstract Shade Trees_ is used for automatic conversions and data flow determination.
+
+The tool needs more work, the type system requires further insight and formalization. Shading domains and the reuse of components seem to work fine so far.
+
+There's also a "short write-up":/code/nucleus/ about the rendering system created for my thesis. It is slightly outdated, but probably a better option if you don't wish to jump over the PDF, skipping all the basics.
+
+!nucled.jpg!
+!sponza.jpg!

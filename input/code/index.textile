@@ -1,11 +1,11 @@
-* "Boxen":boxen/ - Battlefield-style multiplayer shooter in development
-* "Deadlock":http://deadlock.team0xf.com/ - Arena-based multiplayer FPS whose develoment I led for a university team programming course
-* "ctrace":../ctrace/ - Compile-time ray-tracer
-* "Hybrid":http://hybrid.team0xf.com/ - IMGUI with extensive caching
-* "Nucleus":nucleus/ - My current work-in progress rendering engine
-* "xfProf":xfProf/ - Statistical profiler for D
-* "xfBuild":http://bitbucket.org/h3r3tic/xfbuild/wiki/Home - Incremental build tool for D
-* "OMFG":omfg/ (broken) - Silly game; More info later
-* "Photon Mapping":photons/ (broken) - I experimented briefly with spectral photon mapping; Images "here":/img/
-* "Artificial Neural Networks":http://h3.gd/ann/ - Pretty simple stuff, but features the Utah Teapot
+This page lists some of the projects I have been involved in. Check out my "reel video":http://bit.ly/fY4LrI to observe many of them in action!
 
+* "Boxen":boxen/ - Battlefield-style multiplayer shooter in development
+* "Deadlock":deadlock/ - Arena-based multiplayer FPS whose develoment I led for a university team programming course
+* "Hybrid":hybrid/ - IMGUI and RMGUI crossbreed
+* "Nucleus":nucleus/ - My current work-in progress rendering engine
+* "DShade":/devlog/?p=9 - Software 3D rasterizer with vertex and pixel shader support
+* "ctrace":../ctrace/ - The first ever *compile-time* ray-tracer
+* "xfProf":xfProf/ - Statistical profiler for D
+* Photon Mapping - I experimented briefly with spectral photon mapping; More info later; Images "here":/img/
+* "xfBuild":http://bitbucket.org/h3r3tic/xfbuild/wiki/Home - Incremental build tool for D

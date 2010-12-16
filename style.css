@@ -239,3 +239,47 @@ hr {
 	margin: 20px 1% 20px 1%;
 }
 
+table.projectsTable {
+	border-spacing: 0px 10px !important;
+}
+
+table.projectsTable td {
+	padding-left: 10px;
+	padding-right: 20px;
+	padding-bottom: 0px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+table.projectsTable td + td {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+table.projectsTable tr {
+	background-color: rgba(0%, 0%, 0%, 0.03);
+	background-image: url(headerBackground.png);
+}
+
+table.projectsTable td a img {
+	max-width: 256px !important;
+	height: 92px;
+	opacity: 0.8;
+	border: none;
+	-webkit-transition: opacity 0.1s ease-out;
+}
+
+table.projectsTable td a img:hover {
+	opacity: 1.0;
+}
+
+table.projectsTable hr {
+   height: 1px;
+   border: none;
+   margin: 1px 1px 5px 1px;
+   padding: 0px;
+   text-align: center;
+   background: -moz-linear-gradient(left top, rgba(60%, 60%, 20%, 1.0), rgba(80%, 50%, 17%, 0.0));
+   background: -webkit-gradient(linear, left top, right bottom, from(rgba(60%, 60%, 20%, 1.0)), to(rgba(80%, 50%, 17%, 0.0)));
+}
+

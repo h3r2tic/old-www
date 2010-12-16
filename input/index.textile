@@ -2,7 +2,7 @@ Hello, world! I'm a programmer obsessed with gamedev, particularly one of these 
 
 In my spare time I'm working on a team-based multi-player first person shooter game akin to the _Battlefield_ series. More info "here":code/boxen/.
 
-So far, my largest finished project is "Deadlock":http://deadlock.team0xf.com/, an arena-based multi-player first person shooter done with four friends from "team0xf":http://team0xf.com/.
+So far, my largest finished project is "Deadlock":code/deadlock/, an arena-based multi-player first person shooter done with four friends from "team0xf".
 
 The progress of my work can be tracked via "my blog":http://h3.gd/devlog/, "twitter":http://twitter.com/h3r2tic/ and a "random stream of images":http://h3.gd/img/ which I sometimes update with cool visuals.
 

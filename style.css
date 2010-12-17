@@ -273,14 +273,14 @@ table.projectsTable td a img:hover {
 	opacity: 1.0;
 }
 
-table.projectsTable td a {
+table.projectsTable td strong a {
 	color: #f0f0f0;
 	font-family: "Palatino Linotype", "Book Antiqua", _Palatino, "URW Palladio L", serif;
 	font-variant: normal;
 	font-weight: bold;
 }
 
-table.projectsTable td a:hover {
+table.projectsTable td strong a:hover {
 	color: #fff0a0;
 }
 

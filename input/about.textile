@@ -1,3 +1,5 @@
+!{float:right; margin: 0px 0px 10px 30px}troll.png!
+
 h1. About me
 
 My name is Tomasz Stachowiak. I'm a game programmer. I'm mostly interested in the topics of graphics (both real-time and off-line) and game networking (networked physics), though I've been fiddling with other areas as well, such as doing core game engine programming, tools (custom statistical profiler, build tool, graph-based shader editor), GUIs (IM, RM) and various perversions, such as compile-time ray tracing.

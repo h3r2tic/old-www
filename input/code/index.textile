@@ -1,12 +1,12 @@
 This page lists some of the projects I have been involved in. Check out my "reel video":http://bit.ly/fY4LrI to observe many of them in action!
 
 table(projectsTable).
-| !boxenThumb.jpg!:boxen/ |<. *Boxen*<br/><hr/>Battlefield-style multiplayer shooter in development |
-| !deadlockThumb.jpg!:deadlock/ |<. *Deadlock*<br/><hr/>Arena-based multiplayer FPS whose development I led for a university team programming course |
-| !hybridThumb.jpg!:hybrid/ |<. *Hybrid*<br/><hr/>IMGUI and RMGUI crossbreed |
-| !nucleusThumb.jpg!:nucleus/ |<. *Nucleus*<br/><hr/>My current work-in progress rendering engine |
-| !dshadeThumb.jpg!:/devlog/?p=9 |<. *DShade*<br/><hr/>Software 3D rasterizer with vertex and pixel shader support |
-| !ctraceThumb.jpg!:/ctrace/ |<. *ctrace*<br/><hr/>The first ever *compile-time* ray-tracer |
-| !xfprofThumb.jpg!:xfProf/ |<. *xfProf*<br/><hr/>Statistical profiler for D |
-| !photonThumb.jpg! |<. *Photon mapping*<br/><hr/>I experimented briefly with spectral photon mapping; More info later; Images "here":/img/ |
-| !xfbuildThumb.jpg!:http://bitbucket.org/h3r3tic/xfbuild/wiki/Home |<. *xfBuild*<br/><hr/>Multi-threaded incremental build tool for D |
+| !boxenThumb.jpg!:boxen/ |<. "Boxen":boxen/<br/><hr/>Battlefield-style multiplayer shooter in development |
+| !deadlockThumb.jpg!:deadlock/ |<. "Deadlock":deadlock/<br/><hr/>Arena-based multiplayer FPS whose development I led for a university team programming course |
+| !hybridThumb.jpg!:hybrid/ |<. "Hybrid":hybrid/<br/><hr/>IMGUI and RMGUI crossbreed |
+| !nucleusThumb.jpg!:nucleus/ |<. "Nucleus":nucleus/<br/><hr/>My current work-in progress rendering engine |
+| !dshadeThumb.jpg!:/devlog/?p=9 |<. "DShade":/devlog/?p=9<br/><hr/>Software 3D rasterizer with vertex and pixel shader support |
+| !ctraceThumb.jpg!:/ctrace/ |<. "ctrace":/ctrace/<br/><hr/>The first ever *compile-time* ray-tracer |
+| !xfprofThumb.jpg!:xfProf/ |<. "xfProf":xfProf/<br/><hr/>Statistical profiler for D |
+| !photonThumb.jpg!:# |<. "Photon mapping":#<br/><hr/>I experimented briefly with spectral photon mapping; More info later; Images "here":/img/ |
+| !xfbuildThumb.jpg!:http://bitbucket.org/h3r3tic/xfbuild/wiki/Home |<. "xfBuild":http://bitbucket.org/h3r3tic/xfbuild/wiki/Home<br/><hr/>Multi-threaded incremental build tool for D |

@@ -1,4 +1,4 @@
-!{float:right; margin: 0px 0px 10px 30px}troll.png!
+!{float:right; margin: 0px 0px 10px 30px}trollface.png!
 
 h1. About me
 

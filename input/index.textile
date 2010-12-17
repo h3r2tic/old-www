@@ -8,7 +8,7 @@ The progress of my work can be tracked via "my blog":http://h3.gd/devlog/, "twit
 
 I'm looking for a job in gamedev! Here's "my Résumé":http://bit.ly/hTymRs and a game development reel video:
 
-<div style="text-align:center"><iframe src="http://player.vimeo.com/video/17813985" width="400" height="225" frameborder="0"></iframe></div>
+<div style="text-align:center"><iframe src="http://player.vimeo.com/video/17813985?title=0&amp;byline=0&amp;portrait=0" width="400" height="225" frameborder="0"></iframe></div>
 
 "Here":code/ is a list containing some of the stuff I've been involved in, and "this page":pub/msc.html contains my MSc thesis about pretty real-time pixels.
 

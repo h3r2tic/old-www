@@ -39,8 +39,8 @@ def blur(im, xy, radius, samples, alpha):
 	for xoff, yoff in zip(xcoords, ycoords):
 		xf = xy[0]+xoff
 		yf = xy[1]+yoff
-		x = int(xf)
-		y = int(yf)
+		x = int(round(xf))
+		y = int(round(yf))
 
 		if yf < cornerRadius:
 			cornerDist = 0
@@ -58,16 +58,16 @@ def blur(im, xy, radius, samples, alpha):
 		if x >= 0 and x < im.size[0] and y >= 0 and y < im.size[1]:
 			pix = im.getpixel((x, y))
 			psamples += 1
-			color[0] += toLinear(pix[0])
-			color[1] += toLinear(pix[1])
-			color[2] += toLinear(pix[2])
+			color[0] += toLinear(1.0/255 * pix[0])
+			color[1] += toLinear(1.0/255 * pix[1])
+			color[2] += toLinear(1.0/255 * pix[2])
 
 	if psamples > 0:
 		return (
-			int(fromLinear(color[0] / psamples)),
-			int(fromLinear(color[1] / psamples)),
-			int(fromLinear(color[2] / psamples)),
-			int(255 * alpha * psamples / samples)
+			int(round(255 * fromLinear(color[0] / psamples))),
+			int(round(255 * fromLinear(color[1] / psamples))),
+			int(round(255 * fromLinear(color[2] / psamples))),
+			int(round(255 * alpha * psamples / samples))
 		)
 	else:
 		return (0, 0, 0, 0)

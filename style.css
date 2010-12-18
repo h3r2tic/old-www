@@ -164,6 +164,7 @@ body {
 	border-radius: 4px;
 	-moz-border-radius: 4px;
 	-webkit-transition: background-color 0.1s ease-out;
+	-moz-transition: background-color 0.1s ease-out;
 }
 
 #menu div a:hover {
@@ -267,6 +268,7 @@ table.projectsTable td a img {
 	opacity: 0.8;
 	border: none;
 	-webkit-transition: opacity 0.1s ease-out;
+	-moz-transition: opacity 0.1s ease-out;
 	position: relative;
 	z-index: 1;
 }
@@ -276,12 +278,13 @@ table.projectsTable td a:hover img {
 }
 
 table.projectsTable td a + div img {
-	opacity: 0.4;
+	opacity: 0.2;
 	-webkit-transition: opacity 0.1s ease-out;
+	-moz-transition: opacity 0.1s ease-out;
 }
 
 table.projectsTable td a:hover + div img {
-	opacity: 0.7;
+	opacity: 0.55;
 }
 
 table.projectsTable td strong a {

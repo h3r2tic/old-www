@@ -9,6 +9,7 @@ import scipy
 from math import *
 
 extsize = 28
+cornerRadius = 3
 
 
 def toLinear(x):
@@ -36,8 +37,24 @@ def blur(im, xy, radius, samples, alpha):
 	psamples = 0
 
 	for xoff, yoff in zip(xcoords, ycoords):
-		x = int(xy[0]+xoff)
-		y = int(xy[1]+yoff)
+		xf = xy[0]+xoff
+		yf = xy[1]+yoff
+		x = int(xf)
+		y = int(yf)
+
+		if yf < cornerRadius:
+			cornerDist = 0
+			if xf < cornerRadius:
+				cornerDist =\
+					(cornerRadius-xf)**2 +\
+					(cornerRadius-yf)**2
+			elif xf >= im.size[0]-cornerRadius:
+				cornerDist =\
+					(im.size[0]-cornerRadius-xf)**2 +\
+					(cornerRadius-yf)**2
+			if cornerDist > cornerRadius**2:
+				continue
+
 		if x >= 0 and x < im.size[0] and y >= 0 and y < im.size[1]:
 			pix = im.getpixel((x, y))
 			psamples += 1
@@ -73,6 +90,6 @@ for fname in os.listdir('input/code/'):
 				alpha = float(im2.size[1] - y) / im2.size[1]
 				alpha *= alpha
 				#alpha *= 0.75
-				im2.putpixel((x, y), blur(im, (x-extsize, y), radius, 50, alpha))
+				im2.putpixel((x, y), blur(im, (x-extsize, y), radius, 64, alpha))
 
 		im2.save("output/code/%sRefl.png" % match.group(1), "PNG", optimize=1)

@@ -271,8 +271,17 @@ table.projectsTable td a img {
 	z-index: 1;
 }
 
-table.projectsTable td a img:hover {
+table.projectsTable td a:hover img {
 	opacity: 1.0;
+}
+
+table.projectsTable td a + div img {
+	opacity: 0.4;
+	-webkit-transition: opacity 0.1s ease-out;
+}
+
+table.projectsTable td a:hover + div img {
+	opacity: 0.7;
 }
 
 table.projectsTable td strong a {
@@ -298,7 +307,7 @@ table.projectsTable hr {
 
 div.reflWrap {
 	position:relative;
-	left: -24px;
+	left: -28px;
 	top: -26px;
 }
 
@@ -309,5 +318,6 @@ img.refl {
 	-moz-box-shadow: none !important;
 	border-radius: 0px !important;
 	-moz-border-radius: 0px !important;
-	max-width: 304px !important;
+	max-width: 312px !important;
+	z-index: 1;
 }

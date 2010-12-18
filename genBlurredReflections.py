@@ -8,7 +8,7 @@ from PIL import Image, ImageOps
 import scipy
 from math import *
 
-extsize = 24
+extsize = 28
 
 
 def toLinear(x):
@@ -64,15 +64,15 @@ for fname in os.listdir('input/code/'):
 
 		w, h = im.size
 
-		im2 = Image.new("RGBA", (im.size[0] + extsize*2, int(im.size[1] * 0.7)))
+		im2 = Image.new("RGBA", (im.size[0] + extsize*2, 80))
 
 		for y in range(im2.size[1]):
 			for x in range(im2.size[0]):
 				radius = float(y) / 2
-				#radius += 1
+				radius += 0.2
 				alpha = float(im2.size[1] - y) / im2.size[1]
 				alpha *= alpha
-				alpha *= 0.5
+				#alpha *= 0.75
 				im2.putpixel((x, y), blur(im, (x-extsize, y), radius, 50, alpha))
 
 		im2.save("output/code/%sRefl.png" % match.group(1), "PNG", optimize=1)

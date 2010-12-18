@@ -1,3 +1,7 @@
+# Yeah, I know that Gaussian-blurring the image only varying the kernel's radius
+# with distance will not give anything resembling a physically-correct reflection,
+# but it looks good enough for now.
+
 import os
 import re
 from PIL import Image, ImageOps

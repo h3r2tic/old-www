@@ -1,4 +1,5 @@
 #settingsPopupWrap {
+	z-index: 3;
 	visibility: hidden;
 	position: absolute;
 	top: 25%;
@@ -8,7 +9,6 @@
 }
 
 #settingsPopup {
-	z-index: 2;
 	text-align: left;
 	width: 55%;
 	max-width: 700px;

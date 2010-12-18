@@ -267,6 +267,8 @@ table.projectsTable td a img {
 	opacity: 0.8;
 	border: none;
 	-webkit-transition: opacity 0.1s ease-out;
+	position: relative;
+	z-index: 1;
 }
 
 table.projectsTable td a img:hover {

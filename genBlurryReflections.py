@@ -50,7 +50,7 @@ def blur(im, xy, radius, samples, alpha):
 					(cornerRadius-yf)**2
 			elif xf >= im.size[0]-cornerRadius:
 				cornerDist =\
-					(im.size[0]-cornerRadius-xf)**2 +\
+					(im.size[0]-1-cornerRadius-xf)**2 +\
 					(cornerRadius-yf)**2
 			if cornerDist > cornerRadius**2:
 				continue

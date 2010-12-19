@@ -10,6 +10,10 @@ from math import *
 
 extsize = 28
 cornerRadius = 3
+shrink = 1.5
+fadeOutPower = 1.75
+initialBlurRadius = 0.2
+blurDy = 0.5
 
 
 def toLinear(x):
@@ -85,11 +89,10 @@ for fname in os.listdir('input/code/'):
 
 		for y in range(im2.size[1]):
 			for x in range(im2.size[0]):
-				radius = float(y) / 2
-				radius += 0.2
+				radius = float(y) * blurDy
+				radius += initialBlurRadius
 				alpha = float(im2.size[1] - y) / im2.size[1]
-				alpha *= alpha
-				#alpha *= 0.75
-				im2.putpixel((x, y), blur(im, (x-extsize, y), radius, 64, alpha))
+				alpha = pow(alpha, fadeOutPower)
+				im2.putpixel((x, y), blur(im, (x-extsize, y*shrink), radius, 64, alpha))
 
 		im2.save("output/code/%sRefl.png" % match.group(1), "PNG", optimize=1)

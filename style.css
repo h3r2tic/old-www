@@ -271,6 +271,7 @@ table.projectsTable td a img {
 	-moz-transition: opacity 0.1s ease-out;
 	position: relative;
 	z-index: 1;
+	margin-bottom: 5px !important;
 }
 
 table.projectsTable td a:hover img {
@@ -311,7 +312,7 @@ table.projectsTable hr {
 div.reflWrap {
 	position:relative;
 	left: -28px;
-	top: -26px;
+	top: -21px;
 }
 
 img.refl {

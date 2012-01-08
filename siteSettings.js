@@ -9,10 +9,7 @@ function setGlobalTextColor(color) {
 
 function enableGlobalTextShadows() {
 	var doc = document.getElementById('content');
-	doc.style.textShadow =
-		siteSettings.useShadowBlur
-		? "2px 1px 4px rgba(0, 0, 0, 0.6)"
-		: "2px 2px 0px rgb(16%, 16%, 16%)";	/* far from ideal as a fallback, but still better than no shadows at all */
+	doc.style.textShadow = "2px 1px 4px rgba(0, 0, 0, 0.6)";
 }
 
 
@@ -77,16 +74,6 @@ function loadBackgroundGradient() {
 function SiteSettings() {
 	this.version = "5";
 	this.useTextShadows = true;
-
-	/* WebKit currently falls back to non-native font rendering (via CoreGraphics / Skia)
-	 * in case blurred or translucent shadows are enabled. The fallback doesn't have
-	 * sub-pixel anti-aliasing and its strokes are too thick, ruining the intended look. */
-	if (navigator.userAgent.indexOf("WebKit") != -1) {
-		this.useShadowBlur = false;
-	} else {
-		// Firefox looks great with shadows
-		this.useShadowBlur = true;
-	}
 
 	this.textColor = "rgb(240,240,240)";	
 	this.defaultBgColor = "rgb(69,69,69)";

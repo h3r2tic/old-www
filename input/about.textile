@@ -2,8 +2,6 @@
 
 h1. About me
 
-!{float:right; margin: 14px}trollface.png!
-
 My name is Tomasz Stachowiak. I'm a game programmer. I'm mostly interested in the topics of graphics (both real-time and off-line) and game networking (networked physics), though I've been fiddling with other areas as well, such as doing core game engine programming, tools (custom statistical profiler, build tool, graph-based shader editor), GUIs (IM, RM) and various perversions, such as compile-time ray tracing.
 
 I am currently employed by The Creative Assembly, and work as a graphics programmer on an upcoming console title. Stay tuned, it's going to be shiny! If you'd like to join us, drop me a line; "we're hiring!":http://creative-assembly.com/?p=1316

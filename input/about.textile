@@ -1,6 +1,10 @@
 h1. About me
 
+!{float:right; margin: 14px}trollface.png!
+
 My name is Tomasz Stachowiak. I'm a game programmer. I'm mostly interested in the topics of graphics (both real-time and off-line) and game networking (networked physics), though I've been fiddling with other areas as well, such as doing core game engine programming, tools (custom statistical profiler, build tool, graph-based shader editor), GUIs (IM, RM) and various perversions, such as compile-time ray tracing.
+
+I am currently employed by The Creative Assembly, and work as a graphics programmer on an upcoming console title. Stay tuned, it's going to be shiny! If you'd like to join us, drop me a line; "we're hiring!":http://creative-assembly.com/?p=1316
 
 I love "customization":newBlackbox.png, "my companion":t42.jpg and "good music":http://nin.com/.
 
@@ -9,8 +13,6 @@ I have a "sister":http://missselfdestruct.deviantart.com/ and a "brother":http:/
 I luuuuv "mudkipz":http://www.encyclopediadramatica.com/index.php/So_i_herd_u_liek_mudkip.
 
 You can contact me by sending an e-mail to the 'h3' account at this domain.
-
-I'm looking for a job in gamedev! Here's "my Résumé":http://bit.ly/hTymRs and a game development "reel video":http://bit.ly/fY4LrI.
 
 h1. About this site
 

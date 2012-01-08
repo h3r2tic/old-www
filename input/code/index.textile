@@ -1,6 +1,5 @@
 This page lists some of the projects I have been involved in. Check out my "reel video":http://bit.ly/fY4LrI to observe many of them in action!
 
-* "Boxen":boxen/ - Battlefield-style multiplayer shooter in development
 * "Deadlock":deadlock/ - Arena-based multiplayer FPS whose develoment I led for a university team programming course
 * "Hybrid":hybrid/ - IMGUI and RMGUI crossbreed
 * "Nucleus":nucleus/ - My current work-in progress rendering engine

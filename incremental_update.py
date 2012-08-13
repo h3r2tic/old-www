@@ -7,7 +7,7 @@ import pickle
 import threading
 
 # setup logging
-ssh.util.log_to_file('demo_sftp.log')
+ssh.util.log_to_file('incremental_update_sftp.log')
 os.chdir( 'output' )
 
 def humanize_bytes(bytes, precision=1):

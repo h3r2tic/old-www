@@ -7,3 +7,4 @@ output
 *.map
 *.exe
 password.txt
+incremental_update_sftp.log

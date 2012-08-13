@@ -1,3 +1,3 @@
 generate.py
-sh -login updateSite.sh
+incremental_update.py
 pause

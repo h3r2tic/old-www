@@ -325,3 +325,20 @@ img.refl {
 	max-width: 312px !important;
 	z-index: 1;
 }
+
+p.formula {
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+p.formula img {
+	border: 1px solid #2c2c2c;
+	padding: 1px !important;
+	background-color: #303030;
+	margin: 0 !important;
+	box-shadow: 6px 4px 10px rgba(0%, 0%, 0%, 0.2) !important;
+	-webkit-box-shadow: 6px 4px 10px rgba(0%, 0%, 0%, 0.2) !important;
+	-moz-box-shadow: 6px 4px 10px rgba(0%, 0%, 0%, 0.2) !important;
+	border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+}

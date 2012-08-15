@@ -134,8 +134,9 @@ total_upload_size = sum( [ f.size for f in upload_tasks ] )
 
 if total_upload_size > 0:
     def update_progress_bar( item, total_upload_done ):
+        assert len(item.reason) <= 8
         progress_bar_width = 20
-        file_name_width = 40
+        file_name_width = 35
         max_line_width = 79
 
         i = progress_bar_width * total_upload_done / total_upload_size
@@ -149,7 +150,7 @@ if total_upload_size > 0:
         else:
             bar += item.fpath
         bar += '"'
-        assert len( bar ) <= max_line_width
+        assert len( bar ) <= max_line_width, bar
         bar += ' ' * ( max_line_width - len( bar ) )
         sys.stdout.write( '\r' + bar )
 

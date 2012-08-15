@@ -54,18 +54,57 @@ def generateGraph(code, outname, i):
 	os.utime( outname, (conf.mtime,) * 2 )
 	return 'p=. !%s!\n\n' % fname
 
-def generateLaTeX(code, outname, i, conf):
-	with open( 'latextemp.tex', 'w' ) as f:
-		f.write( code )
-	os.system( 'latex -quiet latextemp.tex' )
-	fname = '%s_graph%s.png' % (outname, i)
-	cmd = 'dvipng -T tight -D 190 --gamma 1.0 --truecolor -q -o %s latextemp.dvi 1>NUL' % fname
-	os.system( cmd )
-	os.system( cmd )
-	os.utime( fname, (conf.mtime,) * 2 )
-	return 'p(formula)=. !%s!\n\n' % fname
+
+def replaceMathWithPlaceholders(text):
+	substs = []
+	num = 0
+
+	subst_prefix = 'mathSubstitution666SATAN'
+	subst_suffix = 'lul'
+	out_text = ''
+
+	delims = [('\\(', '\\)'), ('$$', '$$')]
+
+	while len( text ) > 0:
+		delim = min( [(d, text.find(d[0])) for d in delims], key = lambda x: ( x[1] if x[1] != -1 else len(text) ) )
+		if delim[1] == -1:
+			out_text += text
+			break
+		( delim, pos ) = delim
+
+		out_text += text[:pos]
+		ident = subst_prefix + `len(substs)` + subst_suffix
+		out_text += ident
+		text = text[pos+len(delim[0]):]
+		e = text.find( delim[1] )
+		assert e != -1, ("mismatched %s..%s in the file" % ( delim[0], delim[1] ) )
+		substs.append( delim[0] + text[:e] + delim[ 1 ] )
+		text = text[e+len(delim[1]):]
+
+	return out_text, substs
+
+def substituteBackPlaceholders( text, substs ):
+	subst_prefix = 'mathSubstitution666SATAN'
+	subst_suffix = 'lul'
+	out_text = ''
+	while len(text) > 0:
+		i = text.find( subst_prefix )
+		if -1 == i:
+			out_text += text
+			break
+		out_text += text[:i]
+		text = text[i+len(subst_prefix):]
+		i = text.find( subst_suffix )
+		assert i != -1
+		n = int( text[:i] )
+		text = text[i+len(subst_suffix):]
+		out_text += substs[ n ]
+	return out_text
+
 
 def formatText(text, outname, wantComments, conf):
+	( text, mathSubsts ) = replaceMathWithPlaceholders( text )
+
 	text2 = ''
 	lines = text.splitlines()
 	graphCntr = 0
@@ -121,31 +160,6 @@ def formatText(text, outname, wantComments, conf):
 					else: assert false, p
 				text2 += generateGraph(prefix + code + suffix, outname, graphCntr)
 				graphCntr += 1
-			elif lang[0:3] == "tex":
-				params = lang[3:].strip().split(' ')
-				prefix = r'''
-					\documentclass{article}
-					\usepackage[active]{preview}
-					\usepackage{color}
-					\begin{document}
-					\begin{preview}
-					\definecolor{bggray}{rgb}{0.215,0.215,0.215}
-					\pagecolor{bggray}
-					\setlength\fboxsep{4.0pt}
-					\setlength\fboxrule{0.2pt}
-					\color{bggray}
-					\fbox{
-					\[
-					\textcolor{white}{$
-				'''
-				suffix = r'''$}
-					\]
-					}
-					\end{preview}
-					\end{document}
-				'''
-				text2 += generateLaTeX(prefix + code + suffix, outname, graphCntr, conf)
-				graphCntr += 1
 			else:
 				lexer = get_lexer_by_name(lang, stripall=True)
 				code = highlight(code, lexer, HtmlFormatter())
@@ -164,7 +178,7 @@ def formatText(text, outname, wantComments, conf):
 			text2 += line + '\n'
 		lines = lines[1:]
 
-	return textile.textile(text2)
+	return substituteBackPlaceholders( textile.textile(text2), mathSubsts )
 
 
 def textile2html( conf ):

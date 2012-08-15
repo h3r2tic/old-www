@@ -18,6 +18,7 @@
 		<link rel="stylesheet" type="text/css" media="screen, projection" href="%(siteRoot)sslider/slider.css" />
 		<link rel="stylesheet" type="text/css" media="screen, projection" href="%(siteRoot)sdisqus.css" />
 		<script type="text/javascript" src="%(siteRoot)sslider/slider.js"></script>
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 		<script type="text/javascript">
 			var disqus_iframe_css = "http://h3.gd/disqus.css";
 			var disqus_identifier = "%(currentPage)s";

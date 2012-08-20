@@ -6,6 +6,43 @@ h1. Smoothie: an empirical BRDF
 
 This article introduces Smoothie, an empirical specular BRDF with visual characteristics similar to the Trowbridge-Reitz microfacet distribution. The proposed model does not have a rigorously derived physical structure. It strives to be physically-plausible, however at the core it is an arbitrary mathematical formula, only inspired by observations and aesthetics. It is an attempt at achieving the look of a complex reflectance model at a fraction of the computational cost, close to the commonly used Blinn-Phong model. An approximate version of Smoothie is provided, which has a runtime cost similar to unnormalized Phong.
 
+
+h2. TL;DR
+
+This:
+
+{{{c
+// float3 L = unit vector towards the light
+// float3 V = unit vector towards the viewer
+// float3 N = unit surface normal
+
+// Assuming perceptually uniform roughness
+float  alpha = roughness * roughness;
+
+float3 h = V + L;
+float3 H = normalize( h );
+
+// Compute the Fresnel interpolation function
+float  F = exp2( -1.71983 - 5.43926 * dot( L, h ) );
+
+// 4 sin^2(theta_m)
+float  p2 = 4 * ( 1 - dot( N, H ) * dot( N, H ) );
+
+float  d = alpha + p2 / alpha;
+
+// Reciprocal of the visibility function and the NDF
+float  s_rec = dot( H * d, H * d );
+
+// Put it all together
+specular = lerp( gloss, 1, F ) / s_rec;
+
+// Remember to multiply by max( 0, dot( N, L ) )
+}}}
+
+| ... equals this: | instead of this ( Blinn-Phong ): |
+| !smoothie.png!:smoothie.png | !smoothie_comparison_BlinnPhong.png!:smoothie_comparison_BlinnPhong.png |
+| ... at roughly the same price :) | |
+
 h2. Previous work
 
 Specular reflections are determined by microstructure details of the surface that they appear on. Because at the scales we typically use in computer graphics rendering, we tend to describe the microstructure using statistical models of height and slope distribution. Most commonly, graphics rendering systems use the microfacet model introduced by TODO in TODO.
@@ -22,7 +59,7 @@ However, not all real surfaces can be neatly approximated with a Gaussian NDF. M
 
 In [GGX paper], Walter et al. propose a long-tailed reflectance model called GGX, which they use to model light scattering in rough surfaces. TODO has shown that GGX is in fact identical to the Trowbridge-Reitz model, mentioned by Blinn in [TODO] (yes, Blinn again, take a shot). Visually, TR/GGX exhibits characteristics of both fractal and Gaussian surfaces, with a relatively smooth peak, and a long tail. The model proposed in this article produces results similar to Trowbridge-Reitz, albeit at a lower computational cost.
 
-p=. !{width:30%; height:30%}smoothie_comparison_BlinnPhong.png! !{width:30%; height:30%}smoothie_comparison_GGX.png! !{width:30%; height:30%}smoothie.png!
+p=. !{width:30%; height:30%}smoothie_comparison_BlinnPhong.png!:smoothie_comparison_BlinnPhong.png !{width:30%; height:30%}smoothie_comparison_GGX.png!:smoothie_comparison_GGX.png !{width:30%; height:30%}smoothie.png!:smoothie.png
 _from left to right: Blinn-Phong, GGX, Smoothie_
 
 h2. Microfacet Smoothie
@@ -47,7 +84,7 @@ p=. !schlick_vs_SG.png!
 
 This may be an issue if the desired look of a surface is a diffuse one, with specular reflections only appearing at grazing angles. The Spherical Gaussian approximation is overall a pretty good fit to the desired curve, but it's possible to get a better one by focusing on the important parts of its range. The \(L \cdot H\) term only takes low values at extremely grazing angles, and its significance is reduced by the \(N \cdot L\) term, as well as the masking function of the BRDF. Consider the following bunnies:
 
-p=. !{width:30%; height:30%}fresnelThresholds1.png! !{width:30%; height:30%}fresnelThresholds2.png! !{width:30%; height:30%}fresnelThresholds3.png! 
+p=. !{width:30%; height:30%}fresnelThresholds1.png!:fresnelThresholds1.png !{width:30%; height:30%}fresnelThresholds2.png!:fresnelThresholds2.png !{width:30%; height:30%}fresnelThresholds3.png!:fresnelThresholds3.png 
 
 The geometry in each of these renders is illuminated by a point light source; the configuration is exactly the same except for the viewpoint. The colored patterns visualize \(L \cdot H\). Values less than 0.6 are coded blue, less than 0.4 are green, and less than 0.2 are red. According to these observations, we should be focusing the precision of the Fresnel approximation roughly in the middle of the values taken on by \(L \cdot H\).
 
@@ -71,7 +108,7 @@ The error is not an issue in practice; in fact, clamping the Fresnel term actual
 
 Please note that the approximation only works for direct lighting, and it will break down if used for environment mapping. Because of the way that environment mapping is typically evaluated in real-time rendering, the interpolation curve will be calculated for \(V \cdot N\) instead of \(L \cdot H\), and the values of the former will be much closer to zero.
 
-h3. TL;DR;
+h3. Implementation
 
 Summing everything up, Smoothie can be implemented in HLSL as follows:
 
@@ -160,7 +197,7 @@ This article has introduced Smoothie, an empirical BRDF similar in looks to Trow
 
 Furthermore, the proposed new approximation of the Fresnel term proves a more precise and cheaper formulation than the approaches commonly used in rendering.
 
-p=. !{width:40%; height:40%}smoothie_normalMapping_comparison_BlinnPhong.png! !{width:40%; height:40%}smoothie_normalMapping.png!
+p=. !{width:40%; height:40%}smoothie_normalMapping_comparison_BlinnPhong.png!:smoothie_normalMapping_comparison_BlinnPhong.png !{width:40%; height:40%}smoothie_normalMapping.png!:smoothie_normalMapping.png
 _Normal mapping applied to Blinn-Phong (left) and Smoothie (right)_
 
 h2. References

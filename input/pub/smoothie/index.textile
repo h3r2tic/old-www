@@ -35,9 +35,9 @@ where \(\alpha > 0\) is related to surface roughness, and \(\theta_m\) is the an
 
 It is possible to analytically derive Smith's shadowing/masking term for Smoothie; the method has been outlined in [GGX paper], however it produces visually displeasing bright halos around the object [figure]. The same phenomenon can be observed in GGX, which hints that Smith's shadowing/masking term might not be a good fit for non-Gaussian BRDFs. The much cheaper geometric term introduced by [Kelemen-Szirmay-Kalos] can be used instead:
 
-$$G = \frac{4}{h \cdot h},$$
+$$G = \frac{4(N \cdot L)(N \cdot V)}{h \cdot h},$$
 
-where \(h = L + V\) is the unnormalized half-angle vector.
+where \(h = L + V\) is the unnormalized half-angle vector. _Note that the numerator cancels itself out with the denominator of the full microfacet BRDF_.
 
 h3. Fresnel term
 
@@ -63,11 +63,13 @@ It is pretty apparent that the function proposed by Schlick is far from ideal. O
 
 p=. !fresnelGraph3.png!
 
-The proposed approximation diverges significantly from the actual Fresnel curve where \(L \cdot H < 0.2\); this is demonstrated in the following graph: 
+On the other hand, the proposed approximation diverges significantly from the actual Fresnel curve where \(L \cdot H < 0.2\); this is demonstrated in the following graph: 
 
 p=. !fresnelGraph4.png!
 
-The error is not an issue in practice; in fact, clamping the Fresnel term actually reduces aliasing in real-time rendering.
+The error is not an issue in practice; in fact, clamping the Fresnel term actually reduces aliasing in real-time rendering, because typically only a few pixels at object boundaries would receive the full Fresnel reflections.
+
+Please note that the approximation only works for direct lighting, and it will break down if used for environment mapping. Because of the way that environment mapping is typically evaluated in real-time rendering, the interpolation curve will be calculated for \(V \cdot N\) instead of \(L \cdot H\), and the values of the former will be much closer to zero.
 
 h3. TL;DR;
 

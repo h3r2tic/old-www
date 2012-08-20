@@ -21,7 +21,7 @@ class CodegenConf(object):
 		self.mtime = os.stat( 'input/' + dir + path ).st_mtime + ver_num
 		try:
 			self.out_of_date = os.stat( self.outfile ).st_mtime + 0.001 < self.mtime
-		except IOError:
+		except Exception:
 			self.out_of_date = True
 
 

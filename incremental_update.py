@@ -78,12 +78,15 @@ class RemoteStorage(object):
         # get host key, if we know one
         hostkeytype = None
         hostkey = None
+        keypath = None
         try:
-            host_keys = ssh.util.load_host_keys(os.path.expanduser('~/.ssh/known_hosts'))
+            keypath = os.path.expanduser('~/.ssh/known_hosts')
+            host_keys = ssh.util.load_host_keys(keypath)
         except IOError:
             try:
                 # try ~/ssh/ too, because windows can't have a folder named ~/.ssh/
-                host_keys = ssh.util.load_host_keys(os.path.expanduser('~/ssh/known_hosts'))
+                keypath = os.path.expanduser('~/ssh/known_hosts')
+                host_keys = ssh.util.load_host_keys(keypath)
             except IOError:
                 print '*** Unable to open host keys file'
                 host_keys = {}
@@ -91,7 +94,7 @@ class RemoteStorage(object):
         if host_keys.has_key(hostname):
             hostkeytype = host_keys[hostname].keys()[0]
             hostkey = host_keys[hostname][hostkeytype]
-            print 'Using host key of type %s' % hostkeytype
+            print 'Using host key of type %s from %s' % (hostkeytype, keypath)
 
 
         self.t = ssh.Transport((hostname, port))
@@ -164,8 +167,16 @@ if total_upload_size > 0:
         remote.sftp.put( t.fpath, t.fpath, progress_func )
         total_upload_done += t.size
 
-remote.save_file_list( ( local_dirs, local_files ) )
+
+for fpath in local_files.keys():
+    remote_files[fpath] = local_files[fpath]
+
+#for d in local_dirs.keys():
+#    remote_dirs[d] = local_dirs[d]
+
+remote.save_file_list( ( remote_dirs, remote_files ) )
 remote.t.close()
+
 
 for thread in threading.enumerate():
     if thread is not threading.currentThread():

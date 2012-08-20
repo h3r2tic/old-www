@@ -1,0 +1,158 @@
+disqus
+
+!{width:25%; height:25%; float:right; margin-left:1em}smoothie_importanceSampling.png!
+
+h1. Smoothie: an empirical BRDF
+
+This article introduces Smoothie, an empirical specular BRDF with visual characteristics similar to the Trowbridge-Reitz microfacet distribution. The proposed model does not have a rigorously derived physical structure. It strives to be physically-plausible, however at the core it is an arbitrary mathematical formula, only inspired by observations and aesthetics. It is an attempt at achieving the look of a complex reflectance model at a fraction of the computational cost, close to the commonly used Blinn-Phong model. An approximate version of Smoothie is provided, which has a runtime cost similar to unnormalized Phong.
+
+h2. Previous work
+
+Specular reflections are determined by microstructure of the surface that they appear on. Because at the scales we typically use in computer graphics rendering, we tend to describe the micro-structure using statistical models of height and slope distribution. Most commonly, we use the microfacet model introduced by TODO in TODO. A Bidirectional Reflectance Distribution Function (_BRDF_) describes the reflection of light off an opaque surface in a particular direction:
+
+$$f_r = \frac{D(H)}{4(N \cdot L)(N \cdot V)} \cdot G(N, L, V) \cdot F(\lambda, H \cdot L)$$
+
+Within this framework, surfaces are assumed to be composed of tiny elements, each of which is a perfect mirror. For a particular viewpoint observing the surface at a macro-scale, we want to find out the fraction of microfacets which are able to reflect light from a light source. Because they are perfect mirrors, there is only one such orientation between a viewer and a particular light position. In the microfacet BRDF formulation, the statistical quantity of such ideally aligned mirrors is given by the Normal Distribution Function (NDF).
+
+The two most commonly used NDFs are the Beckmann and Phong functions, which assume an underlying Gaussian distribution of microfacet heights. Such a surface model is particularly convenient from a computational point of view [ quote Stam ], and serves as a reasonable approximation of some types of surfaces. It is used in a prevailing number of BRDF models, including Cook-Torrance, Blinn-Phong, Ashikhmin-Shirley, HTSG, etc.
+
+However, not all real surfaces can be neatly approximated with a Gaussian NDF. Measured data indicates that classes of surfaces ( TODO: EXAMPLES ) exhibit a long tail in the specular highlight, as well as a sharper peak. In [Stam], Stam points out that the height distribution is only one factor determining the look of a surface, whereas another important component is the auto-correlation of heights. Beckmann and similar models over-simplify the structure, assuming that both height distribution and auto-correlation are Gaussian. Stam gives an example of a model with fractal auto-correlation, which exhibits long-tailed, spiky highlights. [ TODO: some picture, e.g. steal Figure 4 from Ashikhmin ].
+
+In [GGX paper], Walter et al. propose a long-tailed reflectance model called GGX, which they use to model light scattering in rough surfaces. TODO has shown that GGX is in fact identical to the Trowbridge-Reitz model, mentioned by Blinn in [TODO]. Visually, TR/GGX exhibits characteristics of both fractal and Gaussian surfaces, with a relatively smooth peak, and a long tail. The model proposed in this article produces results similar to Trowbridge-Reitz, albeit at a lower computational cost.
+
+p=. !{width:30%; height:30%}smoothie_comparison_BlinnPhong.png! !{width:30%; height:30%}smoothie_comparison_GGX.png! !{width:30%; height:30%}smoothie.png!
+_from left to right: Blinn-Phong, GGX, Smoothie_
+
+h2. Microfacet Smoothie
+
+Using the microfacet framework, the normal distribution function of Smoothie is:
+
+$$D = \left(\alpha + \frac{4\cdot\sin^2(\theta_m)}{\alpha}\right)^{-2},$$
+
+where \(\alpha > 0\) is related to surface roughness, and \(\theta_m\) is the angle between the surface normal and the microfacet normal. In practice, values of \(\alpha \in [0; 1]\) give visually pleasing results. Furthermore, substituting \(\alpha = r^2\), where \(r \in [0; 1]\) yields a perceptually linear roughness range.
+
+It is possible to analytically derive Smith's shadowing/masking term for Smoothie; the method has been outlined in [GGX paper], however it produces visually displeasing bright halos around the object [figure]. The same phenomenon can be observed in GGX, which hints that Smith's shadowing/masking term might not be a good fit for non-Gaussian BRDFs. The much cheaper geometric term introduced by [Kelemen-Szirmay-Kalos] can be used instead:
+
+$$G = \frac{1}{h \cdot h},$$
+
+where \(h = L + V\) is the unnormalized half-angle vector.
+
+h3. Fresnel term
+
+Any Fresnel term formulation can be used with the proposed model. The most common choice for real-time graphics is Schlick's approximation: \(1 + (1 - s_c) * (1 - L \cdot H)^5\), where \(H = \frac{h}{||h||}\). This formula is still pretty expensive to evaluate, but can be approximated with a spherical Gaussian <a href="http://seblagarde.wordpress.com/2012/06/03/spherical-gaussien-approximation-for-blinn-phong-phong-and-fresnel/">[1]</a><a href="http://seblagarde.wordpress.com/2011/08/17/hello-world/">[2]</a>. The basic idea is to replace the \((1-x)^5\) component with \(exp(-6x)\). The curves are pretty similar for high values of \(x\), however the approximation doesn't decay to zero for high values of \(x\) as the original term does:
+
+p=. !schlick_vs_SG.png!
+
+This may be an issue if the desired look of a surface is a diffuse one, with specular reflections only appearing at grazing angles. The spherical Gaussian approximation is overall a pretty good fit to the desired curve, but it's possible to get a better one by focusing on the important parts of its range. It matches the shape of the Fresnel term well where x is low, but we don't really care about this case; it can only occur if the light and eye vectors are pointing away from each other, meaning that the light is behind the object (thus the N dot L term completely hides it). Consider the following bunnies:
+
+p=. !{width:30%; height:30%}fresnelThresholds1.png! !{width:30%; height:30%}fresnelThresholds2.png! !{width:30%; height:30%}fresnelThresholds3.png! 
+
+The geometry in each of these renders is illuminated by a point light source; the configuration is exactly the same except for the viewpoint. The colored patterns visualize \(L \cdot H\). Values less than 0.6 are coded blue, less than 0.4 are green, and less than 0.2 are red. According to these observations, we should be focusing the precision of the Fresnel approximation roughly in the middle of the values taken on by \(L \cdot H\).
+
+It turns out that the Fresnel term can be well approximated with functions of the form \(exp2(a + b * (L \cdot h))\), where *a* and *b* are constants. Note that this formula uses the unnormalized half-angle vector, unlike the spherical Gaussian. The values for *a* and *b* can be obtained easily via least squares fitting. However, we should not just blindly try to fit to the power-of-five function proposed by Schlick, since it's an approximation already. Instead, let's consider what Schlick was trying to accomplish with his Fresnel formulation. If we take a look at the plots of Fresnel curves for some common dielectrics, we can notice that they are roughly just offset and scaled versions of one another:
+
+p=. !fresnelGraph1.png!
+
+Schlick' s idea was to approximate the general shape of the curves, and have it interpolate between a base value and one. The base value is commonly called the _specular color_. Schlick used the \((1 - x)^5\) function for interpolation purposes, however it is not the best fit we can get. Consider the following plot of Fresnel reflectance mapped to the \([0; 1]\) range for common dielectrics (IOR of 1.33, 1.4 and 1.5), as well as the \((1 - x)^5\) curve:
+
+p=. !fresnelGraph2.png!
+
+It is pretty apparent that the function proposed by Schlick is far from ideal. One approach we can use to find a better approximation, is to least-squares fit to the exact Fresnel curve for a specific index of refraction. The exact choice of fitting parameters is an empirical one, however. Assuming an IOR of 1.4, and weighing the importance according to a normal distribution (\(\mu = 0.55, \sigma = 0.1\)) we arrive at: \(a = - 1.84086\), \(b = - 5.17982\), assuming the aforementioned model \(exp2(a + b * (L \cdot h))\). This yields a significantly improved fit for the considered cases:
+
+p=. !fresnelGraph3.png!
+
+h3. TL;DR;
+
+Summing everything up, Smoothie can be implemented in HLSL as follows:
+
+{{{c
+// float3 L = unit vector towards the light
+// float3 V = unit vector towards the viewer
+// float3 N = unit surface normal
+
+// Assuming perceptually uniform roughness
+float  alpha = roughness * roughness;
+
+float3 h = V + L;
+float3 H = normalize( h );
+
+// Compute the Fresnel interpolation function
+float  F = exp2( -1.84086 - 5.17982 * dot( L, h ) );
+
+// 4 sin^2(theta_m)
+float  p2 = 4 * ( 1 - dot( N, H ) * dot( N, H ) );
+
+float  d = alpha + p2 / alpha;
+
+// Reciprocal of the visibility function and the NDF
+float  s_rec = dot( H * d, H * d );
+
+// Put it all together
+specular = lerp( gloss, 1, F ) / s_rec;
+
+// Remember to multiply by max( 0, dot( N, L ) )
+}}}
+
+h2. Approximate Smoothie
+
+At the cost of highlight elongation, we can simplify the proposed model even further. Assuming that *L*, *V* and *N* vectors lie in the same plane, we get \(\sin( \theta_m ) = \sin( ( \theta_i + \theta_o ) / 2 \). We know that \(\lim_{x\rightarrow 0} \sin(x)/x = 1\). Furthermore, \(\sin( x ) / x\) does not deviate a lot from the value of 1 in the range \([0; \pi/2]\). We can therefore approximate \(\sin( x / 2 )\) as \(sin( x ) / 2\). Since specular reflections happen when \(\theta_i\) and \(\theta_o\) are close to opposite, \(\theta_i + \theta_o\) will tend to be small, therefore the approximation works pretty well. In the restricted case where *i*, *o* and *n* lie in the same plane, we can compute \(\sin( \theta_o + \theta_i )\) simply by projecting \(i + o\) into the plane defined by *n* and computing the length of the resulting vector. Doing so in the more general case will however tend to underestimate \(\sin( \theta_m )\), and it is the main source of error in the approximation. The resulting specular highlights will tend to be too wide at grazing angles.
+
+[ piktur ]
+
+The approximation might still be worthwhile, especially if used in the context of game rendering, in which distance attenuation is usually artificially clamped. In that case, a lot of the incorrect elongation would be hidden. With deferred rendering, it is also possible to decide whether correct elongation is important on a per-light basis, just like artists sometimes tag lights to be diffuse-only, in order to save some GPU cycles.
+
+The approximate version of Smoothie thus becomes:
+
+$$\left(\alpha + \frac{||h - N * N \cdot h||^2}{\alpha}\right)^{-2},$$
+
+where h is once again the unnormalized half-way vector. Since the aforementioned Fresnel term approximation doesn't require a normalized half-way vector either, the two may be cheaply combined.
+
+{{{c
+// float3 L = unit vector towards the light
+// float3 V = unit vector towards the viewer
+// float3 N = unit surface normal
+
+// Assuming perceptually uniform roughness
+float  alpha = roughness * roughness;
+
+float3 h = V + L;
+
+// Compute the Fresnel interpolation function
+float  F = exp2( -1.84086 - 5.17982 * dot( L, h ) );
+
+float3 p = h - N * dot( N, h );
+float  p2 = dot( p, p );
+float  d = alpha + p2 / alpha;
+
+// Put it all together
+specular = lerp( gloss, 1, F) / ( d * d );
+
+// Remember to multiply by max( 0, dot( N, L ) )
+}}}
+
+Note that since this is not a microfacet formulation, it does not use the *G* function. Monte Carlo experiments indicate that doing so would break energy conservation.
+
+h3. Normalization
+
+Both the microfacet and the approximate versions of Smoothie are energy-conserving, however they lose some energy as the \(\alpha\) parameter increases. The energy response of the *D* function is:
+
+$$\int _0^{\pi/2}\int _0^{2 \pi }\sin\theta \cos\theta \cdot D \left(\frac{\theta }{2},a \right) d\phi d\theta = \frac{1}{2}+x^2 \log x-\frac{1}{2} x^2 \log(1+x^2)$$
+
+p=. !smoothie_D_energy_response.png!
+
+The exact normalization factor ( reciprocal of the above formula ) is expensive to evaluate, however the loss is not much of an issue in game rendering. Furthermore, it may be approximated, and then applied as a multiplicative factor over the BRDF:
+
+p=. !smoothie_D_normalization.png!
+
+h2. Conclusion
+
+This article has introduced Smoothie, an empirical BRDF similar in looks to Trowbridge-Reitz/GGX, and computational cost similar to the commonly used Blinn-Phong model. Hopefully, Smoothie can become a viable alternative for real-time rendering applications, especially combined with the cheap approximation where the exact shape of the specular highlight isn't critical.
+
+Furthermore, the proposed new approximation of the Fresnel term proves a more precise and cheaper formulation than the approaches commonly used in rendering.
+
+p=. !{width:40%; height:40%}smoothie_normalMapping_comparison_BlinnPhong.png! !{width:40%; height:40%}smoothie_normalMapping.png!
+_Normal mapping applied to Blinn-Phong (left) and Smoothie (right)_
+
+h2. References
+
+TODO

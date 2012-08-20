@@ -8,17 +8,19 @@ This article introduces Smoothie, an empirical specular BRDF with visual charact
 
 h2. Previous work
 
-Specular reflections are determined by microstructure of the surface that they appear on. Because at the scales we typically use in computer graphics rendering, we tend to describe the micro-structure using statistical models of height and slope distribution. Most commonly, we use the microfacet model introduced by TODO in TODO. A Bidirectional Reflectance Distribution Function (_BRDF_) describes the reflection of light off an opaque surface in a particular direction:
+Specular reflections are determined by microstructure details of the surface that they appear on. Because at the scales we typically use in computer graphics rendering, we tend to describe the microstructure using statistical models of height and slope distribution. Most commonly, graphics rendering systems use the microfacet model introduced by TODO in TODO.
+
+A Bidirectional Reflectance Distribution Function (BRDF) describes the reflection of light off an opaque surface in a particular direction:
 
 $$f_r = \frac{D(H)}{4(N \cdot L)(N \cdot V)} \cdot G(N, L, V) \cdot F(\lambda, H \cdot L)$$
 
-Within this framework, surfaces are assumed to be composed of tiny elements, each of which is a perfect mirror. For a particular viewpoint observing the surface at a macro-scale, we want to find out the fraction of microfacets which are able to reflect light from a light source. Because they are perfect mirrors, there is only one such orientation between a viewer and a particular light position. In the microfacet BRDF formulation, the statistical quantity of such ideally aligned mirrors is given by the Normal Distribution Function (NDF).
+Within this framework, surfaces are assumed to be composed of tiny elements, each of which is a perfect mirror. For a particular viewpoint observing the surface at a macro-scale, we want to find out the fraction of microfacets which are able to reflect light from a light source. Because they are perfect mirrors, there is only one such orientation between a viewer and a particular light direction. In the microfacet BRDF formulation, the statistical quantity of such ideally aligned mirrors is given by the Normal Distribution Function (NDF).
 
 The two most commonly used NDFs are the Beckmann and Phong functions, which assume an underlying Gaussian distribution of microfacet heights. Such a surface model is particularly convenient from a computational point of view [ quote Stam ], and serves as a reasonable approximation of some types of surfaces. It is used in a prevailing number of BRDF models, including Cook-Torrance, Blinn-Phong, Ashikhmin-Shirley, HTSG, etc.
 
 However, not all real surfaces can be neatly approximated with a Gaussian NDF. Measured data indicates that classes of surfaces ( TODO: EXAMPLES ) exhibit a long tail in the specular highlight, as well as a sharper peak. In [Stam], Stam points out that the height distribution is only one factor determining the look of a surface, whereas another important component is the auto-correlation of heights. Beckmann and similar models over-simplify the structure, assuming that both height distribution and auto-correlation are Gaussian. Stam gives an example of a model with fractal auto-correlation, which exhibits long-tailed, spiky highlights. [ TODO: some picture, e.g. steal Figure 4 from Ashikhmin ].
 
-In [GGX paper], Walter et al. propose a long-tailed reflectance model called GGX, which they use to model light scattering in rough surfaces. TODO has shown that GGX is in fact identical to the Trowbridge-Reitz model, mentioned by Blinn in [TODO]. Visually, TR/GGX exhibits characteristics of both fractal and Gaussian surfaces, with a relatively smooth peak, and a long tail. The model proposed in this article produces results similar to Trowbridge-Reitz, albeit at a lower computational cost.
+In [GGX paper], Walter et al. propose a long-tailed reflectance model called GGX, which they use to model light scattering in rough surfaces. TODO has shown that GGX is in fact identical to the Trowbridge-Reitz model, mentioned by Blinn in [TODO] (yes, Blinn again, take a shot). Visually, TR/GGX exhibits characteristics of both fractal and Gaussian surfaces, with a relatively smooth peak, and a long tail. The model proposed in this article produces results similar to Trowbridge-Reitz, albeit at a lower computational cost.
 
 p=. !{width:30%; height:30%}smoothie_comparison_BlinnPhong.png! !{width:30%; height:30%}smoothie_comparison_GGX.png! !{width:30%; height:30%}smoothie.png!
 _from left to right: Blinn-Phong, GGX, Smoothie_
@@ -29,27 +31,27 @@ Using the microfacet framework, the normal distribution function of Smoothie is:
 
 $$D = \left(\alpha + \frac{4\cdot\sin^2(\theta_m)}{\alpha}\right)^{-2},$$
 
-where \(\alpha > 0\) is related to surface roughness, and \(\theta_m\) is the angle between the surface normal and the microfacet normal. In practice, values of \(\alpha \in [0; 1]\) give visually pleasing results. Furthermore, substituting \(\alpha = r^2\), where \(r \in [0; 1]\) yields a perceptually linear roughness range.
+where \(\alpha > 0\) is related to surface roughness, and \(\theta_m\) is the angle between the surface normal and the microfacet normal. In practice, the range \(\alpha \in [0; 1]\) yields useful, visually pleasing results. Furthermore, substituting \(\alpha = r^2\), where \(r \in [0; 1]\) yields a perceptually linear roughness scale.
 
 It is possible to analytically derive Smith's shadowing/masking term for Smoothie; the method has been outlined in [GGX paper], however it produces visually displeasing bright halos around the object [figure]. The same phenomenon can be observed in GGX, which hints that Smith's shadowing/masking term might not be a good fit for non-Gaussian BRDFs. The much cheaper geometric term introduced by [Kelemen-Szirmay-Kalos] can be used instead:
 
-$$G = \frac{1}{h \cdot h},$$
+$$G = \frac{4}{h \cdot h},$$
 
 where \(h = L + V\) is the unnormalized half-angle vector.
 
 h3. Fresnel term
 
-Any Fresnel term formulation can be used with the proposed model. The most common choice for real-time graphics is Schlick's approximation: \(1 + (1 - s_c) * (1 - L \cdot H)^5\), where \(H = \frac{h}{||h||}\). This formula is still pretty expensive to evaluate, but can be approximated with a spherical Gaussian <a href="http://seblagarde.wordpress.com/2012/06/03/spherical-gaussien-approximation-for-blinn-phong-phong-and-fresnel/">[1]</a><a href="http://seblagarde.wordpress.com/2011/08/17/hello-world/">[2]</a>. The basic idea is to replace the \((1-x)^5\) component with \(exp(-6x)\). The curves are pretty similar for high values of \(x\), however the approximation doesn't decay to zero for high values of \(x\) as the original term does:
+Any Fresnel term formulation can be combined with the proposed model. The most common choice for real-time graphics is Schlick's approximation: \(1 + (1 - s_c) * (1 - L \cdot H)^5\), where \(H = \frac{h}{||h||}\). This formula is still pretty expensive to evaluate, but can be approximated with a Spherical Gaussian <a href="http://seblagarde.wordpress.com/2012/06/03/spherical-gaussien-approximation-for-blinn-phong-phong-and-fresnel/">[1]</a><a href="http://seblagarde.wordpress.com/2011/08/17/hello-world/">[2]</a>. The basic idea is to replace the \((1-x)^5\) component with \(exp(-6x)\). The curves are pretty similar for high values of \(x\), however the approximation doesn't decay to zero for high values of \(x\) as the original term does:
 
 p=. !schlick_vs_SG.png!
 
-This may be an issue if the desired look of a surface is a diffuse one, with specular reflections only appearing at grazing angles. The spherical Gaussian approximation is overall a pretty good fit to the desired curve, but it's possible to get a better one by focusing on the important parts of its range. It matches the shape of the Fresnel term well where x is low, but we don't really care about this case; it can only occur if the light and eye vectors are pointing away from each other, meaning that the light is behind the object (thus the N dot L term completely hides it). Consider the following bunnies:
+This may be an issue if the desired look of a surface is a diffuse one, with specular reflections only appearing at grazing angles. The Spherical Gaussian approximation is overall a pretty good fit to the desired curve, but it's possible to get a better one by focusing on the important parts of its range. The \(L \cdot H\) term only takes low values at extremely grazing angles, and its significance is reduced by the \(N \cdot L\) term, as well as the masking function of the BRDF. Consider the following bunnies:
 
 p=. !{width:30%; height:30%}fresnelThresholds1.png! !{width:30%; height:30%}fresnelThresholds2.png! !{width:30%; height:30%}fresnelThresholds3.png! 
 
 The geometry in each of these renders is illuminated by a point light source; the configuration is exactly the same except for the viewpoint. The colored patterns visualize \(L \cdot H\). Values less than 0.6 are coded blue, less than 0.4 are green, and less than 0.2 are red. According to these observations, we should be focusing the precision of the Fresnel approximation roughly in the middle of the values taken on by \(L \cdot H\).
 
-It turns out that the Fresnel term can be well approximated with functions of the form \(exp2(a + b * (L \cdot h))\), where *a* and *b* are constants. Note that this formula uses the unnormalized half-angle vector, unlike the spherical Gaussian. The values for *a* and *b* can be obtained easily via least squares fitting. However, we should not just blindly try to fit to the power-of-five function proposed by Schlick, since it's an approximation already. Instead, let's consider what Schlick was trying to accomplish with his Fresnel formulation. If we take a look at the plots of Fresnel curves for some common dielectrics, we can notice that they are roughly just offset and scaled versions of one another:
+It turns out that the Fresnel term can be well approximated with functions of the form \(exp2(a + b * (L \cdot h))\), where *a* and *b* are constants. Note that this formula uses the unnormalized half-angle vector, unlike the Spherical Gaussian. The values for *a* and *b* can be obtained easily via least squares fitting. However, we should not just blindly try to fit to the power-of-five function proposed by Schlick, since it's an approximation already. Instead, let's consider what Schlick was trying to accomplish with his Fresnel formulation. If we take a look at the plots of Fresnel curves for some common dielectrics, we can notice that they are roughly just offset and scaled versions of one another:
 
 p=. !fresnelGraph1.png!
 
@@ -57,9 +59,15 @@ Schlick' s idea was to approximate the general shape of the curves, and have it 
 
 p=. !fresnelGraph2.png!
 
-It is pretty apparent that the function proposed by Schlick is far from ideal. One approach we can use to find a better approximation, is to least-squares fit to the exact Fresnel curve for a specific index of refraction. The exact choice of fitting parameters is an empirical one, however. Assuming an IOR of 1.4, and weighing the importance according to a normal distribution (\(\mu = 0.55, \sigma = 0.1\)) we arrive at: \(a = - 1.84086\), \(b = - 5.17982\), assuming the aforementioned model \(exp2(a + b * (L \cdot h))\). This yields a significantly improved fit for the considered cases:
+It is pretty apparent that the function proposed by Schlick is far from ideal. One approach we can use to find a better approximation, is to least-squares fit to the exact Fresnel curve for a specific index of refraction. The exact choice of fitting parameters is an empirical one, however. Assuming an IOR of 1.4, and weighing the importance according to a normal distribution (\(\mu = 0.55, \sigma = 0.12\)) we arrive at: \(a = -1.71983\), \(b = -5.43926\), assuming the aforementioned model \(exp2(a + b * (L \cdot h))\). This yields a significantly improved fit for the considered cases:
 
 p=. !fresnelGraph3.png!
+
+The proposed approximation diverges significantly from the actual Fresnel curve where \(L \cdot H < 0.2\); this is demonstrated in the following graph: 
+
+p=. !fresnelGraph4.png!
+
+The error is not an issue in practice; in fact, clamping the Fresnel term actually reduces aliasing in real-time rendering.
 
 h3. TL;DR;
 
@@ -77,7 +85,7 @@ float3 h = V + L;
 float3 H = normalize( h );
 
 // Compute the Fresnel interpolation function
-float  F = exp2( -1.84086 - 5.17982 * dot( L, h ) );
+float  F = exp2( -1.71983 - 5.43926 * dot( L, h ) );
 
 // 4 sin^2(theta_m)
 float  p2 = 4 * ( 1 - dot( N, H ) * dot( N, H ) );
@@ -118,7 +126,7 @@ float  alpha = roughness * roughness;
 float3 h = V + L;
 
 // Compute the Fresnel interpolation function
-float  F = exp2( -1.84086 - 5.17982 * dot( L, h ) );
+float  F = exp2( -1.71983 - 5.43926 * dot( L, h ) );
 
 float3 p = h - N * dot( N, h );
 float  p2 = dot( p, p );

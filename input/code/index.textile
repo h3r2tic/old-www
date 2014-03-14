@@ -4,7 +4,7 @@ table(projectsTable).
 | !deadlockThumb.jpg!:deadlock/ <div class="reflWrap"><img class="refl" src="deadlockRefl.png"/></div> |<. *"Deadlock":deadlock/*<br/><hr/>Arena-based multiplayer FPS whose development I led for a university team programming course |
 | !hybridThumb.jpg!:hybrid/ <div class="reflWrap"><img class="refl" src="hybridRefl.png"/></div> |<. *"Hybrid":hybrid/*<br/><hr/>IMGUI and RMGUI crossbreed |
 | !nucleusThumb.jpg!:nucleus/ <div class="reflWrap"><img class="refl" src="nucleusRefl.png"/></div> |<. *"Nucleus":nucleus/*<br/><hr/>My current work-in progress rendering engine |
-| !dshadeThumb.jpg!:/devlog/?p=9 <div class="reflWrap"><img class="refl" src="dshadeRefl.png"/></div> |<. *"DShade":/devlog/?p=9*<br/><hr/>Software 3D rasterizer with vertex and pixel shader support |
+| !dshadeThumb.jpg!:dshade/ <div class="reflWrap"><img class="refl" src="dshadeRefl.png"/></div> |<. *"DShade":dshade/*<br/><hr/>Software 3D rasterizer with vertex and pixel shader support |
 | !ctraceThumb.jpg!:/ctrace/ <div class="reflWrap"><img class="refl" src="ctraceRefl.png"/></div> |<. *"ctrace":/ctrace/*<br/><hr/>The first ever *compile-time* ray-tracer |
 | !xfprofThumb.jpg!:xfProf/ <div class="reflWrap"><img class="refl" src="xfprofRefl.png"/></div> |<. *"xfProf":xfProf/*<br/><hr/>Statistical profiler for D |
 | !photonThumb.jpg!:# <div class="reflWrap"><img class="refl" src="photonRefl.png"/></div> |<. *"Photon mapping":#*<br/><hr/>I experimented briefly with spectral photon mapping; More info later; Images "here":/img/ |

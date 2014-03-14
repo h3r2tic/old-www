@@ -1,0 +1,14 @@
+h1. Boxen
+
+Boxen was an excursion into an unusual territory for me -- game networking and physics synchronization. I had the ambition of making a Battlefield-like game, but that turned out to be too vast in scope... Surprise, surprise! In any case, it was a valuable and fun learning experience. I used ENet for the low-level networking, rolled an authority scheme on top of it, and synchronized a Havok physics simulation, as well as gameplay logic.
+
+Below is a video of an early netcode test. Please note that it gets a bit shaky in the second half; it was configured to use very little bandwidth via prioritized delta updates with an amortized bytes/second budget, and the budget turned out to be too low.
+
+<iframe src="http://player.vimeo.com/video/89059299" width="744" height="465" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+The authority scheme was similar to the ideas independently published by Glenn Fiedler at "gafferongames.com":http://gafferongames.com/. Basically, each player owns the objects they touch (directly and indirectly) until said objects come to rest. If two players transitively touch the same object, the server takes over and resolves the conflict until the players agree. Corrections are done in a continuous way unless the difference is greater than a pre-configured threshold. The upside of this approach is that if you push an unowned object, there is no lag or inconsistency in the interaction. In the case of an authority clash, there is some rubber banding for complex dynamic actors, but kinematic player controllers can be resolved almost immediately, and with great consistency.
+
+I also implemented an event system for gameplay logic. The events came in three flavors: "Wishes" would be sent from clients to the server, and could be ignored; "Orders" would be sent from the server to clients, and needed to be obeyed. "Local" events didn't go through the network, but were handy in implementing gameplay. All events could be delayed in time, such that you could say "explode this projectile in 100ms"; they would be transmitted immediately, and appropriately delayed on the other end. In the example given, if network latency was lower than 100ms, no further lag would be perceived.
+
+<iframe width="744" height="418" src="http://www.youtube.com/embed/JFQaXcpKSBY" frameborder="0" allowfullscreen></iframe>
+

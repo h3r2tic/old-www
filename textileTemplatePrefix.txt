@@ -40,7 +40,6 @@
 					<img src="%(siteRoot)ssettingsIcon.png" alt="settings" />
 				</span>
 				<div>
-					<a href="http://h3.gd/devlog/">BLOG</a>
 					<a href="%(siteRoot)scode/">CODE</a>
 					<a href="%(siteRoot)sabout.html">ABOUT</a>
 				</div>

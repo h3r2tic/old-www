@@ -1,0 +1,44 @@
+h1. DShade
+
+DShade was a software renderer which I wrote in order to learn rasterization from the ground up. I implemented it in the D programming language ( version 1.x ), which I was using heavily at the time.
+
+!dshade.png!
+
+Some of the fun features DShade supported where:
+* Vertex and pixel shaders;
+* On-the-fly recompilation and reloading of shaders;
+* Bilinear texture filtering;
+* Perspective-correct attribute interpolation;
+* Sutherland-Hodgman clipping;
+* Back-face culling;
+* Z-buffering;
+* Alpha blending;
+* Stippled lines, menus, text rendering.
+
+The shaders were short snippets of D code, which I would compile into DLLs using the DigitalMars compiler. A shader could look like this:
+
+{{{d
+vec4 vertexShader(
+	in attr!(vec3, `positions`) inPos,
+	in attr!(vec3, `normals`) inNorm,
+	out vec3 norm
+) { static if (compute) {
+	inNorm = modelMat.rotate(inNorm);
+	norm = inNorm;
+	return comboMat.xform(vec4(inPos.x, inPos.y, inPos.z, 1));
+} else return vec4.zero; }
+
+
+void pixelShader(
+	in vec3 inNorm,
+	out Color output
+) { static if (compute) {
+	output = float3ToColor(
+		inNorm.x * 0.5f + 0.5f,
+		inNorm.y * 0.5f + 0.5f,
+		inNorm.z * 0.5f + 0.5f
+	);
+}}
+}}}
+
+When compiling a DLL, this snippet would be mixed into the body of a renderer, and get inlined inside it. Compile-time reflection would let the renderer know which inputs from the mesh needed to be provided for the shaders, and which outputs of the vertex shader would have to be interpolated for the pixel shader. This meant that the shader could be reasonably efficient, and easy to write.

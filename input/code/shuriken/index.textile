@@ -1,0 +1,17 @@
+h1. Shuriken
+
+Shuriken is my most recent personal graphics research framework. I'm writing it with use of modern OpenGL, and the "Rust":http://www.rust-lang.org/ programming language.
+
+!044.jpg!
+
+Within the framework I have developed a novel algorithm for rendering real-time reflections, which I call Stochastic Glossy Screen-Space Reflections (SGSSR). It supports moderate and high glossiness levels, as well as normal mapping, all driven by G-Buffer parameters, and consistent with regular lighting. Gaps in the screen-space solution are filled with dynamically re-lit parallax-projected environment maps.
+
+The toy engine also supports a few tiny yet pleasant features:
+* Physically-based shading with the Trowbridge-Reitz/GGX specular model;
+* Compute-based tiled-deferred lighting;
+* Sub-second shader re-loading with automatic dependency tracking;
+* A data-driven post-processing pipeline configurable via JSON;
+* Alchemy SSAO, FXAA, accumulation-based AA for static shots;
+* Glare, tone mapping, chromatic aberration, color grading.
+
+<iframe src="http://player.vimeo.com/video/85683578" width="744" height="465" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>

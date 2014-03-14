@@ -1,10 +1,8 @@
-Hello, world! I'm a programmer obsessed with gamedev, particularly one of these twisted souls who enjoy engine programming more than working on the actual games.
+Hello, world! I'm a programmer obsessed with game development, particularly one of these twisted souls who enjoy engine programming more than working on actual games.
 
-I am currently employed at The Creative Assembly, and work as a graphics programmer on an upcoming console title. Stay tuned, it's going to be shiny! If you'd like to join us, drop me a line; "we're hiring!":http://creative-assembly.com/?p=1316
+I am currently employed at The Creative Assembly, and work as a graphics programmer on Alien: Isolation. If you'd like to join us, drop me a line; "we're hiring!":http://www.creative-assembly.com/jobs
 
-So far, my largest finished hobby project is "Deadlock":code/deadlock/, an arena-based multi-player first person shooter done with four friends from "team0xf".
-
-The progress of my work can be tracked via "my blog":http://h3.gd/devlog/, "twitter":http://twitter.com/h3r2tic/ and a "random stream of images":http://h3.gd/img/ which I sometimes update with cool visuals.
+I sometimes post random screenshots of path-tracers and real-time graphics on my "twitter":http://twitter.com/h3r2tic/.
 
 "Here":code/ is a list containing some of the stuff I've been involved in, and "this page":pub/msc.html contains my MSc thesis about pretty real-time pixels.
 

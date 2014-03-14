@@ -1,5 +1,5 @@
 disqus
-h1. Info
+h1. Deadlock
 
 Deadlock is a multi-player first person shooter game developed by a team of 5 programmers, over the course of 6 months, for the "Team Programming" course at Nicolaus Copernicus University in Toruń, Poland. I was the lead programmer of this team and worked mostly on the core engine components, the rendering and networking systems. I also served the role of a mentor and a manger in the Scrum-based development process.
 

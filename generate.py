@@ -3,6 +3,8 @@ import os.path
 import shutil
 import textile
 import subprocess
+import shutil
+from glob import glob
 
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
@@ -43,7 +45,7 @@ def untabify(line, ts = 4):
 			n += c
 	return n
 
-def generateGraph(code, outname, i):
+def generateGraph(code, outname, i, conf):
 	fname = '%s_graph%s.png' % (outname, i)
 	args = 'dot -Lg -Tpng -o ' + fname
 	proc = subprocess.Popen(args, shell=True, stdin=subprocess.PIPE)
@@ -51,7 +53,7 @@ def generateGraph(code, outname, i):
 	pipe.write(code)
 	pipe.close()
 	proc.wait()
-	os.utime( outname, (conf.mtime,) * 2 )
+	os.utime( fname, (conf.mtime,) * 2 )
 	return 'p=. !%s!\n\n' % fname
 
 
@@ -158,7 +160,7 @@ def formatText(text, outname, wantComments, conf):
 							];
 						'''
 					else: assert false, p
-				text2 += generateGraph(prefix + code + suffix, outname, graphCntr)
+				text2 += generateGraph(prefix + code + suffix, outname, graphCntr, conf)
 				graphCntr += 1
 			else:
 				lexer = get_lexer_by_name(lang, stripall=True)
@@ -248,17 +250,23 @@ def dir_textile2html(dir, level = 0):
 
 print 'Generating website data...'
 
+if not os.path.isdir('output'):
+        os.mkdir('output')
+
 dir_textile2html('')
 
 print 'Copying misc files...'
 
-cmds = [
-	r'cp -pR slider output/slider',
-	r'cp -p *.css *.js output/',
-	r'cp -p headerBackground.png settingsIcon.png teapot.png output/',
-]
-for c in cmds:
-	print '   ', c
-	os.system(c)
+try:
+        shutil.copytree('slider', 'output/slider')
+except OSError:
+        pass
+
+files_to_copy = ['headerBackground.png', 'settingsIcon.png', 'teapot.png'] + glob('*.css') + glob('*.js')
+for f in files_to_copy:
+        try:
+                shutil.copy( f, 'output/' )
+        except OSError:
+                pass
 	
 print 'Done.'

@@ -30,7 +30,7 @@ def get_local_dirs_files():
     local_dirs = set([])
     local_files = {}
 
-    for root_, dirs, files in os.walk(''):
+    for root_, dirs, files in os.walk('.'):
         root = root_.replace('\\', '/')
         if root != '':
             local_dirs.add( root )
@@ -80,12 +80,13 @@ class RemoteStorage(object):
         hostkey = None
         keypath = None
         try:
-            keypath = os.path.expanduser('~/.ssh/known_hosts')
+            keypath = os.path.expanduser(r'C:\MinGW\msys\1.0\home\h3r3tic\.ssh\known_hosts')
+            print keypath
             host_keys = ssh.util.load_host_keys(keypath)
         except IOError:
             try:
                 # try ~/ssh/ too, because windows can't have a folder named ~/.ssh/
-                keypath = os.path.expanduser('~/ssh/known_hosts')
+                keypath = os.path.expanduser('/ssh/known_hosts')
                 host_keys = ssh.util.load_host_keys(keypath)
             except IOError:
                 print '*** Unable to open host keys file'

@@ -2,7 +2,7 @@ Hello, world! I'm a programmer obsessed with game development, particularly one 
 
 I am currently employed at The Creative Assembly, and work as a graphics programmer on Alien: Isolation. If you'd like to join us, drop me a line; "we're hiring!":http://www.creative-assembly.com/jobs
 
-I sometimes post random screenshots of path-tracers and real-time graphics on my "twitter":http://twitter.com/h3r2tic/.
+I sometimes post random screenshots of path-tracers, real-time graphics, and cake on my "twitter":http://twitter.com/h3r2tic/, as well as "here":img/.
 
 "Here":code/ is a list containing some of the stuff I've been involved in, and "this page":pub/msc.html contains my MSc thesis about pretty real-time pixels.
 

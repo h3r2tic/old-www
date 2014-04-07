@@ -6,7 +6,7 @@ ctrace is a compile-time raytracer written in the D Programming Language.
 h1. Why ?
 
 Why would anyone create anything like this ? The rendering times are terrible, code is harder to write... but I think it's a nice demonstration of metaprogramming in D.
-Ok, ok, I'm just a pervert and I love raping the D compiler.
+Ok, ok, I'm just a pervert and I love abusing the D compiler.
 
 h1. How ?
 

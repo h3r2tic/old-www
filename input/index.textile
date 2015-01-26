@@ -1,6 +1,6 @@
 Hello, world! I'm a programmer obsessed with game development, particularly one of these twisted souls who enjoy engine programming more than working on actual games.
 
-I am currently employed at The Creative Assembly, and work as a graphics programmer on Alien: Isolation. If you'd like to join us, drop me a line; "we're hiring!":http://www.creative-assembly.com/jobs
+I am currently employed as a renderologist at Frostbite.
 
 I sometimes post random screenshots of path-tracers, real-time graphics, and cake on my "twitter":http://twitter.com/h3r2tic/, as well as "here":img/.
 

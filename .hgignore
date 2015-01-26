@@ -8,3 +8,4 @@ output
 *.exe
 password.txt
 incremental_update_sftp.log
+img

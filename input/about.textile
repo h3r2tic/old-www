@@ -4,7 +4,7 @@ h1. About me
 
 My name is Tomasz Stachowiak. I'm a game programmer. I'm mostly interested in the topics of graphics (both real-time and off-line) and game networking (networked physics), though I've been fiddling with other areas as well, such as doing core game engine programming, tools (custom statistical profiler, build tool, graph-based shader editor), GUIs (IM, RM) and various perversions, such as compile-time ray tracing.
 
-I am currently employed by The Creative Assembly, and work as a graphics programmer on Alien: Isolation. Stay tuned, it's going to be shiny! If you'd like to join us, drop me a line; "we're hiring!":http://www.creative-assembly.com/jobs
+I am currently employed as a renderologist at Frostbite. I make pixels shiny.
 
 You can contact me by sending an e-mail to the 'h3' account at this domain.
 
